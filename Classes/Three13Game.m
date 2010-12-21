@@ -19,7 +19,7 @@
         hand = [[Three13Hand alloc] init];
         knownCard = [[Three13Card alloc] init];
         mysteryCard = [[Three13Card alloc] init];
-        state = 0;
+        state = -1;
         level = 3;
         round = 1;
         totalScore = 0;
@@ -82,6 +82,7 @@
    [self deal:level];
     [hand updateScore];
     NSLog(@"Known and unkonw are %@ and %@", knownCard, mysteryCard);
+    state = 0;
     NSLog(@"Start Game completed");
    // [self testGame];
     
