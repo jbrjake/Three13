@@ -99,6 +99,13 @@
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad {
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(gameStarts) name:@"Start Game" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(levelStarts) name:@"Start Level" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(roundStarts) name:@"Start Round" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(knownChosen) name:@"Choose Known" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(mysteryChosen) name:@"Choose Mystery" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(cardDiscarded) name:@"Discard Card" object:nil];
+
     UIImageView * backgroundImage = [[UIImageView alloc] initWithFrame:self.view.bounds];
     backgroundImage.image = [UIImage imageNamed:@"green-leather.png"];
     backgroundImage.tag = 105;
@@ -238,6 +245,30 @@
         }
     }
     
+}
+
+-(void) gameStarts {
+    NSLog(@"Game notified view controller of start!");
+}
+
+-(void) levelStarts {
+    NSLog(@"Game notified view controller of start level!");
+}
+
+-(void) roundStarts {
+    NSLog(@"Game notified view controller of start round!");
+}
+
+-(void) knownChosen {
+    NSLog(@"Game notified view controller of known chosen!");
+}
+
+-(void) mysteryChosen {
+    NSLog(@"Game notified view controller of mystery chosen!");
+}
+
+-(void) cardDiscarded {
+    NSLog(@"Game notified view controller of discarded card!");
 }
 
 - (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {

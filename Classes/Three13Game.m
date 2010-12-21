@@ -79,13 +79,17 @@
 
 -(void) startGame {
 
-   [self deal:level];
+    [self deal:level];
     [hand updateScore];
     NSLog(@"Known and unkonw are %@ and %@", knownCard, mysteryCard);
     [self setState:0];
     NSLog(@"Start Game completed");
    // [self testGame];
     
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"Start Game" object:self];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"Start Level" object:self];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"Start Round" object:self];
+
 }
 
 -(void) deal: (NSInteger) cardNumber {
@@ -112,6 +116,7 @@
     if( state == 0 ) {
         [hand addCard:knownCard];
         [self setState:1];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"Choose Known" object:self];
     }
 }
 
@@ -122,7 +127,8 @@
         NSLog(@"Hand starts as %@", hand);
         [hand addCard:mysteryCard];
         NSLog(@"Hand becomes %@", hand);
-        [self setState: 1];        
+        [self setState: 1];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"Choose Mystery" object:self];
     }
 }
 
@@ -139,7 +145,9 @@
         }
         [cardsCopy release];
         [self setState:0];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"Discard Card" object:self];
         [self setRound:round+1];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"Start Round" object:self];
         [self checkForWin];
     }
 }
@@ -149,6 +157,7 @@
     [self setLevel:level+1];
     [deck init];
     [self deal:level];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"Start Level" object:self];
     NSLog(@"Starting round %d level %d with score %d", round, level, totalScore );
 }
 
