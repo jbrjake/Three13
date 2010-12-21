@@ -18,6 +18,7 @@
     IBOutlet UILabel * scoreLabel;
     IBOutlet UILabel * roundLabel;
     IBOutlet UILabel * levelLabel;
+    NSMutableArray * handCardFrames;
 }
 
 @property(nonatomic, retain) NSMutableArray * cardViews;
@@ -27,6 +28,8 @@
 @property(nonatomic, retain) IBOutlet UILabel * scoreLabel;
 @property(nonatomic, retain) IBOutlet UILabel * roundLabel;
 @property(nonatomic, retain) IBOutlet UILabel * levelLabel;
+@property(nonatomic, retain) NSMutableArray * handCardFrames;
+
 -(IBAction) handleTap:(UIGestureRecognizer*)sender;
 
 @end

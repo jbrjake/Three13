@@ -10,7 +10,7 @@
 #import <QuartzCore/QuartzCore.h>
 @implementation _13_prototypeViewController
 
-@synthesize cardViews, knownThree13CardView, mysteryThree13CardView, totalScoreLabel, scoreLabel, roundLabel, levelLabel;
+@synthesize cardViews, knownThree13CardView, mysteryThree13CardView, totalScoreLabel, scoreLabel, roundLabel, levelLabel, handCardFrames;
 
 // The designated initializer. Override to perform setup that is required before the view is loaded.
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
@@ -111,6 +111,7 @@
     backgroundImage.tag = 105;
     [self.view addSubview:backgroundImage];
     cardViews = [NSMutableArray new];
+    handCardFrames = [NSMutableArray new];
     
     int frameOffset = 13;
     int pad = 7;
@@ -123,7 +124,8 @@
             int x = frameOffset + w*(k) + pad*(k+1);
             int y = 110 + h*(i) + pad*(i+1);
  //           NSLog(@"Placing card %d at %d,%d", i*k, x, y);
-            UIImageView * cardView = [ [UIImageView alloc] initWithFrame:CGRectMake(x, y, w, h)];
+            [handCardFrames addObject:[NSValue valueWithCGRect:CGRectMake(x, y, w, h)]];
+            UIImageView * cardView = [ [UIImageView alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2, -100, w, h)];
             cardView.layer.cornerRadius = 6.0;
             cardView.layer.masksToBounds = YES;
             [cardViews addObject:cardView];
@@ -249,6 +251,23 @@
 
 -(void) gameStarts {
     NSLog(@"Game notified view controller of start!");
+    for (int i = 0; i < cardViews.count; i++) {
+        UIImageView * view = [cardViews objectAtIndex:i];
+        CGRect rect = [[handCardFrames objectAtIndex:i] CGRectValue];
+
+        CABasicAnimation *animation =
+        [CABasicAnimation animationWithKeyPath:@"position"];
+        CGPoint startPoint = CGPointMake(view.frame.origin.x + (view.frame.size.width/2), view.frame.origin.y + (view.frame.size.height/2));
+        CGPoint endPoint = CGPointMake(rect.origin.x + (rect.size.width/2), rect.origin.y + (rect.size.height/2));
+        [animation setFromValue:[NSValue valueWithPoint:startPoint]];
+        [animation setToValue:[NSValue valueWithPoint:endPoint]];
+        [animation setDuration:1.0];
+        
+        [view.layer setPosition:endPoint];
+        
+        [view.layer addAnimation:animation forKey:nil];
+        
+    }
 }
 
 -(void) levelStarts {
