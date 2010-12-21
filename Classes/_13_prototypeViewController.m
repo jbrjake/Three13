@@ -122,11 +122,7 @@
  //           NSLog(@"Placing card %d at %d,%d", i*k, x, y);
             UIImageView * cardView = [ [UIImageView alloc] initWithFrame:CGRectMake(x, y, w, h)];
             cardView.layer.cornerRadius = 6.0;
-            cardView.clipsToBounds = YES;
-            cardView.layer.shadowOffset = CGSizeMake(1, 1);
-            cardView.layer.shadowRadius = 2.0;
-            cardView.layer.shadowColor = [UIColor blackColor].CGColor;
-            cardView.layer.shadowOpacity = 0.8;
+            cardView.layer.masksToBounds = YES;
             [cardViews addObject:cardView];
             [cardView release];
         }
@@ -165,8 +161,12 @@
     roundLabel.text = [NSString stringWithFormat:@"Round: %d", game.round];
     levelLabel.text = [NSString stringWithFormat:@"Level: %d", game.level];
 //    NSLog(@"Game started, setting known/mystery cards to %d and %d", game.knownCard.number, game.mysteryCard.number);
+    knownThree13CardView.layer.cornerRadius = 6.0;
+    knownThree13CardView.layer.masksToBounds = YES;
     [knownThree13CardView setImage:game.knownCard.face];
     [knownThree13CardView setTag:game.knownCard.number];
+    mysteryThree13CardView.layer.cornerRadius = 6.0;
+    mysteryThree13CardView.layer.masksToBounds = YES;
     [mysteryThree13CardView setTag:game.mysteryCard.number];
     [mysteryThree13CardView setImage:game.mysteryCard.back];
 //    mysteryThree13CardView.animationImages = imagesArray;
