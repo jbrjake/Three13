@@ -82,7 +82,7 @@
    [self deal:level];
     [hand updateScore];
     NSLog(@"Known and unkonw are %@ and %@", knownCard, mysteryCard);
-    state = 0;
+    [self setState:0];
     NSLog(@"Start Game completed");
    // [self testGame];
     
@@ -105,13 +105,13 @@
     mysteryCard = [[deck draw] retain];
     NSLog(@"Set mystery card to %@", mysteryCard);
     [hand updateScore];
-    currentScore = hand.score;
+    [self setCurrentScore:hand.score];
 }
 
 -(void) choseKnownCard {
     if( state == 0 ) {
         [hand addCard:knownCard];
-        state = 1;
+        [self setState:1];
     }
 }
 
@@ -122,7 +122,7 @@
         NSLog(@"Hand starts as %@", hand);
         [hand addCard:mysteryCard];
         NSLog(@"Hand becomes %@", hand);
-        state = 1;        
+        [self setState: 1];        
     }
 }
 
@@ -138,15 +138,15 @@
             }
         }
         [cardsCopy release];
-        state = 0;
-        round++;
+        [self setState:0];
+        [self setRound:round+1];
         [self checkForWin];
     }
 }
 
 -(void) startNewLevel {
-    round = 1;
-    level++;
+    [self setRound:1];
+    [self setLevel:level+1];
     [deck init];
     [self deal:level];
     NSLog(@"Starting round %d level %d with score %d", round, level, totalScore );
@@ -157,14 +157,14 @@
     //Then check for out of time
     
     [hand updateScore];
-    currentScore = hand.score;
+    [self setCurrentScore:hand.score];
     if (hand.score == 0) {
         NSLog(@"It's a win!");
         [self startNewLevel];
     }
     else if( round > level ) {
         NSLog(@"Out of rounds!");
-        totalScore += hand.score;
+        [self setTotalScore:totalScore + hand.score];
         [self startNewLevel];
     }
     else {

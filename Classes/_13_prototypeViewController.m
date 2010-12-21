@@ -93,10 +93,6 @@
     }
 //    NSLog(@"Set unknown card");
     
-    levelLabel.text = [NSString stringWithFormat:@"Level: %d", game.level];
-    roundLabel.text = [NSString stringWithFormat:@"Round: %d", game.round];
-    scoreLabel.text = [NSString stringWithFormat:@"Current Score: %d", game.currentScore];
-    totalScoreLabel.text = [NSString stringWithFormat:@"Total Score: %d", game.totalScore];
 }
 
 
@@ -132,6 +128,11 @@
         [self.view addSubview:cardView];
     }    
     game = [[Three13Game alloc] init];
+    [game addObserver:self forKeyPath:@"state" options:0 context:nil];
+    [game addObserver:self forKeyPath:@"level" options:0 context:nil];
+    [game addObserver:self forKeyPath:@"round" options:0 context:nil];
+    [game addObserver:self forKeyPath:@"currentScore" options:0 context:nil];
+    [game addObserver:self forKeyPath:@"totalScore" options:0 context:nil];
     NSMutableArray * imagesArray = [NSMutableArray new];
     for (Three13Card * card in game.deck.cards) {
         [imagesArray addObject:card.face];
@@ -198,6 +199,7 @@
     if (knownThree13CardView.image != nil) {
         [game choseKnownCard];
         [self updateDisplay];
+        scoreLabel.text = @"";
     }
 }
 
@@ -206,6 +208,7 @@
     if (mysteryThree13CardView.image != nil) {
         [game choseMysteryCard];
         [self updateDisplay];
+        scoreLabel.text = @"";
     }
 }
 
@@ -235,6 +238,42 @@
         }
     }
     
+}
+
+- (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+    if ([keyPath isEqualToString:@"state"] && [object isEqual:game] ) {
+        switch (game.state) {
+            case -1:
+                break;
+            case 0:
+                NSLog(@"Game started");
+                break;
+            case 1:
+                break;
+            default:
+                break;
+        }
+    }
+
+    if ([keyPath isEqualToString:@"level"] && [object isEqual:game] ) {
+        NSLog(@"On level %d", game.level);
+        levelLabel.text = [NSString stringWithFormat:@"Level: %d", game.level];
+    }
+
+    if ([keyPath isEqualToString:@"round"] && [object isEqual:game] ) {
+        NSLog(@"On round %d", game.round);
+        roundLabel.text = [NSString stringWithFormat:@"Round: %d", game.round];
+    }
+
+    if ([keyPath isEqualToString:@"currentScore"] && [object isEqual:game] ) {
+        NSLog(@"Current score %d", game.currentScore);
+        scoreLabel.text = [NSString stringWithFormat:@"Current Score: %d", game.currentScore];
+    }
+
+    if ([keyPath isEqualToString:@"totalScore"] && [object isEqual:game] ) {
+        NSLog(@"Total score %d", game.totalScore);
+        totalScoreLabel.text = [NSString stringWithFormat:@"Total Score: %d", game.totalScore];
+    }
 }
 
 /*
