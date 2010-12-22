@@ -13,8 +13,8 @@
     Three13Game * game;
     NSMutableArray * cardViews;
     NSMutableArray * allCardViews;
-    IBOutlet UIImageView * knownThree13CardView;
-    IBOutlet UIImageView * mysteryThree13CardView;
+    UIImageView * knownThree13CardView;
+    UIImageView * mysteryThree13CardView;
     IBOutlet UILabel * totalScorLabel;
     IBOutlet UILabel * scoreLabel;
     IBOutlet UILabel * roundLabel;
@@ -28,8 +28,8 @@
 
 @property(nonatomic, retain) NSMutableArray * cardViews;
 @property(nonatomic, retain) NSMutableArray * allCardViews;
-@property(nonatomic, retain) IBOutlet UIImageView * knownThree13CardView;
-@property(nonatomic, retain) IBOutlet UIImageView * mysteryThree13CardView;
+@property(nonatomic, retain) UIImageView * knownThree13CardView;
+@property(nonatomic, retain) UIImageView * mysteryThree13CardView;
 @property(nonatomic, retain) IBOutlet UILabel * totalScoreLabel;
 @property(nonatomic, retain) IBOutlet UILabel * scoreLabel;
 @property(nonatomic, retain) IBOutlet UILabel * roundLabel;

@@ -35,7 +35,6 @@
 - (void) updateDisplay {
     
     NSLog(@"Updating display");
-    NSLog(@"There are %d tags in subviews", [[self.view subviews] count]);
     for (UIImageView * cardView in allCardViews) {
         cardView.frame = aboveFrame;
     }
@@ -52,9 +51,8 @@
     for (int i = 0; i < [game.hand.cards count]; i++) {
         Three13Card * drawnCard = [game.hand showCardAt:i];
         CGRect frame = [[handCardFrames objectAtIndex:i] CGRectValue];
-        UIImageView * view = [self.view viewWithTag:drawnCard.number];
+        UIImageView * view = (UIImageView*)[self.view viewWithTag:drawnCard.number];
         view.frame = frame;
-        NSLog(@"Drawing the %d card", i);
     }
     
 //    for( int i = 0; i < [game.hand.cards count]; i++) {
@@ -70,35 +68,39 @@
     
 //    NSLog(@"Game state is: %d", game.state);
     if (game.knownCard && game.state == 0) {
+        knownThree13CardView = (UIImageView*)[self.view viewWithTag:game.knownCard.number];
+        knownThree13CardView.frame = knownCardFrame;
+        
 //        NSLog(@"Setting known card face");
-        [knownThree13CardView setImage:game.knownCard.face];
 //        NSLog(@"Setting known card number");
-        [knownThree13CardView setTag:game.knownCard.number];
-        [UIView animateWithDuration:1.0 animations:^{
-            knownThree13CardView.alpha = 1.0;
-        }];
+//        [UIView animateWithDuration:1.0 animations:^{
+//            knownThree13CardView.alpha = 1.0;
+//        }];
         
     }
     else {
-        [UIView animateWithDuration:0.2 animations:^{
-            knownThree13CardView.alpha = 0.0;
-        }];        
+        knownThree13CardView = nil;
+//        [UIView animateWithDuration:0.2 animations:^{
+//            knownThree13CardView.alpha = 0.0;
+//        }];        
 //        [knownThree13CardView setImage:nil];
 //        [knownThree13CardView setTag:nil];
     }
 //    NSLog(@"Set known card");
     if (game.mysteryCard && game.state == 0) {
-        [mysteryThree13CardView setTag:game.mysteryCard.number];
-        [mysteryThree13CardView setImage:game.mysteryCard.back];
-        [UIView animateWithDuration:1.0 animations:^{
-            mysteryThree13CardView.alpha = 1.0;
-        }];
+        mysteryThree13CardView = (UIImageView*)[self.view viewWithTag:game.mysteryCard.number];
+        mysteryThree13CardView.frame = mysteryCardFrame;
+        mysteryThree13CardView.image = game.mysteryCard.back;
+//        [UIView animateWithDuration:1.0 animations:^{
+//            mysteryThree13CardView.alpha = 1.0;
+//        }];
         
     }
     else {
-        [UIView animateWithDuration:0.2 animations:^{
-            mysteryThree13CardView.alpha = 0.0;
-        }];        
+        mysteryThree13CardView = nil;
+//        [UIView animateWithDuration:0.2 animations:^{
+//            mysteryThree13CardView.alpha = 0.0;
+//        }];        
 //        [mysteryThree13CardView setTag:nil];
 //        [mysteryThree13CardView setImage:nil];    
     }
@@ -131,10 +133,12 @@
     cardViews = [NSMutableArray new];
     handCardFrames = [NSMutableArray new];
     belowFrame = CGRectMake(600, 1000, w, h);
-    knownCardFrame = knownThree13CardView.frame;
-    mysteryCardFrame = mysteryThree13CardView.frame;
+    knownCardFrame = CGRectMake(193, 365, w, h);
+    mysteryCardFrame = CGRectMake(250, 365, w, h);
+    
     knownThree13CardView.frame = belowFrame;
     mysteryThree13CardView.frame = belowFrame;
+
     int frameOffset = 13;
     int pad = 7;
     
@@ -171,7 +175,6 @@
         cardView.layer.masksToBounds = YES;
         cardView.image = card.face;
         cardView.tag = card.number;
-        NSLog(@"allCardViews count: %d", allCardViews.count);
         [allCardViews addObject:cardView];
         [self.view addSubview:cardView];
         [cardView release];
@@ -211,18 +214,22 @@
     roundLabel.text = [NSString stringWithFormat:@"Round: %d", game.round];
     levelLabel.text = [NSString stringWithFormat:@"Level: %d", game.level];
 //    NSLog(@"Game started, setting known/mystery cards to %d and %d", game.knownCard.number, game.mysteryCard.number);
+    
+    knownThree13CardView = [self.view viewWithTag:game.knownCard.number];
     knownThree13CardView.layer.cornerRadius = 6.0;
     knownThree13CardView.layer.masksToBounds = YES;
-    [knownThree13CardView setImage:game.knownCard.face];
-    [knownThree13CardView setTag:game.knownCard.number];
+    knownThree13CardView.frame = belowFrame;
+    
+    mysteryThree13CardView = [self.view viewWithTag:game.mysteryCard.number];
     mysteryThree13CardView.layer.cornerRadius = 6.0;
     mysteryThree13CardView.layer.masksToBounds = YES;
     [mysteryThree13CardView setTag:game.mysteryCard.number];
     [mysteryThree13CardView setImage:game.mysteryCard.back];
+    mysteryThree13CardView.frame = belowFrame;
 //    mysteryThree13CardView.animationImages = imagesArray;
 //    mysteryThree13CardView.startAnimating;
-    [self.view addSubview:knownThree13CardView];
-    [self.view addSubview:mysteryThree13CardView];
+//    [self.view addSubview:knownThree13CardView];
+//    [self.view addSubview:mysteryThree13CardView];
     [self.view addSubview:scoreLabel];
     [self.view addSubview:totalScoreLabel];
     [self.view addSubview:roundLabel];
@@ -315,7 +322,7 @@
     } completion:^(BOOL finished) {
             
             //Start round
-        [self roundStarts];
+            [self roundStarts];
             //Reveal score labels
 /*            CABasicAnimation *labelAnimation =
             [CABasicAnimation animationWithKeyPath:@"opacity"];
@@ -352,8 +359,8 @@
 -(void) roundStarts {
     NSLog(@"Game notified view controller of start round!");
     [UIView transitionWithView:nil duration:1.0 options:UIViewAnimationOptionTransitionFlipFromLeft animations:^{
-        knownThree13CardView.frame = CGRectMake(knownCardFrame.origin.x , knownCardFrame.origin.y , knownThree13CardView.frame.size.width, knownThree13CardView.frame.size.height);
-        mysteryThree13CardView.frame = CGRectMake(mysteryCardFrame.origin.x , mysteryCardFrame.origin.y , mysteryThree13CardView.frame.size.width, mysteryThree13CardView.frame.size.height);
+        knownThree13CardView.frame = knownCardFrame;
+        mysteryThree13CardView.frame = mysteryCardFrame;
     } completion:^(BOOL finished) {
         //Reveal score labels
         
@@ -404,10 +411,15 @@
 
 -(void) knownChosen {
     NSLog(@"Game notified view controller of known chosen!");
+    [mysteryThree13CardView.layer removeAnimationForKey:@"animateOpacity"];
+    [knownThree13CardView.layer removeAnimationForKey:@"animateOpacity"];
 }
 
 -(void) mysteryChosen {
     NSLog(@"Game notified view controller of mystery chosen!");
+    [mysteryThree13CardView.layer removeAnimationForKey:@"animateOpacity"];
+    [knownThree13CardView.layer removeAnimationForKey:@"animateOpacity"];
+    mysteryThree13CardView.image = game.mysteryCard.face;
 }
 
 -(void) cardDiscarded {
