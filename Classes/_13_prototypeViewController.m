@@ -334,6 +334,21 @@
             
         } completion:^(BOOL finished) {
             NSLog(@"Completed label fade-in");
+            
+            //Pulsate known/mystery
+            CABasicAnimation *theAnimation;
+            
+            theAnimation=[CABasicAnimation animationWithKeyPath:@"opacity"];
+            theAnimation.duration=1.0;
+            theAnimation.repeatCount=HUGE_VALF;
+            theAnimation.autoreverses=YES;
+            theAnimation.fromValue=[NSNumber numberWithFloat:1.0];
+            theAnimation.toValue=[NSNumber numberWithFloat:0.5];
+            theAnimation.timingFunction = [CAMediaTimingFunction functionWithName: kCAMediaTimingFunctionEaseInEaseOut];
+
+            [mysteryThree13CardView.layer addAnimation:theAnimation forKey:@"animateOpacity"];
+            [knownThree13CardView.layer addAnimation:theAnimation forKey:@"animateOpacity"];
+            
         } ];
 
 /*
