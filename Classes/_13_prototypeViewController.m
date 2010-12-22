@@ -10,7 +10,7 @@
 #import <QuartzCore/QuartzCore.h>
 @implementation _13_prototypeViewController
 
-@synthesize cardViews, knownThree13CardView, mysteryThree13CardView, totalScoreLabel, scoreLabel, roundLabel, levelLabel, handCardFrames;
+@synthesize cardViews, knownThree13CardView, mysteryThree13CardView, totalScoreLabel, scoreLabel, roundLabel, levelLabel, handCardFrames, knownCardFrame, mysteryCardFrame;
 
 // The designated initializer. Override to perform setup that is required before the view is loaded.
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
@@ -106,12 +106,18 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(mysteryChosen) name:@"Choose Mystery" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(cardDiscarded) name:@"Discard Card" object:nil];
 
-    UIImageView * backgroundImage = [[UIImageView alloc] initWithFrame:self.view.bounds];
+    self.view.backgroundColor = [UIColor blackColor];
+    CGRect hiddenBackground = CGRectMake(self.view.bounds.origin.x, -1000, self.view.bounds.size.width, self.view.bounds.size.height);
+    UIImageView * backgroundImage = [[UIImageView alloc] initWithFrame:hiddenBackground];
     backgroundImage.image = [UIImage imageNamed:@"green-leather.png"];
     backgroundImage.tag = 105;
     [self.view addSubview:backgroundImage];
     cardViews = [NSMutableArray new];
     handCardFrames = [NSMutableArray new];
+    knownCardFrame = knownThree13CardView.frame;
+    mysteryCardFrame = mysteryThree13CardView.frame;
+    knownThree13CardView.frame = CGRectMake(600, 1000, knownCardFrame.size.width, knownCardFrame.size.height);
+    mysteryThree13CardView.frame = CGRectMake(600, 1000, mysteryCardFrame.size.width, mysteryCardFrame.size.height);
     
     int frameOffset = 13;
     int pad = 7;
@@ -154,6 +160,10 @@
         [ [cardViews objectAtIndex:i ] setTag: drawnThree13Card.number];
     }
     
+    scoreLabel.alpha = 0;
+    totalScoreLabel.alpha = 0;
+    roundLabel.alpha = 0;
+    levelLabel.alpha = 0;
     scoreLabel.textColor = [UIColor whiteColor];
     scoreLabel.shadowColor = [UIColor blackColor];
     scoreLabel.shadowOffset = CGSizeMake(1, 1);
@@ -251,10 +261,49 @@
 
 -(void) gameStarts {
     NSLog(@"Game notified view controller of start!");
-    for (int i = 0; i < cardViews.count; i++) {
-        UIImageView * view = [cardViews objectAtIndex:i];
-        CGRect rect = [[handCardFrames objectAtIndex:i] CGRectValue];
+    
+    //Animate in the backdrop    
+    UIImageView * backView = [self.view viewWithTag:105];
+    [UIView transitionWithView:nil duration:1.0 options:UIViewAnimationOptionTransitionFlipFromLeft animations:^{
+		backView.frame = CGRectMake(self.view.bounds.origin.x, self.view.bounds.origin.y, self.view.bounds.size.width, self.view.bounds.size.height);
+	} completion:^(BOOL finished) {
+        [self levelStarts];
+    } ];
+    
+}
 
+-(void) levelStarts {
+    NSLog(@"Game notified view controller of start level!");
+    //Animate in the cards for the hand
+    [UIView transitionWithView:nil duration:1.0 options:UIViewAnimationOptionTransitionFlipFromLeft animations:^{
+        for( int i = 0; i < cardViews.count; i++) {
+            UIImageView * view = [cardViews objectAtIndex:i];
+            CGRect rect = [[handCardFrames objectAtIndex:i] CGRectValue];
+            view.frame = CGRectMake(rect.origin.x , rect.origin.y , view.frame.size.width, view.frame.size.height);
+        }
+    } completion:^(BOOL finished) {
+            
+            //Start round
+        [self roundStarts];
+            //Reveal score labels
+/*            CABasicAnimation *labelAnimation =
+            [CABasicAnimation animationWithKeyPath:@"opacity"];
+            [labelAnimation setFromValue:[NSNumber numberWithFloat:0.0]];
+            [labelAnimation setToValue:[NSNumber numberWithFloat:1.0]];
+            [labelAnimation setDuration:1.0];
+            
+            scoreLabel.alpha = 1.0;
+            totalScoreLabel.alpha = 1.0;
+            roundLabel.alpha = 1.0;
+            levelLabel.alpha = 1.0;
+            [scoreLabel.layer addAnimation:labelAnimation forKey:nil];
+            [totalScoreLabel.layer addAnimation:labelAnimation forKey:nil];
+            [roundLabel.layer addAnimation:labelAnimation forKey:nil];
+            [levelLabel.layer addAnimation:labelAnimation forKey:nil];            
+ */
+        }];
+
+/*        
         CABasicAnimation *animation =
         [CABasicAnimation animationWithKeyPath:@"position"];
         CGPoint startPoint = CGPointMake(view.frame.origin.x + (view.frame.size.width/2), view.frame.origin.y + (view.frame.size.height/2));
@@ -266,16 +315,45 @@
         [view.layer setPosition:endPoint];
         
         [view.layer addAnimation:animation forKey:nil];
-        
-    }
-}
-
--(void) levelStarts {
-    NSLog(@"Game notified view controller of start level!");
+*/
 }
 
 -(void) roundStarts {
     NSLog(@"Game notified view controller of start round!");
+    [UIView transitionWithView:nil duration:1.0 options:UIViewAnimationOptionTransitionFlipFromLeft animations:^{
+        knownThree13CardView.frame = CGRectMake(knownCardFrame.origin.x , knownCardFrame.origin.y , knownThree13CardView.frame.size.width, knownThree13CardView.frame.size.height);
+        mysteryThree13CardView.frame = CGRectMake(mysteryCardFrame.origin.x , mysteryCardFrame.origin.y , mysteryThree13CardView.frame.size.width, mysteryThree13CardView.frame.size.height);
+    } completion:^(BOOL finished) {
+        //Reveal score labels
+        
+        [UIView transitionWithView:nil duration:1.0 options:nil animations:^{
+            scoreLabel.alpha = 1.0;
+            totalScoreLabel.alpha = 1.0;
+            roundLabel.alpha = 1.0;
+            levelLabel.alpha = 1.0;
+            
+        } completion:^(BOOL finished) {
+            NSLog(@"Completed label fade-in");
+        } ];
+
+/*
+        CABasicAnimation *labelAnimation =
+        [CABasicAnimation animationWithKeyPath:@"opacity"];
+        [labelAnimation setFromValue:[NSNumber numberWithFloat:0.0]];
+        [labelAnimation setToValue:[NSNumber numberWithFloat:1.0]];
+        [labelAnimation setDuration:1.0];
+        
+        scoreLabel.alpha = 1.0;
+        totalScoreLabel.alpha = 1.0;
+        roundLabel.alpha = 1.0;
+        levelLabel.alpha = 1.0;
+        [scoreLabel.layer addAnimation:labelAnimation forKey:nil];
+        [totalScoreLabel.layer addAnimation:labelAnimation forKey:nil];
+        [roundLabel.layer addAnimation:labelAnimation forKey:nil];
+        [levelLabel.layer addAnimation:labelAnimation forKey:nil];
+*/
+    }];
+    
 }
 
 -(void) knownChosen {

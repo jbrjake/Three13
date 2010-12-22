@@ -87,8 +87,10 @@
    // [self testGame];
     
     [[NSNotificationCenter defaultCenter] postNotificationName:@"Start Game" object:self];
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"Start Level" object:self];
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"Start Round" object:self];
+//    Starting 1st level is handled by the view controller so animation is sequenced properly.
+//    [[NSNotificationCenter defaultCenter] postNotificationName:@"Start Level" object:self];
+//    Starting 1st round is handled by the view controller so animation is sequence properly.
+//    [[NSNotificationCenter defaultCenter] postNotificationName:@"Start Round" object:self];
 
 }
 

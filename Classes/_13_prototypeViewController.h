@@ -19,6 +19,8 @@
     IBOutlet UILabel * roundLabel;
     IBOutlet UILabel * levelLabel;
     NSMutableArray * handCardFrames;
+    CGRect knownCardFrame;
+    CGRect mysteryCardFrame;
 }
 
 @property(nonatomic, retain) NSMutableArray * cardViews;
@@ -29,6 +31,8 @@
 @property(nonatomic, retain) IBOutlet UILabel * roundLabel;
 @property(nonatomic, retain) IBOutlet UILabel * levelLabel;
 @property(nonatomic, retain) NSMutableArray * handCardFrames;
+@property(nonatomic) CGRect knownCardFrame;
+@property(nonatomic) CGRect mysteryCardFrame;
 
 -(IBAction) handleTap:(UIGestureRecognizer*)sender;
 
