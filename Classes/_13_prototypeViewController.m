@@ -10,7 +10,7 @@
 #import <QuartzCore/QuartzCore.h>
 @implementation _13_prototypeViewController
 
-@synthesize cardViews, knownThree13CardView, mysteryThree13CardView, totalScoreLabel, scoreLabel, roundLabel, levelLabel, handCardFrames, knownCardFrame, mysteryCardFrame;
+@synthesize cardViews, allCardViews, knownThree13CardView, mysteryThree13CardView, totalScoreLabel, scoreLabel, roundLabel, levelLabel, handCardFrames, knownCardFrame, mysteryCardFrame, aboveFrame, belowFrame;
 
 // The designated initializer. Override to perform setup that is required before the view is loaded.
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
@@ -35,26 +35,37 @@
 - (void) updateDisplay {
     
     NSLog(@"Updating display");
+    NSLog(@"There are %d tags in subviews", [[self.view subviews] count]);
+    for (UIImageView * cardView in allCardViews) {
+        cardView.frame = aboveFrame;
+    }
     
-    for( UIImageView * cardView in cardViews ) {
+//    for( UIImageView * cardView in cardViews ) {
 //        [UIView animateWithDuration:1.0 animations:^{
 //            cardView.alpha = 0.0;
 //        }];
-        cardView.image = nil;
-        cardView.tag = 0;
-        
-    }
+//        cardView.image = nil;
+//        cardView.tag = 0;
+//    }
 //    NSLog(@"Nilled hand card views");
-    for( int i = 0; i < [game.hand.cards count]; i++) {
-        Three13Card * drawnThree13Card = [game.hand showCardAt:i];
-        [ [cardViews objectAtIndex:i ] setImage: drawnThree13Card.face];
-        [ [cardViews objectAtIndex:i ] setTag: drawnThree13Card.number];
+    
+    for (int i = 0; i < [game.hand.cards count]; i++) {
+        Three13Card * drawnCard = [game.hand showCardAt:i];
+        CGRect frame = [[handCardFrames objectAtIndex:i] CGRectValue];
+        UIImageView * view = [self.view viewWithTag:drawnCard.number];
+        view.frame = frame;
+        NSLog(@"Drawing the %d card", i);
+    }
+    
+//    for( int i = 0; i < [game.hand.cards count]; i++) {
+//        Three13Card * drawnThree13Card = [game.hand showCardAt:i];
+//        [ [cardViews objectAtIndex:i ] setImage: drawnThree13Card.face];
+//        [ [cardViews objectAtIndex:i ] setTag: drawnThree13Card.number];
 //        UIImageView * cardView = [cardViews objectAtIndex:i];
 //        [UIView animateWithDuration:1.0 animations:^{
 //            cardView.alpha = 1.0;
 //        }];
-        
-    }
+//    }
 //    NSLog(@"Set hand card views to hand");
     
 //    NSLog(@"Game state is: %d", game.state);
@@ -112,17 +123,20 @@
     backgroundImage.image = [UIImage imageNamed:@"green-leather.png"];
     backgroundImage.tag = 105;
     [self.view addSubview:backgroundImage];
-    cardViews = [NSMutableArray new];
-    handCardFrames = [NSMutableArray new];
-    knownCardFrame = knownThree13CardView.frame;
-    mysteryCardFrame = mysteryThree13CardView.frame;
-    knownThree13CardView.frame = CGRectMake(600, 1000, knownCardFrame.size.width, knownCardFrame.size.height);
-    mysteryThree13CardView.frame = CGRectMake(600, 1000, mysteryCardFrame.size.width, mysteryCardFrame.size.height);
-    
-    int frameOffset = 13;
-    int pad = 7;
+
     int w = 50;
     int h = 75;
+
+    allCardViews = [NSMutableArray new];
+    cardViews = [NSMutableArray new];
+    handCardFrames = [NSMutableArray new];
+    belowFrame = CGRectMake(600, 1000, w, h);
+    knownCardFrame = knownThree13CardView.frame;
+    mysteryCardFrame = mysteryThree13CardView.frame;
+    knownThree13CardView.frame = belowFrame;
+    mysteryThree13CardView.frame = belowFrame;
+    int frameOffset = 13;
+    int pad = 7;
     
     for( int i = 0; i < 3; i++)
     {
@@ -131,34 +145,50 @@
             int y = 110 + h*(i) + pad*(i+1);
  //           NSLog(@"Placing card %d at %d,%d", i*k, x, y);
             [handCardFrames addObject:[NSValue valueWithCGRect:CGRectMake(x, y, w, h)]];
-            UIImageView * cardView = [ [UIImageView alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2, -100, w, h)];
-            cardView.layer.cornerRadius = 6.0;
-            cardView.layer.masksToBounds = YES;
-            [cardViews addObject:cardView];
-            [cardView release];
+//            UIImageView * cardView = [ [UIImageView alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2, -100, w, h)];
+//            cardView.layer.cornerRadius = 6.0;
+//            cardView.layer.masksToBounds = YES;
+//            [cardViews addObject:cardView];
+//            [cardView release];
         }
     }
     
-    for( UIImageView * cardView in cardViews ) {
-        [self.view addSubview:cardView];
-    }    
+//    for( UIImageView * cardView in cardViews ) {
+//        [self.view addSubview:cardView];
+//    }    
     game = [[Three13Game alloc] init];
     [game addObserver:self forKeyPath:@"state" options:0 context:nil];
     [game addObserver:self forKeyPath:@"level" options:0 context:nil];
     [game addObserver:self forKeyPath:@"round" options:0 context:nil];
     [game addObserver:self forKeyPath:@"currentScore" options:0 context:nil];
     [game addObserver:self forKeyPath:@"totalScore" options:0 context:nil];
+    
+    aboveFrame = CGRectMake(self.view.frame.size.width/2, -100, w, h);
+    // Build a view for each card, tagged by number, and place outside of frame
+    for (Three13Card * card in game.deck.cards) {
+        UIImageView * cardView = [[UIImageView alloc] initWithFrame:aboveFrame];
+        cardView.layer.cornerRadius = 6.0;
+        cardView.layer.masksToBounds = YES;
+        cardView.image = card.face;
+        cardView.tag = card.number;
+        NSLog(@"allCardViews count: %d", allCardViews.count);
+        [allCardViews addObject:cardView];
+        [self.view addSubview:cardView];
+        [cardView release];
+    }
+    
     NSMutableArray * imagesArray = [NSMutableArray new];
     for (Three13Card * card in game.deck.cards) {
         [imagesArray addObject:card.face];
     }
     
     [game startGame];
-    for( int i = 0; i < [game.hand.cards count]; i++) {
-        Three13Card * drawnThree13Card = [game.hand showCardAt:i];
-        [ [cardViews objectAtIndex:i ] setImage: drawnThree13Card.face];
-        [ [cardViews objectAtIndex:i ] setTag: drawnThree13Card.number];
-    }
+//    for( int i = 0; i < [game.hand.cards count]; i++) {
+//        Three13Card * drawnThree13Card = [game.hand showCardAt:i];
+//        [ [cardViews objectAtIndex:i ] setImage: drawnThree13Card.face];
+//        [ [cardViews objectAtIndex:i ] setTag: drawnThree13Card.number];
+//    }
+    
     
     scoreLabel.alpha = 0;
     totalScoreLabel.alpha = 0;
@@ -276,10 +306,11 @@
     NSLog(@"Game notified view controller of start level!");
     //Animate in the cards for the hand
     [UIView transitionWithView:nil duration:1.0 options:UIViewAnimationOptionTransitionFlipFromLeft animations:^{
-        for( int i = 0; i < cardViews.count; i++) {
-            UIImageView * view = [cardViews objectAtIndex:i];
-            CGRect rect = [[handCardFrames objectAtIndex:i] CGRectValue];
-            view.frame = CGRectMake(rect.origin.x , rect.origin.y , view.frame.size.width, view.frame.size.height);
+        for (int i = 0; i < [game.hand.cards count]; i++) {
+            Three13Card * drawnCard = [game.hand showCardAt:i];
+            CGRect frame = [[handCardFrames objectAtIndex:i] CGRectValue];
+            UIImageView * view = [self.view viewWithTag:drawnCard.number];
+            view.frame = frame;
         }
     } completion:^(BOOL finished) {
             

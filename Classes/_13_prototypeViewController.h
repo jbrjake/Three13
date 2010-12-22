@@ -12,6 +12,7 @@
 
     Three13Game * game;
     NSMutableArray * cardViews;
+    NSMutableArray * allCardViews;
     IBOutlet UIImageView * knownThree13CardView;
     IBOutlet UIImageView * mysteryThree13CardView;
     IBOutlet UILabel * totalScorLabel;
@@ -21,9 +22,12 @@
     NSMutableArray * handCardFrames;
     CGRect knownCardFrame;
     CGRect mysteryCardFrame;
+    CGRect aboveFrame;
+    CGRect belowFrame;
 }
 
 @property(nonatomic, retain) NSMutableArray * cardViews;
+@property(nonatomic, retain) NSMutableArray * allCardViews;
 @property(nonatomic, retain) IBOutlet UIImageView * knownThree13CardView;
 @property(nonatomic, retain) IBOutlet UIImageView * mysteryThree13CardView;
 @property(nonatomic, retain) IBOutlet UILabel * totalScoreLabel;
@@ -33,6 +37,8 @@
 @property(nonatomic, retain) NSMutableArray * handCardFrames;
 @property(nonatomic) CGRect knownCardFrame;
 @property(nonatomic) CGRect mysteryCardFrame;
+@property(nonatomic) CGRect aboveFrame;
+@property(nonatomic) CGRect belowFrame;
 
 -(IBAction) handleTap:(UIGestureRecognizer*)sender;
 
