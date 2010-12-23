@@ -289,15 +289,20 @@
         }
         completion:^(BOOL finished){
             UIImageView * mysteryView = (UIImageView *) [self.view viewWithTag:mysteryTag];
-            [ UIView transitionWithView:mysteryView duration:1.0
-                options:UIViewAnimationOptionTransitionFlipFromLeft
-                animations:^(void) {
-                    [ mysteryView setImage: game.mysteryCard.face];
-                }
-                completion:NULL
-            ];
+            [self flipViewForCard:game.mysteryCard];
         }
     ];
+}
+
+-(void) flipViewForCard:(Three13Card*)card {
+    UIImageView * cardView = (UIImageView *) [self.view viewWithTag:card.number];
+    [ UIView transitionWithView:cardView duration:1.0
+        options:UIViewAnimationOptionTransitionFlipFromLeft
+        animations:^(void) {
+            [ cardView setImage: card.face];
+        }
+        completion:NULL
+     ];    
 }
 
 -(void) cardDiscarded:(NSNotification *)note {
