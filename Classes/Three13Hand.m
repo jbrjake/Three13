@@ -157,8 +157,6 @@ int next_comb(int comb[], int k, int n) {
     /* Make sets of cards in the hand */
     [valueSets removeAllObjects];
     [suitSets removeAllObjects];
-//    valueSets = [NSMutableArray arrayWithCapacity:13];
-//    suitSets = [NSMutableArray arrayWithCapacity:4];
     
 //    NSLog(@"Making suit and value sets");
     NSMutableSet * handSet = [[NSMutableSet alloc] initWithArray:cards];
@@ -330,10 +328,6 @@ int next_comb(int comb[], int k, int n) {
         // Go through each meld
         NSMutableArray * allMeldsCopy = [allMelds copy];
         for (NSSet * setA in allMeldsCopy ) {
-            if ([setA count] < (i+1)*3 ){
-                // No need to re-compare examined melds
-                //break;
-            }
             NSMutableArray * tempArray = [[NSMutableArray alloc] init];
             for (NSSet *setB in allMeldsCopy ) {
                 if (![setA intersectsSet:setB] ) {
@@ -351,7 +345,6 @@ int next_comb(int comb[], int k, int n) {
         }
         [allMeldsCopy release];
     }
-    
 //    NSLog(@"All melds: %@", allMelds);    
 }
 
@@ -390,28 +383,20 @@ int next_comb(int comb[], int k, int n) {
 }
   
 -(void) evaluateHand {
-//    [self printCardRetainCounts];
-      NSLog(@"Find value suits and jokers");
+//    NSLog(@"Find value suits and jokers");
     [self findValuesSuitsAndJokers];
-//    [self printCardRetainCounts];
-      NSLog(@"Prunt sets to size");
+//    NSLog(@"Prunt sets to size");
     [self pruneSetsToSize];
-//    [self printCardRetainCounts];
-    NSLog(@"Add jokers");
+//    NSLog(@"Add jokers");
     [self addJokersToSets];
-//    [self printCardRetainCounts];
-    NSLog(@"Find combos");
+//    NSLog(@"Find combos");
     [self findSetCombinations];
-//    [self printCardRetainCounts];
-    NSLog(@"Prune sets to runs");
+//    NSLog(@"Prune sets to runs");
     [self pruneSuitSetsToRuns];
-//    [self printCardRetainCounts];
-    NSLog(@"Find melds of melds");
+//    NSLog(@"Find melds of melds");
     [self findMeldsOfMelds];
-//    [self printCardRetainCounts];
-    NSLog(@"Score hand");
+//    NSLog(@"Score hand");
     [self scoreHand];
-//    [self printCardRetainCounts];
 }
 
 -(void) updateScore {

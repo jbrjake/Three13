@@ -81,17 +81,12 @@
 
     [self deal:level];
     [hand updateScore];
-    NSLog(@"Known and unkonw are %@ and %@", knownCard, mysteryCard);
+//    NSLog(@"Known and unkonw are %@ and %@", knownCard, mysteryCard);
     [self setState:0];
-    NSLog(@"Start Game completed");
-   // [self testGame];
+//    NSLog(@"Start Game completed");
+//  [self testGame];
     
     [[NSNotificationCenter defaultCenter] postNotificationName:@"Start Game" object:self];
-//    Starting 1st level is handled by the view controller so animation is sequenced properly.
-//    [[NSNotificationCenter defaultCenter] postNotificationName:@"Start Level" object:self];
-//    Starting 1st round is handled by the view controller so animation is sequence properly.
-//    [[NSNotificationCenter defaultCenter] postNotificationName:@"Start Round" object:self];
-
 }
 
 -(void) deal: (NSInteger) cardNumber {
@@ -107,9 +102,9 @@
     [hand sortBySuit];
     [hand sortByValue];
     knownCard = [[deck draw] retain];
-    NSLog(@"Set known card to %@", knownCard);
+//    NSLog(@"Set known card to %@", knownCard);
     mysteryCard = [[deck draw] retain];
-    NSLog(@"Set mystery card to %@", mysteryCard);
+//    NSLog(@"Set mystery card to %@", mysteryCard);
     [hand updateScore];
     [self setCurrentScore:hand.score];
 }
@@ -123,12 +118,10 @@
 }
 
 -(void) choseMysteryCard {
-    if( mysteryCard )
-        NSLog(@"Mystery card %@!!", mysteryCard);
     if( state == 0 ) {
-        NSLog(@"Hand starts as %@", hand);
+//        NSLog(@"Hand starts as %@", hand);
         [hand addCard:mysteryCard];
-        NSLog(@"Hand becomes %@", hand);
+//        NSLog(@"Hand becomes %@", hand);
         [self setState: 1];
         [[NSNotificationCenter defaultCenter] postNotificationName:@"Choose Mystery" object:self];
     }
@@ -162,7 +155,7 @@
     [deck init];
     [self deal:level];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"Start Level" object:self];
-    NSLog(@"Starting round %d level %d with score %d", round, level, totalScore );
+//    NSLog(@"Starting round %d level %d with score %d", round, level, totalScore );
 }
 
 -(void) checkForWin {
@@ -172,16 +165,16 @@
     [hand updateScore];
     [self setCurrentScore:hand.score];
     if (hand.score == 0) {
-        NSLog(@"It's a win!");
+//        NSLog(@"It's a win!");
         [self startNewLevel];
     }
     else if( round > level-1 ) {
-        NSLog(@"Out of rounds!");
+ //       NSLog(@"Out of rounds!");
         [self setTotalScore:totalScore + hand.score];
         [self startNewLevel];
     }
     else {
-        NSLog(@"Dealing new mystery/known cards");
+//        NSLog(@"Dealing new mystery/known cards");
         // Deal new mystery/known cards
         knownCard = [[deck draw] retain];
         mysteryCard = [[deck draw] retain];
