@@ -135,21 +135,23 @@
 }
 
 -(void) choseCard:(NSInteger)number {
+    NSDictionary * dict;
     if( state == 1 ) {
         NSMutableArray * cardsCopy = [hand.cards copy];
         for( Three13Card * card in [hand.cards copy] ) {
             if( card.number == number ) {
                 NSLog(@"Found a match!");
                 NSLog(@"Hand was %@", hand);
+                dict = [NSDictionary dictionaryWithObject:[NSNumber numberWithInt:card.number] forKey:@"discard"];
                 [hand.cards removeObject:card];
                 NSLog(@"Hand now is %@", hand);
             }
         }
         [cardsCopy release];
         [self setState:0];
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"Discard Card" object:self];
-        [self setRound:round+1];
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"Start Round" object:self];
+        [hand sortBySuit];
+        [hand sortByValue];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"Discard Card" object:self userInfo:dict];
         [self checkForWin];
     }
 }
@@ -173,7 +175,7 @@
         NSLog(@"It's a win!");
         [self startNewLevel];
     }
-    else if( round > level ) {
+    else if( round > level-1 ) {
         NSLog(@"Out of rounds!");
         [self setTotalScore:totalScore + hand.score];
         [self startNewLevel];
@@ -183,6 +185,8 @@
         // Deal new mystery/known cards
         knownCard = [[deck draw] retain];
         mysteryCard = [[deck draw] retain];
+        [self setRound:round+1];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"Start Round" object:self];
     }
 
 }

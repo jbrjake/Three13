@@ -366,6 +366,7 @@ int next_comb(int comb[], int k, int n) {
 -(void) scoreHand {
     int bestScore = 0;
     int meldScore;
+    [bestMeld removeAllObjects];
     NSLog(@"Valid melds: %@", allMelds);
     for (NSSet * meld in allMelds) {
         meldScore = 0;
