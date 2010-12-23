@@ -413,13 +413,31 @@
     NSLog(@"Game notified view controller of known chosen!");
     [mysteryThree13CardView.layer removeAnimationForKey:@"animateOpacity"];
     [knownThree13CardView.layer removeAnimationForKey:@"animateOpacity"];
+    [UIView animateWithDuration:1
+                     animations:^{
+                         knownThree13CardView.frame = [ [handCardFrames objectAtIndex:game.hand.cards.count] CGRectValue];
+                         mysteryThree13CardView.frame = belowFrame;
+                     }];
+    
 }
 
 -(void) mysteryChosen {
     NSLog(@"Game notified view controller of mystery chosen!");
     [mysteryThree13CardView.layer removeAnimationForKey:@"animateOpacity"];
     [knownThree13CardView.layer removeAnimationForKey:@"animateOpacity"];
-    mysteryThree13CardView.image = game.mysteryCard.face;
+    int mysteryTag = mysteryThree13CardView.tag;
+    [UIView animateWithDuration:1
+        animations:^{
+                        mysteryThree13CardView.frame = [ [handCardFrames objectAtIndex:game.hand.cards.count] CGRectValue];
+                        knownThree13CardView.frame = belowFrame;
+                     }
+        completion:^(BOOL finished){
+                         UIImageView * mysteryView = (UIImageView *) [self.view viewWithTag:mysteryTag];
+                         [ UIView transitionWithView:mysteryView duration:1.0 options:UIViewAnimationOptionTransitionFlipFromLeft animations:^(void) {
+                             [ mysteryView setImage: game.mysteryCard.face];
+                         } completion:NULL];
+                    } ];
+    
 }
 
 -(void) cardDiscarded {
