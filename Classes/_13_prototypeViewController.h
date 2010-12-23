@@ -41,6 +41,10 @@
 @property(nonatomic) CGRect belowFrame;
 
 -(IBAction) handleTap:(UIGestureRecognizer*)sender;
-
+-(void) createGestureRecognizers;
+-(void) levelStarts;
+-(void) roundStarts;
+-(void) moveCardWithTag:(NSInteger)tag toLocation:(CGRect)frame;
+-(void) flipViewForCard:(Three13Card *)card;
 @end
 

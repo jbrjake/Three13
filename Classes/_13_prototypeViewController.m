@@ -128,10 +128,10 @@
     levelLabel.text = [NSString stringWithFormat:@"Level: %d", game.level];
 //    NSLog(@"Game started, setting known/mystery cards to %d and %d", game.knownCard.number, game.mysteryCard.number);
     
-    knownThree13CardView = [self.view viewWithTag:game.knownCard.number];
+    knownThree13CardView = (UIImageView*)[self.view viewWithTag:game.knownCard.number];
     knownThree13CardView.frame = belowFrame;
     
-    mysteryThree13CardView = [self.view viewWithTag:game.mysteryCard.number];
+    mysteryThree13CardView = (UIImageView*)[self.view viewWithTag:game.mysteryCard.number];
     mysteryThree13CardView.frame = belowFrame;
 
     [self.view addSubview:scoreLabel];
@@ -196,7 +196,7 @@
 //    NSLog(@"Game notified view controller of start!");
     
     //Animate in the backdrop    
-    UIImageView * backView = [self.view viewWithTag:105];
+    UIImageView * backView = (UIImageView*)[self.view viewWithTag:105];
     [UIView transitionWithView:nil duration:1.0 options:UIViewAnimationOptionTransitionFlipFromLeft animations:^{
 		backView.frame = CGRectMake(self.view.bounds.origin.x, self.view.bounds.origin.y, self.view.bounds.size.width, self.view.bounds.size.height);
 	} completion:^(BOOL finished) {
@@ -279,7 +279,6 @@
     [mysteryThree13CardView.layer removeAnimationForKey:@"animateOpacity"];
     [knownThree13CardView.layer removeAnimationForKey:@"animateOpacity"];
 */
-    int mysteryTag = mysteryThree13CardView.tag;
     CGRect frame = [ [handCardFrames objectAtIndex:game.hand.cards.count-1] CGRectValue];
     [self moveCardWithTag:knownThree13CardView.tag toLocation:belowFrame];
 
@@ -288,7 +287,6 @@
             mysteryThree13CardView.frame = frame;
         }
         completion:^(BOOL finished){
-            UIImageView * mysteryView = (UIImageView *) [self.view viewWithTag:mysteryTag];
             [self flipViewForCard:game.mysteryCard];
         }
     ];
