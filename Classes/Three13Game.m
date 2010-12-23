@@ -101,6 +101,8 @@
     }
     [hand sortBySuit];
     [hand sortByValue];
+    [knownCard release];
+    [mysteryCard release];
     knownCard = [[deck draw] retain];
 //    NSLog(@"Set known card to %@", knownCard);
     mysteryCard = [[deck draw] retain];
@@ -111,7 +113,7 @@
 
 -(void) choseKnownCard {
     if( state == 0 ) {
-        [hand addCard:knownCard];
+        [hand addCard:[knownCard retain]];
         [self setState:1];
         [[NSNotificationCenter defaultCenter] postNotificationName:@"Choose Known" object:self];
     }
@@ -120,7 +122,7 @@
 -(void) choseMysteryCard {
     if( state == 0 ) {
 //        NSLog(@"Hand starts as %@", hand);
-        [hand addCard:mysteryCard];
+        [hand addCard:[mysteryCard retain]];
 //        NSLog(@"Hand becomes %@", hand);
         [self setState: 1];
         [[NSNotificationCenter defaultCenter] postNotificationName:@"Choose Mystery" object:self];
@@ -131,7 +133,7 @@
     NSDictionary * dict;
     if( state == 1 ) {
         NSMutableArray * cardsCopy = [hand.cards copy];
-        for( Three13Card * card in [hand.cards copy] ) {
+        for( Three13Card * card in cardsCopy ) {
             if( card.number == number ) {
                 NSLog(@"Found a match!");
                 NSLog(@"Hand was %@", hand);
@@ -176,6 +178,8 @@
     else {
 //        NSLog(@"Dealing new mystery/known cards");
         // Deal new mystery/known cards
+        [knownCard release];
+        [mysteryCard release];
         knownCard = [[deck draw] retain];
         mysteryCard = [[deck draw] retain];
         [self setRound:round+1];
