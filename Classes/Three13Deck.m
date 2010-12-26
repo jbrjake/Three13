@@ -63,6 +63,14 @@ int randomSort(id obj1, id obj2, void *context ) {
 	return [cards count];
 }
 
+-(NSMutableArray*) cardIDs {
+    NSMutableArray * cardIDs = [NSMutableArray new];
+    for (Three13Card * card in cards) {
+        [cardIDs addObject:[NSNumber numberWithInt:card.number]];
+    }
+    return cardIDs;
+}
+
 - (NSString *) description {
 	NSString *desc = [NSString stringWithFormat:@"Three13Deck with %d cards\n",[self cardsRemaining]];
 	for(int x = 0; x < [self cardsRemaining]; x++) {

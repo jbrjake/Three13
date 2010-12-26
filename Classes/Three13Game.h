@@ -38,4 +38,5 @@
 -(void) choseKnownCard;
 -(void) choseMysteryCard;
 -(void) choseCard:(NSInteger)number;
+-(NSMutableDictionary*) gameDict;
 @end

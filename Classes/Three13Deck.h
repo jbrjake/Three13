@@ -15,5 +15,6 @@
 - (void) shuffle;
 - (Three13Card *) draw;
 - (NSInteger) cardsRemaining;
+- (NSMutableArray*) cardIDs;
 
 @end

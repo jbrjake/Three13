@@ -130,15 +130,16 @@
 }
 
 -(void) choseCard:(NSInteger)number {
-    NSDictionary * dict;
+    NSMutableDictionary * dict;
     if( state == 1 ) {
         NSMutableArray * cardsCopy = [hand.cards copy];
         for( Three13Card * card in cardsCopy ) {
             if( card.number == number ) {
                 NSLog(@"Found a match!");
                 NSLog(@"Hand was %@", hand);
-                dict = [NSDictionary dictionaryWithObject:[NSNumber numberWithInt:card.number] forKey:@"discard"];
                 [hand.cards removeObject:card];
+                dict = [self gameDict];
+                [dict setObject:[NSNumber numberWithInt:number] forKey:@"discard"];
                 NSLog(@"Hand now is %@", hand);
             }
         }
@@ -186,6 +187,11 @@
         [[NSNotificationCenter defaultCenter] postNotificationName:@"Start Round" object:self];
     }
 
+}
+
+-(NSMutableDictionary *) gameDict {
+    NSMutableDictionary * dict = [NSMutableDictionary dictionaryWithObjectsAndKeys: [hand cardIDs], @"hand", [deck cardIDs], @"deck", nil];
+    return dict;
 }
 
 @end
