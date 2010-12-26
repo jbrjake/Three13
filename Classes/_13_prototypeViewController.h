@@ -15,6 +15,7 @@
     NSMutableArray * allCardViews;
     UIImageView * knownThree13CardView;
     UIImageView * mysteryThree13CardView;
+    NSMutableArray * imagesArray;
     IBOutlet UILabel * totalScorLabel;
     IBOutlet UILabel * scoreLabel;
     IBOutlet UILabel * roundLabel;
@@ -30,6 +31,7 @@
 @property(nonatomic, retain) NSMutableArray * allCardViews;
 @property(nonatomic, retain) UIImageView * knownThree13CardView;
 @property(nonatomic, retain) UIImageView * mysteryThree13CardView;
+@property(nonatomic, retain) NSMutableArray * imagesArray;
 @property(nonatomic, retain) IBOutlet UILabel * totalScoreLabel;
 @property(nonatomic, retain) IBOutlet UILabel * scoreLabel;
 @property(nonatomic, retain) IBOutlet UILabel * roundLabel;
@@ -50,6 +52,7 @@
 -(void) cardDiscarded:(NSNotification *)note;
 
 -(void) moveCardWithTag:(NSInteger)tag toLocation:(CGRect)frame;
+-(void) flipViewFor:(NSNumber*)cardID;
 -(void) flipViewForCard:(Three13Card *)card;
 @end
 

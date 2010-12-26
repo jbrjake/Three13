@@ -10,7 +10,7 @@
 #import <QuartzCore/QuartzCore.h>
 @implementation _13_prototypeViewController
 
-@synthesize cardViews, allCardViews, knownThree13CardView, mysteryThree13CardView, totalScoreLabel, scoreLabel, roundLabel, levelLabel, handCardFrames, knownCardFrame, mysteryCardFrame, aboveFrame, belowFrame;
+@synthesize cardViews, allCardViews, knownThree13CardView, mysteryThree13CardView, imagesArray, totalScoreLabel, scoreLabel, roundLabel, levelLabel, handCardFrames, knownCardFrame, mysteryCardFrame, aboveFrame, belowFrame;
 
 // The designated initializer. Override to perform setup that is required before the view is loaded.
 /*
@@ -57,6 +57,7 @@
     allCardViews = [NSMutableArray new];
     cardViews = [NSMutableArray new];
     handCardFrames = [NSMutableArray new];
+    imagesArray = [NSMutableArray new];
     belowFrame = CGRectMake(600, 1000, w, h);
     knownCardFrame = CGRectMake(193, 365, w, h);
     mysteryCardFrame = CGRectMake(250, 365, w, h);
@@ -99,10 +100,11 @@
         [cardView release];
     }
     
-    NSMutableArray * imagesArray = [NSMutableArray new];
     for (Three13Card * card in game.deck.cards) {
         [imagesArray addObject:card.face];
     }
+    Three13Card * card = [game.deck.cards objectAtIndex:0];
+    [imagesArray addObject:card.back];
     
     [game startGame];
 
@@ -210,24 +212,29 @@
 -(void) levelStarts:(NSNotification *)note {
 //    NSLog(@"Game notified view controller of start level!");
     //Animate in the cards for the hand
+    NSDictionary * dict = note.userInfo;
+    NSMutableArray * handArray = [dict objectForKey:@"hand"];
+    NSMutableArray * deckArray = [dict objectForKey:@"deck"];
+    
     [UIView animateWithDuration:1.0 animations:^(void) {
-        for (int i = 0; i < [game.hand.cards count]; i++) {
-            Three13Card * drawnCard = [game.hand showCardAt:i];
+        for (int i = 0; i < [handArray count]; i++) {
+            NSInteger tag = [[handArray objectAtIndex:i] intValue];
             CGRect frame = [[handCardFrames objectAtIndex:i] CGRectValue];
-            UIImageView * view = (UIImageView*)[self.view viewWithTag:drawnCard.number];
-            view.image = drawnCard.back;
+            UIImageView * view = (UIImageView*)[self.view viewWithTag:tag];
+            view.image = [imagesArray lastObject]; //back image
             view.frame = frame;
 //            [self moveCardWithTag:view.tag toLocation:frame];
         }
-        for (Three13Card * card in game.deck.cards) {
-            UIImageView * cardView = (UIImageView*)[self.view viewWithTag:card.number];
+        for (NSNumber * tag in deckArray) {
+            NSInteger tagInt = [tag intValue];
+            UIImageView * cardView = (UIImageView*)[self.view viewWithTag:tagInt];
             cardView.frame = aboveFrame;
         }        
     }
     completion:^(BOOL finished) {
         //Start round
-        for( Three13Card * card in game.hand.cards) {
-            [self flipViewForCard:card];
+        for( NSNumber * tag in handArray) {
+            [self flipViewFor:tag];
         }        
         [self roundStarts:note];        
     }];     
@@ -302,6 +309,21 @@
     ];
 }
 
+-(void) flipViewFor:(NSNumber*)cardID {
+    UIImageView * cardView = (UIImageView *) [self.view viewWithTag:[cardID intValue]];
+    [ UIView transitionWithView:cardView duration:1.0
+        options:UIViewAnimationOptionTransitionFlipFromLeft
+        animations:^(void) {
+            if( cardView.image == [imagesArray lastObject] )
+                [ cardView setImage: [imagesArray objectAtIndex:[cardID intValue]]];
+            else {
+                [cardView setImage: [imagesArray lastObject]];
+            }
+        }
+        completion:NULL
+    ];    
+}        
+
 -(void) flipViewForCard:(Three13Card*)card {
     UIImageView * cardView = (UIImageView *) [self.view viewWithTag:card.number];
     [ UIView transitionWithView:cardView duration:1.0
@@ -316,7 +338,7 @@
         completion:NULL
      ];    
 }
-
+        
 -(void) cardDiscarded:(NSNotification *)note {
  //   NSLog(@"Game notified view controller of discarded card %@!", [note.userInfo objectForKey:@"discard"]);
     NSInteger discardTag = [[note.userInfo objectForKey:@"discard"] intValue];
