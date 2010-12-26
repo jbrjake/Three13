@@ -190,7 +190,7 @@
 }
 
 -(NSMutableDictionary *) gameDict {
-    NSMutableDictionary * dict = [NSMutableDictionary dictionaryWithObjectsAndKeys: [hand cardIDs], @"hand", [deck cardIDs], @"deck", nil];
+    NSMutableDictionary * dict = [NSMutableDictionary dictionaryWithObjectsAndKeys: [hand cardIDs], @"hand", [deck cardIDs], @"deck", [NSNumber numberWithInt:knownCard.number], @"known", [NSNumber numberWithInt:mysteryCard.number], @"mystery", nil ];
     return dict;
 }
 
