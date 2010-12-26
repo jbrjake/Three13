@@ -287,9 +287,13 @@
     [mysteryThree13CardView.layer removeAnimationForKey:@"animateOpacity"];
     [knownThree13CardView.layer removeAnimationForKey:@"animateOpacity"];
 */
-    CGRect frame = [[ handCardFrames objectAtIndex:game.hand.cards.count-1] CGRectValue];
-    [self moveCardWithTag:game.mysteryCard.number toLocation:belowFrame];
-    [self moveCardWithTag:game.knownCard.number toLocation:frame];    
+    NSDictionary * dict = note.userInfo;
+    NSMutableArray * handArray = [dict objectForKey:@"hand"];
+    NSInteger knownID = [[dict objectForKey:@"known"] intValue];
+    NSInteger mysteryID = [[dict objectForKey:@"mystery"] intValue];
+    CGRect frame = [[ handCardFrames objectAtIndex:handArray.count-1] CGRectValue];
+    [self moveCardWithTag:mysteryID toLocation:belowFrame];
+    [self moveCardWithTag:knownID toLocation:frame];    
 }
 
 -(void) mysteryChosen:(NSNotification *)note {
@@ -299,15 +303,20 @@
     [mysteryThree13CardView.layer removeAnimationForKey:@"animateOpacity"];
     [knownThree13CardView.layer removeAnimationForKey:@"animateOpacity"];
 */
-    CGRect frame = [ [handCardFrames objectAtIndex:game.hand.cards.count-1] CGRectValue];
-    [self moveCardWithTag:game.knownCard.number toLocation:belowFrame];
+    NSDictionary * dict = note.userInfo;
+    NSMutableArray * handArray = [dict objectForKey:@"hand"];
+    NSInteger knownID = [[dict objectForKey:@"known"] intValue];
+    NSInteger mysteryID = [[dict objectForKey:@"mystery"] intValue];
+
+    CGRect frame = [ [handCardFrames objectAtIndex:handArray.count-1] CGRectValue];
+    [self moveCardWithTag:knownID toLocation:belowFrame];
 
     [UIView animateWithDuration:1
         animations:^{
-            [self.view viewWithTag:game.mysteryCard.number].frame = frame;
+            [self.view viewWithTag:mysteryID].frame = frame;
         }
         completion:^(BOOL finished){
-            [self flipViewForCard:game.mysteryCard];
+            [self flipViewFor:[NSNumber numberWithInt:mysteryID]];
         }
     ];
 }
