@@ -352,13 +352,16 @@
 }
         
 -(void) cardDiscarded:(NSNotification *)note {
- //   NSLog(@"Game notified view controller of discarded card %@!", [note.userInfo objectForKey:@"discard"]);
-    NSInteger discardTag = [[note.userInfo objectForKey:@"discard"] intValue];
+    NSLog(@"Game notified view controller of discarded card %@!", [note.userInfo objectForKey:@"discard"]);
+    NSDictionary * dict = note.userInfo;
+    NSMutableArray * handArray = [dict objectForKey:@"hand"];
+    NSLog(@"Hand is %@", handArray);
+    NSInteger discardTag = [[dict objectForKey:@"discard"] intValue];
     [self moveCardWithTag:discardTag toLocation:belowFrame];
-    for (int i = 0; i < [game.hand.cards count]; i++) {
-        Three13Card * drawnCard = [game.hand showCardAt:i];
+    for (int i = 0; i < handArray.count; i++) {
+        NSInteger cardID = [ [handArray objectAtIndex:i] intValue];
         CGRect frame = [[handCardFrames objectAtIndex:i] CGRectValue];
-        UIImageView * view = (UIImageView*)[self.view viewWithTag:drawnCard.number];
+        UIImageView * view = (UIImageView*)[self.view viewWithTag:cardID];
         [self moveCardWithTag:view.tag toLocation:frame];
     }    
 }
