@@ -244,10 +244,13 @@
 //    NSLog(@"Game notified view controller of start round!");
 //    mysteryThree13CardView = (UIImageView*)[self.view viewWithTag:game.mysteryCard.number];
 //    knownThree13CardView = (UIImageView*)[self.view viewWithTag:game.knownCard.number];
-    [ (UIImageView*)[self.view viewWithTag:game.mysteryCard.number] setImage:game.mysteryCard.back];
+    NSDictionary * dict = note.userInfo;
+    NSInteger knownID = [ [dict objectForKey:@"known"] intValue];
+    NSInteger mysteryID = [ [dict objectForKey:@"mystery"] intValue];
+    [ (UIImageView*)[self.view viewWithTag:mysteryID] setImage:[imagesArray lastObject]];
     [UIView transitionWithView:nil duration:1.0 options:UIViewAnimationOptionTransitionFlipFromLeft animations:^{
-        [self.view viewWithTag:game.knownCard.number].frame = knownCardFrame;
-        [self.view viewWithTag:game.mysteryCard.number].frame = mysteryCardFrame;
+        [self.view viewWithTag:knownID].frame = knownCardFrame;
+        [self.view viewWithTag:mysteryID].frame = mysteryCardFrame;
     } completion:^(BOOL finished) {
         //Reveal score labels
         [UIView transitionWithView:nil duration:1.0 options:nil animations:^{
