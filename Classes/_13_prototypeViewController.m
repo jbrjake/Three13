@@ -37,11 +37,11 @@
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad {
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(gameStarts) name:@"Start Game" object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(levelStarts) name:@"Start Level" object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(roundStarts) name:@"Start Round" object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(knownChosen) name:@"Choose Known" object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(mysteryChosen) name:@"Choose Mystery" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(gameStarts:) name:@"Start Game" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(levelStarts:) name:@"Start Level" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(roundStarts:) name:@"Start Round" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(knownChosen:) name:@"Choose Known" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(mysteryChosen:) name:@"Choose Mystery" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(cardDiscarded:) name:@"Discard Card" object:nil];
 
     self.view.backgroundColor = [UIColor blackColor];
@@ -194,7 +194,7 @@
     
 }
 
--(void) gameStarts {
+-(void) gameStarts:(NSNotification *)note {
 //    NSLog(@"Game notified view controller of start!");
     
     //Animate in the backdrop    
@@ -202,12 +202,12 @@
     [UIView transitionWithView:nil duration:1.0 options:UIViewAnimationOptionTransitionFlipFromLeft animations:^{
 		backView.frame = CGRectMake(self.view.bounds.origin.x, self.view.bounds.origin.y, self.view.bounds.size.width, self.view.bounds.size.height);
 	} completion:^(BOOL finished) {
-        [self levelStarts];
+        [self levelStarts:note];
     } ];
     
 }
 
--(void) levelStarts {
+-(void) levelStarts:(NSNotification *)note {
 //    NSLog(@"Game notified view controller of start level!");
     //Animate in the cards for the hand
     [UIView animateWithDuration:1.0 animations:^(void) {
@@ -229,11 +229,11 @@
         for( Three13Card * card in game.hand.cards) {
             [self flipViewForCard:card];
         }        
-        [self roundStarts];        
+        [self roundStarts:note];        
     }];     
 }
 
--(void) roundStarts {
+-(void) roundStarts:(NSNotification *)note {
 //    NSLog(@"Game notified view controller of start round!");
 //    mysteryThree13CardView = (UIImageView*)[self.view viewWithTag:game.mysteryCard.number];
 //    knownThree13CardView = (UIImageView*)[self.view viewWithTag:game.knownCard.number];
@@ -270,7 +270,7 @@
     }];
 }
 
--(void) knownChosen {
+-(void) knownChosen:(NSNotification *)note {
 //    NSLog(@"Game notified view controller of known chosen!");
 
 /*    
@@ -282,7 +282,7 @@
     [self moveCardWithTag:game.knownCard.number toLocation:frame];    
 }
 
--(void) mysteryChosen {
+-(void) mysteryChosen:(NSNotification *)note {
 //    NSLog(@"Game notified view controller of mystery chosen!");
     
 /*

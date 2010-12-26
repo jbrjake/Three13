@@ -42,8 +42,13 @@
 
 -(IBAction) handleTap:(UIGestureRecognizer*)sender;
 -(void) createGestureRecognizers;
--(void) levelStarts;
--(void) roundStarts;
+-(void) gameStarts:(NSNotification *)note;
+-(void) levelStarts:(NSNotification *)note;
+-(void) roundStarts:(NSNotification *)note;
+-(void) knownChosen:(NSNotification *)note;
+-(void) mysteryChosen:(NSNotification *)note;
+-(void) cardDiscarded:(NSNotification *)note;
+
 -(void) moveCardWithTag:(NSInteger)tag toLocation:(CGRect)frame;
 -(void) flipViewForCard:(Three13Card *)card;
 @end
