@@ -86,7 +86,7 @@
 //    NSLog(@"Start Game completed");
 //  [self testGame];
     
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"Start Game" object:self];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"Start Game" object:self userInfo:[self gameDict] ];
 }
 
 -(void) deal: (NSInteger) cardNumber {
@@ -115,7 +115,7 @@
     if( state == 0 ) {
         [hand addCard:[knownCard retain]];
         [self setState:1];
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"Choose Known" object:self];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"Choose Known" object:self userInfo:[self gameDict] ];
     }
 }
 
@@ -125,12 +125,12 @@
         [hand addCard:[mysteryCard retain]];
 //        NSLog(@"Hand becomes %@", hand);
         [self setState: 1];
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"Choose Mystery" object:self];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"Choose Mystery" object:self userInfo:[self gameDict] ];
     }
 }
 
 -(void) choseCard:(NSInteger)number {
-    NSMutableDictionary * dict;
+    NSMutableDictionary * dict = [self gameDict];
     if( state == 1 ) {
         NSMutableArray * cardsCopy = [hand.cards copy];
         for( Three13Card * card in cardsCopy ) {
@@ -138,7 +138,6 @@
                 NSLog(@"Found a match!");
                 NSLog(@"Hand was %@", hand);
                 [hand.cards removeObject:card];
-                dict = [self gameDict];
                 [dict setObject:[NSNumber numberWithInt:number] forKey:@"discard"];
                 NSLog(@"Hand now is %@", hand);
             }
@@ -157,7 +156,7 @@
     [self setLevel:level+1];
     [deck init];
     [self deal:level];
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"Start Level" object:self];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"Start Level" object:self userInfo:[self gameDict] ];
 //    NSLog(@"Starting round %d level %d with score %d", round, level, totalScore );
 }
 
@@ -184,7 +183,7 @@
         knownCard = [[deck draw] retain];
         mysteryCard = [[deck draw] retain];
         [self setRound:round+1];
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"Start Round" object:self];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"Start Round" object:self userInfo:[self gameDict] ];
     }
 
 }
