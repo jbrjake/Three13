@@ -202,7 +202,7 @@
     
     //Animate in the backdrop    
     UIImageView * backView = (UIImageView*)[self.view viewWithTag:105];
-    [UIView transitionWithView:nil duration:1.0 options:UIViewAnimationOptionTransitionFlipFromLeft animations:^{
+    [UIView transitionWithView:nil duration:0.5 options:UIViewAnimationOptionTransitionFlipFromLeft animations:^{
 		backView.frame = CGRectMake(self.view.bounds.origin.x, self.view.bounds.origin.y, self.view.bounds.size.width, self.view.bounds.size.height);
 	} completion:^(BOOL finished) {
         [self levelStarts:note];
@@ -278,13 +278,13 @@
     NSInteger mysteryID = [ [dict objectForKey:@"mystery"] intValue];
     [ (UIImageView*)[self.view viewWithTag:mysteryID] setImage:[imagesArray lastObject]];
     [ (UIImageView*)[self.view viewWithTag:knownID] setImage:[imagesArray lastObject]];
-    [UIView transitionWithView:nil duration:1.0 options:UIViewAnimationOptionTransitionFlipFromLeft animations:^{
+    [UIView transitionWithView:nil duration:0.5 options:UIViewAnimationOptionTransitionFlipFromLeft animations:^{
         [self.view viewWithTag:knownID].frame = knownCardFrame;
         [self.view viewWithTag:mysteryID].frame = mysteryCardFrame;
     } completion:^(BOOL finished) {
         [self flipViewFor:[dict objectForKey:@"known"]];
         //Reveal score labels
-        [UIView transitionWithView:nil duration:1.0 options:nil animations:^{
+        [UIView transitionWithView:nil duration:0.5 options:nil animations:^{
             scoreLabel.alpha = 1.0;
             totalScoreLabel.alpha = 1.0;
             roundLabel.alpha = 1.0;
@@ -354,7 +354,7 @@
 
 -(void) flipViewFor:(NSNumber*)cardID {
     UIImageView * cardView = (UIImageView *) [self.view viewWithTag:[cardID intValue]];
-    [ UIView transitionWithView:cardView duration:1.0
+    [ UIView transitionWithView:cardView duration:0.5
         options:UIViewAnimationOptionTransitionFlipFromLeft
         animations:^(void) {
             if( cardView.image == [imagesArray lastObject] )
@@ -369,7 +369,7 @@
 
 -(void) flipViewForCard:(Three13Card*)card {
     UIImageView * cardView = (UIImageView *) [self.view viewWithTag:card.number];
-    [ UIView transitionWithView:cardView duration:1.0
+    [ UIView transitionWithView:cardView duration:0.5
         options:UIViewAnimationOptionTransitionFlipFromLeft
         animations:^(void) {
             if( cardView.image == card.back )
