@@ -277,10 +277,12 @@
     NSInteger knownID = [ [dict objectForKey:@"known"] intValue];
     NSInteger mysteryID = [ [dict objectForKey:@"mystery"] intValue];
     [ (UIImageView*)[self.view viewWithTag:mysteryID] setImage:[imagesArray lastObject]];
+    [ (UIImageView*)[self.view viewWithTag:knownID] setImage:[imagesArray lastObject]];
     [UIView transitionWithView:nil duration:1.0 options:UIViewAnimationOptionTransitionFlipFromLeft animations:^{
         [self.view viewWithTag:knownID].frame = knownCardFrame;
         [self.view viewWithTag:mysteryID].frame = mysteryCardFrame;
     } completion:^(BOOL finished) {
+        [self flipViewFor:[dict objectForKey:@"known"]];
         //Reveal score labels
         [UIView transitionWithView:nil duration:1.0 options:nil animations:^{
             scoreLabel.alpha = 1.0;
