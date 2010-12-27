@@ -215,6 +215,8 @@
     NSMutableArray * handArray = [dict objectForKey:@"hand"];
     NSMutableArray * deckArray = [dict objectForKey:@"deck"];
     
+    [self displayMessage:[NSString stringWithFormat:@"Scored %d", game.currentScore]];
+
     [UIView animateWithDuration:0.5 animations:^(void) {
         for (int i = 0; i < [handArray count]; i++) {
             NSInteger tag = [[handArray objectAtIndex:i] intValue];
@@ -238,8 +240,43 @@
     }];     
 }
 
+-(void) displayMessage:(NSString*)text {
+    CGRect messageFrame = CGRectMake(self.view.frame.size.width/2, self.view.frame.size.height/2, self.view.frame.size.height/3, self.view.frame.size.width/3);
+    UILabel * messageView = [[UILabel alloc] initWithFrame:messageFrame];
+    messageView.center = CGPointMake(self.view.frame.size.width/2, self.view.frame.size.height/2);
+    messageView.backgroundColor = [UIColor blackColor];
+    messageView.alpha = 0.0;
+    messageView.layer.cornerRadius = 6;
+    messageView.layer.masksToBounds = YES;
+    messageView.text = text;
+    messageView.textAlignment = UITextAlignmentCenter;
+    messageView.adjustsFontSizeToFitWidth = YES;
+    messageView.textColor = [UIColor whiteColor];
+    
+    [self.view addSubview:messageView];
+    
+    [UIView animateWithDuration:0.5 delay:0 options:UIViewAnimationOptionCurveEaseInOut
+                     animations:^(void) {
+                         messageView.alpha = 1.0;
+                     }
+                     completion:^(BOOL finished) {
+                         [UIView animateWithDuration:0.5 delay:0 options:UIViewAnimationOptionCurveEaseInOut
+                                          animations:^(void) {
+                                              messageView.alpha = 0.0;
+                                          }
+                                          completion:^(BOOL finished) {
+                                              [messageView removeFromSuperview];
+                                          }
+                          ];
+                     }
+     ];
+}
+
 -(void) levelStarts:(NSNotification *)note {
 //    NSLog(@"Game notified view controller of start level!");
+    
+    [self displayMessage:[NSString stringWithFormat:@"Level %d", game.level]];
+
     //Animate in the cards for the hand
     NSDictionary * dict = note.userInfo;
     NSMutableArray * handArray = [dict objectForKey:@"hand"];
@@ -278,6 +315,9 @@
     NSInteger mysteryID = [ [dict objectForKey:@"mystery"] intValue];
     [ (UIImageView*)[self.view viewWithTag:mysteryID] setImage:[imagesArray lastObject]];
     [ (UIImageView*)[self.view viewWithTag:knownID] setImage:[imagesArray lastObject]];
+    if (game.round == game.level ) {
+        [self displayMessage:[NSString stringWithFormat:@"Last Round!", game.round]];
+    }
     [UIView transitionWithView:nil duration:0.5 options:UIViewAnimationOptionTransitionFlipFromLeft animations:^{
         [self.view viewWithTag:knownID].frame = knownCardFrame;
         [self.view viewWithTag:mysteryID].frame = mysteryCardFrame;
