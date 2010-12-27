@@ -78,6 +78,8 @@
 }
 
 -(void) startGame {
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(cardDiscarded) name:@"Discarded Card" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(levelEnded) name:@"Ended Level" object:nil];
 
     [self deal:level];
     [hand updateScore];
@@ -147,8 +149,11 @@
         NSMutableDictionary * dict = [self gameDict];
         [dict setObject:[NSNumber numberWithInt:number] forKey:@"discard"];
         [[NSNotificationCenter defaultCenter] postNotificationName:@"Discard Card" object:self userInfo:dict];
-        [self checkForWin];
     }
+}
+
+-(void) cardDiscarded {
+    [self checkForWin];
 }
 
 -(void) startNewLevel {
@@ -160,6 +165,14 @@
 //    NSLog(@"Starting round %d level %d with score %d", round, level, totalScore );
 }
 
+-(void) endLevel {
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"End Level" object:self userInfo:[self gameDict] ];
+}
+
+-(void) levelEnded {
+    [self startNewLevel];
+}
+
 -(void) checkForWin {
     //First check for going out
     //Then check for out of time
@@ -168,12 +181,12 @@
     [self setCurrentScore:hand.score];
     if (hand.score == 0) {
 //        NSLog(@"It's a win!");
-        [self startNewLevel];
+        [self endLevel];
     }
     else if( round > level-1 ) {
  //       NSLog(@"Out of rounds!");
         [self setTotalScore:totalScore + hand.score];
-        [self startNewLevel];
+        [self endLevel];
     }
     else {
 //        NSLog(@"Dealing new mystery/known cards");

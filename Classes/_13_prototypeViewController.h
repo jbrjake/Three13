@@ -45,6 +45,7 @@
 -(IBAction) handleTap:(UIGestureRecognizer*)sender;
 -(void) createGestureRecognizers;
 -(void) gameStarts:(NSNotification *)note;
+-(void) levelEnds:(NSNotification *)note;
 -(void) levelStarts:(NSNotification *)note;
 -(void) roundStarts:(NSNotification *)note;
 -(void) knownChosen:(NSNotification *)note;

@@ -39,6 +39,7 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(gameStarts:) name:@"Start Game" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(levelStarts:) name:@"Start Level" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(levelEnds:) name:@"End Level" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(roundStarts:) name:@"Start Round" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(knownChosen:) name:@"Choose Known" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(mysteryChosen:) name:@"Choose Mystery" object:nil];
@@ -209,6 +210,34 @@
     
 }
 
+-(void) levelEnds:(NSNotification *)note {
+    NSDictionary * dict = note.userInfo;
+    NSMutableArray * handArray = [dict objectForKey:@"hand"];
+    NSMutableArray * deckArray = [dict objectForKey:@"deck"];
+    
+    [UIView animateWithDuration:0.5 animations:^(void) {
+        for (int i = 0; i < [handArray count]; i++) {
+            NSInteger tag = [[handArray objectAtIndex:i] intValue];
+            UIImageView * view = (UIImageView*)[self.view viewWithTag:tag];
+            view.frame = aboveFrame;
+        }
+        for (NSNumber * tag in deckArray) {
+            NSInteger tagInt = [tag intValue];
+            UIImageView * cardView = (UIImageView*)[self.view viewWithTag:tagInt];
+            cardView.frame = aboveFrame;
+        }        
+    }
+    completion:^(BOOL finished) {
+        //Start level
+        for (int i = 0; i < [handArray count]; i++) {
+            NSInteger tag = [[handArray objectAtIndex:i] intValue];
+            UIImageView * view = (UIImageView*)[self.view viewWithTag:tag];
+            view.image = [imagesArray lastObject]; //back image
+        }        
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"Ended Level" object:self ];
+    }];     
+}
+
 -(void) levelStarts:(NSNotification *)note {
 //    NSLog(@"Game notified view controller of start level!");
     //Animate in the cards for the hand
@@ -216,7 +245,7 @@
     NSMutableArray * handArray = [dict objectForKey:@"hand"];
     NSMutableArray * deckArray = [dict objectForKey:@"deck"];
     
-    [UIView animateWithDuration:1.0 animations:^(void) {
+    [UIView animateWithDuration:0.5 animations:^(void) {
         for (int i = 0; i < [handArray count]; i++) {
             NSInteger tag = [[handArray objectAtIndex:i] intValue];
             CGRect frame = [[handCardFrames objectAtIndex:i] CGRectValue];
@@ -311,7 +340,7 @@
     CGRect frame = [ [handCardFrames objectAtIndex:handArray.count-1] CGRectValue];
     [self moveCardWithTag:knownID toLocation:belowFrame];
 
-    [UIView animateWithDuration:1
+    [UIView animateWithDuration:0.5
         animations:^{
             [self.view viewWithTag:mysteryID].frame = frame;
         }
@@ -357,13 +386,22 @@
     NSMutableArray * handArray = [dict objectForKey:@"hand"];
     NSLog(@"Hand is %@", handArray);
     NSInteger discardTag = [[dict objectForKey:@"discard"] intValue];
-    [self moveCardWithTag:discardTag toLocation:belowFrame];
-    for (int i = 0; i < handArray.count; i++) {
-        NSInteger cardID = [ [handArray objectAtIndex:i] intValue];
-        CGRect frame = [[handCardFrames objectAtIndex:i] CGRectValue];
-        UIImageView * view = (UIImageView*)[self.view viewWithTag:cardID];
-        [self moveCardWithTag:view.tag toLocation:frame];
-    }    
+    
+    [UIView animateWithDuration:0.5
+        animations:^(void) {
+            UIImageView * cardView = (UIImageView*)[self.view viewWithTag:discardTag];
+            cardView.frame = belowFrame;
+            for (int i = 0; i < handArray.count; i++) {
+                NSInteger cardID = [ [handArray objectAtIndex:i] intValue];
+                CGRect frame = [[handCardFrames objectAtIndex:i] CGRectValue];
+                UIImageView * view = (UIImageView*)[self.view viewWithTag:cardID];
+                [self moveCardWithTag:view.tag toLocation:frame];
+            }                
+        }
+        completion:^(BOOL finished) {
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"Discarded Card" object:self ];
+        }
+     ];     
 }
 
 - (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
@@ -404,7 +442,7 @@
 
 - (void) moveCardWithTag:(NSInteger)tag toLocation:(CGRect)frame {
     UIImageView * cardView = (UIImageView*)[self.view viewWithTag:tag];
-    [UIView animateWithDuration:1 animations:^(void) {
+    [UIView animateWithDuration:0.5 animations:^(void) {
         cardView.frame = frame;
     }];
 }
