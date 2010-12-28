@@ -206,7 +206,6 @@
 		backView.frame = CGRectMake(self.view.bounds.origin.x, self.view.bounds.origin.y, self.view.bounds.size.width, self.view.bounds.size.height);
 	} completion:^(BOOL finished) {
         [[NSNotificationCenter defaultCenter] postNotificationName:@"Started Game" object:self ];
-        [self levelStarts:note];
     } ];
     
 }

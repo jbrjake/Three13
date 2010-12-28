@@ -94,6 +94,7 @@
 
 -(void) gameStarted {
     NSLog(@"View controller says game started!");
+    [self startNewLevel];
 }
 
 -(void) deal: (NSInteger) cardNumber {
@@ -163,7 +164,6 @@
 
 -(void) startNewLevel {
     [self setRound:1];
-    [self setLevel:level+1];
     [deck init];
     [self deal:level];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"Start Level" object:self userInfo:[self gameDict] ];
@@ -175,6 +175,7 @@
 }
 
 -(void) levelEnded {
+    [self setLevel:level+1];
     [self startNewLevel];
 }
 
