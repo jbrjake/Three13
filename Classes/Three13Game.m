@@ -78,6 +78,7 @@
 }
 
 -(void) startGame {
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(gameStarted) name:@"Started Game" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(cardDiscarded) name:@"Discarded Card" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(levelEnded) name:@"Ended Level" object:nil];
 
@@ -89,6 +90,10 @@
 //  [self testGame];
     
     [[NSNotificationCenter defaultCenter] postNotificationName:@"Start Game" object:self userInfo:[self gameDict] ];
+}
+
+-(void) gameStarted {
+    NSLog(@"View controller says game started!");
 }
 
 -(void) deal: (NSInteger) cardNumber {

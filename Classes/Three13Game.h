@@ -34,6 +34,7 @@
 
 -(void) deal: (NSInteger) cardNumber;
 -(void) startGame;
+-(void) gameStarted;
 -(void) checkForWin;
 -(void) choseKnownCard;
 -(void) choseMysteryCard;
