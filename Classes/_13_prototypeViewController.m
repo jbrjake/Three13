@@ -320,6 +320,8 @@
         [self displayMessage:[NSString stringWithFormat:@"Last Round!", game.round]];
     }
     [UIView transitionWithView:nil duration:0.5 options:UIViewAnimationOptionTransitionFlipFromLeft animations:^{
+        [self.view viewWithTag:knownID].userInteractionEnabled = NO;
+        [self.view viewWithTag:mysteryID].userInteractionEnabled = NO;
         [self.view viewWithTag:knownID].frame = knownCardFrame;
         [self.view viewWithTag:mysteryID].frame = mysteryCardFrame;
     } completion:^(BOOL finished) {
@@ -364,6 +366,8 @@
     NSInteger knownID = [[dict objectForKey:@"known"] intValue];
     NSInteger mysteryID = [[dict objectForKey:@"mystery"] intValue];
     CGRect frame = [[ handCardFrames objectAtIndex:handArray.count-1] CGRectValue];
+    [self.view viewWithTag:mysteryID].userInteractionEnabled = YES;
+    [self.view viewWithTag:knownID].userInteractionEnabled = YES;
     [self moveCardWithTag:mysteryID toLocation:belowFrame];
     [self moveCardWithTag:knownID toLocation:frame];    
 }
@@ -379,6 +383,9 @@
     NSMutableArray * handArray = [dict objectForKey:@"hand"];
     NSInteger knownID = [[dict objectForKey:@"known"] intValue];
     NSInteger mysteryID = [[dict objectForKey:@"mystery"] intValue];
+
+    [self.view viewWithTag:mysteryID].userInteractionEnabled = YES;
+    [self.view viewWithTag:knownID].userInteractionEnabled = YES;
 
     CGRect frame = [ [handCardFrames objectAtIndex:handArray.count-1] CGRectValue];
     [self moveCardWithTag:knownID toLocation:belowFrame];

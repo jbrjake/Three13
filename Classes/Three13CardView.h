@@ -10,7 +10,8 @@
 
 
 @interface Three13CardView : UIImageView {
-
+    CGPoint startLocation;
+    CGRect normalFrame;
 }
 
 @end
