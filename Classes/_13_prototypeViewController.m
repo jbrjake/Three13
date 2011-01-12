@@ -188,9 +188,10 @@
         }
     }
 
-    for( UIView * view in self.view.subviews )
+    for( NSNumber * cardNumber in [game.hand cardIDs] )
     {
-        if ([view pointInside:[sender locationInView:view] withEvent:nil] && view.tag < 105) {
+        Three13CardView * view = (Three13CardView*)[self.view viewWithTag:[cardNumber intValue]];
+        if ([view pointInside:[sender locationInView:view] withEvent:nil] /*&& view.tag < 105*/) {
             [self tappedCard:view.tag];
         }
     }
