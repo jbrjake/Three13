@@ -72,7 +72,7 @@
     for( int i = 0; i < 3; i++)
     {
         for( int k = 0; k < 5; k++) {
-            int x = frameOffset + w*(k) + pad*(k+1);
+            int x = frameOffset + (w/2)*(k) + pad*(k+1);
             int y = 110 + h*(i) + pad*(i+1);
  //           NSLog(@"Placing card %d at %d,%d", i*k, x, y);
             [handCardFrames addObject:[NSValue valueWithCGRect:CGRectMake(x, y, w, h)]];
@@ -287,6 +287,7 @@
             NSInteger tag = [[handArray objectAtIndex:i] intValue];
             CGRect frame = [[handCardFrames objectAtIndex:i] CGRectValue];
             Three13CardView * view = (Three13CardView*)[self.view viewWithTag:tag];
+            [self.view bringSubviewToFront:view];
             view.image = [imagesArray lastObject]; //back image
             view.frame = frame;
 //            [self moveCardWithTag:view.tag toLocation:frame];
@@ -381,9 +382,10 @@
 
     CGRect frame = [ [handCardFrames objectAtIndex:handArray.count-1] CGRectValue];
     [self moveCardWithTag:knownID toLocation:belowFrame];
-
+    
     [UIView animateWithDuration:0.5
         animations:^{
+            [self.view bringSubviewToFront:[self.view viewWithTag:mysteryID]];
             [self.view viewWithTag:mysteryID].frame = frame;
         }
         completion:^(BOOL finished){
@@ -484,6 +486,7 @@
 
 - (void) moveCardWithTag:(NSInteger)tag toLocation:(CGRect)frame {
     Three13CardView * cardView = (Three13CardView*)[self.view viewWithTag:tag];
+    [self.view bringSubviewToFront:cardView];
     [UIView animateWithDuration:0.5 animations:^(void) {
         cardView.frame = frame;
     }];
