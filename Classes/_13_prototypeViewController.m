@@ -91,7 +91,7 @@
 
     // Build a view for each card, tagged by number, and place outside of frame
     for (Three13Card * card in game.deck.cards) {
-        UIImageView * cardView = [[UIImageView alloc] initWithFrame:aboveFrame];
+        Three13CardView * cardView = [[Three13CardView alloc] initWithFrame:aboveFrame];
         cardView.layer.cornerRadius = 6.0;
         cardView.layer.masksToBounds = YES;
         cardView.image = card.face;
@@ -220,12 +220,12 @@
     [UIView animateWithDuration:0.5 animations:^(void) {
         for (int i = 0; i < [handArray count]; i++) {
             NSInteger tag = [[handArray objectAtIndex:i] intValue];
-            UIImageView * view = (UIImageView*)[self.view viewWithTag:tag];
+            Three13CardView * view = (Three13CardView*)[self.view viewWithTag:tag];
             view.frame = aboveFrame;
         }
         for (NSNumber * tag in deckArray) {
             NSInteger tagInt = [tag intValue];
-            UIImageView * cardView = (UIImageView*)[self.view viewWithTag:tagInt];
+            Three13CardView * cardView = (Three13CardView*)[self.view viewWithTag:tagInt];
             cardView.frame = aboveFrame;
         }        
     }
@@ -233,7 +233,7 @@
         //Start level
         for (int i = 0; i < [handArray count]; i++) {
             NSInteger tag = [[handArray objectAtIndex:i] intValue];
-            UIImageView * view = (UIImageView*)[self.view viewWithTag:tag];
+            Three13CardView * view = (Three13CardView*)[self.view viewWithTag:tag];
             view.image = [imagesArray lastObject]; //back image
         }        
         [[NSNotificationCenter defaultCenter] postNotificationName:@"Ended Level" object:self ];
@@ -286,14 +286,14 @@
         for (int i = 0; i < [handArray count]; i++) {
             NSInteger tag = [[handArray objectAtIndex:i] intValue];
             CGRect frame = [[handCardFrames objectAtIndex:i] CGRectValue];
-            UIImageView * view = (UIImageView*)[self.view viewWithTag:tag];
+            Three13CardView * view = (Three13CardView*)[self.view viewWithTag:tag];
             view.image = [imagesArray lastObject]; //back image
             view.frame = frame;
 //            [self moveCardWithTag:view.tag toLocation:frame];
         }
         for (NSNumber * tag in deckArray) {
             NSInteger tagInt = [tag intValue];
-            UIImageView * cardView = (UIImageView*)[self.view viewWithTag:tagInt];
+            Three13CardView * cardView = (Three13CardView*)[self.view viewWithTag:tagInt];
             cardView.frame = aboveFrame;
         }        
     }
@@ -313,8 +313,8 @@
     NSDictionary * dict = note.userInfo;
     NSInteger knownID = [ [dict objectForKey:@"known"] intValue];
     NSInteger mysteryID = [ [dict objectForKey:@"mystery"] intValue];
-    [ (UIImageView*)[self.view viewWithTag:mysteryID] setImage:[imagesArray lastObject]];
-    [ (UIImageView*)[self.view viewWithTag:knownID] setImage:[imagesArray lastObject]];
+    [ (Three13CardView*)[self.view viewWithTag:mysteryID] setImage:[imagesArray lastObject]];
+    [ (Three13CardView*)[self.view viewWithTag:knownID] setImage:[imagesArray lastObject]];
     if (game.round == game.level ) {
         [self displayMessage:[NSString stringWithFormat:@"Last Round!", game.round]];
     }
@@ -393,7 +393,7 @@
 }
 
 -(void) flipViewFor:(NSNumber*)cardID {
-    UIImageView * cardView = (UIImageView *) [self.view viewWithTag:[cardID intValue]];
+    Three13CardView * cardView = (Three13CardView *) [self.view viewWithTag:[cardID intValue]];
     [ UIView transitionWithView:cardView duration:0.5
         options:UIViewAnimationOptionTransitionFlipFromLeft
         animations:^(void) {
@@ -408,7 +408,7 @@
 }        
 
 -(void) flipViewForCard:(Three13Card*)card {
-    UIImageView * cardView = (UIImageView *) [self.view viewWithTag:card.number];
+    Three13CardView * cardView = (Three13CardView *) [self.view viewWithTag:card.number];
     [ UIView transitionWithView:cardView duration:0.5
         options:UIViewAnimationOptionTransitionFlipFromLeft
         animations:^(void) {
@@ -431,12 +431,12 @@
     
     [UIView animateWithDuration:0.5
         animations:^(void) {
-            UIImageView * cardView = (UIImageView*)[self.view viewWithTag:discardTag];
+            Three13CardView * cardView = (Three13CardView*)[self.view viewWithTag:discardTag];
             cardView.frame = belowFrame;
             for (int i = 0; i < handArray.count; i++) {
                 NSInteger cardID = [ [handArray objectAtIndex:i] intValue];
                 CGRect frame = [[handCardFrames objectAtIndex:i] CGRectValue];
-                UIImageView * view = (UIImageView*)[self.view viewWithTag:cardID];
+                Three13CardView * view = (Three13CardView*)[self.view viewWithTag:cardID];
                 [self moveCardWithTag:view.tag toLocation:frame];
             }                
         }
@@ -483,7 +483,7 @@
 }
 
 - (void) moveCardWithTag:(NSInteger)tag toLocation:(CGRect)frame {
-    UIImageView * cardView = (UIImageView*)[self.view viewWithTag:tag];
+    Three13CardView * cardView = (Three13CardView*)[self.view viewWithTag:tag];
     [UIView animateWithDuration:0.5 animations:^(void) {
         cardView.frame = frame;
     }];

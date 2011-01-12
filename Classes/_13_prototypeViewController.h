@@ -8,13 +8,14 @@
 
 #import <UIKit/UIKit.h>
 #import "Three13Game.h"
+#import "Three13CardView.h"
 @interface _13_prototypeViewController : UIViewController {
 
     Three13Game * game;
     NSMutableArray * cardViews;
     NSMutableArray * allCardViews;
-    UIImageView * knownThree13CardView;
-    UIImageView * mysteryThree13CardView;
+    Three13CardView * knownThree13CardView;
+    Three13CardView * mysteryThree13CardView;
     NSMutableArray * imagesArray;
     IBOutlet UILabel * totalScorLabel;
     IBOutlet UILabel * scoreLabel;
@@ -29,8 +30,8 @@
 
 @property(nonatomic, retain) NSMutableArray * cardViews;
 @property(nonatomic, retain) NSMutableArray * allCardViews;
-@property(nonatomic, retain) UIImageView * knownThree13CardView;
-@property(nonatomic, retain) UIImageView * mysteryThree13CardView;
+@property(nonatomic, retain) Three13CardView * knownThree13CardView;
+@property(nonatomic, retain) Three13CardView * mysteryThree13CardView;
 @property(nonatomic, retain) NSMutableArray * imagesArray;
 @property(nonatomic, retain) IBOutlet UILabel * totalScoreLabel;
 @property(nonatomic, retain) IBOutlet UILabel * scoreLabel;
