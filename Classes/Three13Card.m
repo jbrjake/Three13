@@ -67,12 +67,59 @@
     
 }
 
+-(void) getNewFaceImage {
+    //Build URL: cards/<value><suit>
+    
+    NSString * valueURL = [ NSString string ];
+    NSString * suitURL = [ NSString string ];
+    
+    switch (self.value) {
+        case 1:
+            valueURL = @"a";
+            break;
+        case 11:
+            valueURL = @"j";
+            break;
+        case 12:
+            valueURL = @"q";
+            break;
+        case 13:
+            valueURL = @"k";
+            break;
+        default:
+            valueURL = [NSString stringWithFormat:@"%d", self.value];
+            break;
+    }
+    
+    switch (self.suit) {
+        case 0:
+            suitURL = @"hearts";
+            break;
+        case 1:
+            suitURL = @"diamonds";
+            break;
+        case 2:
+            suitURL = @"spades";
+            break;
+        case 3:
+            suitURL = @"clubs";
+            break;
+        default:
+            suitURL = @"";
+            break;
+    }
+    
+    self.face = [UIImage imageNamed:[NSString stringWithFormat:@"%@-%@-150.png", suitURL, valueURL]];
+    self.back = [UIImage imageNamed:@"back-blue-150-2.png"];
+    
+}
+
 - (id) initWithValue:(NSInteger) aValue suit:(Suit) aSuit number:(NSInteger) aNumber {
 	if(self = [super init]) {
 		self.value = aValue;
 		self.suit = aSuit;
         self.number = aNumber;
-        [self getFaceImage];
+        [self getNewFaceImage];
 	}
 	return self;
 }
