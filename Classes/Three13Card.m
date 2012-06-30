@@ -20,8 +20,8 @@
 -(void) getFaceImage {
     //Build URL: cards/<value><suit>
     
-    NSString * valueURL = [ NSString string ];
-    NSString * suitURL = [ NSString string ];
+    NSString * valueURL;
+    NSString * suitURL;
 
     switch (self.value) {
         case 1:
@@ -70,8 +70,8 @@
 -(void) getNewFaceImage {
     //Build URL: cards/<value><suit>
     
-    NSString * valueURL = [ NSString string ];
-    NSString * suitURL = [ NSString string ];
+    NSString * valueURL;
+    NSString * suitURL;
     
     switch (self.value) {
         case 1:
