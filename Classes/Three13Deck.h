@@ -12,6 +12,8 @@
 
 @property (nonatomic, strong) NSMutableArray * cards;
 
+- (void) reinitialize;
+- (void) buildDeck;
 - (void) shuffle;
 - (Three13Card *) draw;
 - (NSInteger) cardsRemaining;

@@ -150,7 +150,7 @@
 
 -(void) startNewLevel {
     [self setRound:1];
-    [deck init];
+    [deck reinitialize];
     [self deal:level];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"Start Level" object:self userInfo:[self gameDict] ];
 //    NSLog(@"Starting round %d level %d with score %d", round, level, totalScore );

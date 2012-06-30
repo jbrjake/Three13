@@ -13,18 +13,27 @@
 	if(self = [super init]) {
 //        NSLog(@"Hit Three13Deck init, making cards now");
 		cards = [[NSMutableArray alloc] init];
-        NSInteger counter = 0;
-        for (int decks = 0; decks < 2; decks++) {
-            for(int suit = 0; suit <= 3; suit++) {
-                for(int value = 1; value <= 13; value++) {
-                    Three13Card *card = [[Three13Card alloc] initWithValue:value suit:suit number:counter];
-                    [cards addObject:card];
-                    counter++;
-                }
-            }            
-        }
+        [self buildDeck];
 	}
 	return self;
+}
+
+- (void) reinitialize {
+    cards = [[NSMutableArray alloc] init];
+    [self buildDeck];
+}
+
+- (void) buildDeck {
+    NSInteger counter = 0;
+    for (int decks = 0; decks < 2; decks++) {
+        for(int suit = 0; suit <= 3; suit++) {
+            for(int value = 1; value <= 13; value++) {
+                Three13Card *card = [[Three13Card alloc] initWithValue:value suit:suit number:counter];
+                [cards addObject:card];
+                counter++;
+            }
+        }            
+    }
 }
 
 /*
