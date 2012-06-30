@@ -412,10 +412,4 @@ int next_comb(int comb[], int k, int n) {
     [cards sortUsingSelector:@selector(compareSuit:)];
 }
 
--(void) printCardRetainCounts {
-    for (Three13Card * card in cards) {
-        NSLog(@"Card retained %d times", [card retainCount]);
-    }
-}
-
 @end

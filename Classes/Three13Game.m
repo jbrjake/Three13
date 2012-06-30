@@ -74,7 +74,6 @@
     [testHand1 release];
     [testHand2 release];
     [testHand3 release];
-    [hand printCardRetainCounts];
 }
 
 -(void) startGame {

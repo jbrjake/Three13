@@ -43,5 +43,4 @@
 -(void) scoreHand;
 -(void) evaluateHand;
 -(void) updateScore;
--(void) printCardRetainCounts;
 @end
