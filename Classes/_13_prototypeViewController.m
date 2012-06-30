@@ -216,7 +216,7 @@
     
     [self displayMessage:[NSString stringWithFormat:@"Scored %d", game.currentScore]];
 
-    [UIView animateWithDuration:0.5 animations:^(void) {
+    [UIView animateWithDuration:0.5 animations:^{
         for (int i = 0; i < [handArray count]; i++) {
             NSInteger tag = [[handArray objectAtIndex:i] intValue];
             Three13CardView * view = (Three13CardView*)[self.view viewWithTag:tag];
@@ -255,12 +255,12 @@
     [self.view addSubview:messageView];
     
     [UIView animateWithDuration:0.5 delay:0 options:UIViewAnimationOptionCurveEaseInOut
-                     animations:^(void) {
+                     animations:^{
                          messageView.alpha = 1.0;
                      }
                      completion:^(BOOL finished) {
                          [UIView animateWithDuration:0.5 delay:0 options:UIViewAnimationOptionCurveEaseInOut
-                                          animations:^(void) {
+                                          animations:^{
                                               messageView.alpha = 0.0;
                                           }
                                           completion:^(BOOL finished) {
@@ -281,7 +281,7 @@
     NSMutableArray * handArray = [dict objectForKey:@"hand"];
     NSMutableArray * deckArray = [dict objectForKey:@"deck"];
     
-    [UIView animateWithDuration:0.5 animations:^(void) {
+    [UIView animateWithDuration:0.5 animations:^{
         for (int i = 0; i < [handArray count]; i++) {
             NSInteger tag = [[handArray objectAtIndex:i] intValue];
             CGRect frame = [[handCardFrames objectAtIndex:i] CGRectValue];
@@ -326,7 +326,7 @@
     } completion:^(BOOL finished) {
         [self flipViewFor:[dict objectForKey:@"known"]];
         //Reveal score labels
-        [UIView transitionWithView:nil duration:0.5 options:nil animations:^{
+        [UIView transitionWithView:nil duration:0.5 options:0 animations:^{
             scoreLabel.alpha = 1.0;
             totalScoreLabel.alpha = 1.0;
             roundLabel.alpha = 1.0;
@@ -404,7 +404,7 @@
     Three13CardView * cardView = (Three13CardView *) [self.view viewWithTag:[cardID intValue]];
     [ UIView transitionWithView:cardView duration:0.5
         options:UIViewAnimationOptionTransitionFlipFromLeft
-        animations:^(void) {
+        animations:^{
             if( cardView.image == [imagesArray lastObject] )
                 [ cardView setImage: [imagesArray objectAtIndex:[cardID intValue]]];
             else {
@@ -419,7 +419,7 @@
     Three13CardView * cardView = (Three13CardView *) [self.view viewWithTag:card.number];
     [ UIView transitionWithView:cardView duration:0.5
         options:UIViewAnimationOptionTransitionFlipFromLeft
-        animations:^(void) {
+        animations:^{
             if( cardView.image == card.back )
                 [ cardView setImage: card.face];
             else {
@@ -438,7 +438,7 @@
     NSInteger discardTag = [[dict objectForKey:@"discard"] intValue];
     
     [UIView animateWithDuration:0.5
-        animations:^(void) {
+        animations:^{
             Three13CardView * cardView = (Three13CardView*)[self.view viewWithTag:discardTag];
             cardView.frame = belowFrame;
             for (int i = 0; i < handArray.count; i++) {
@@ -493,7 +493,7 @@
 - (void) moveCardWithTag:(NSInteger)tag toLocation:(CGRect)frame {
     Three13CardView * cardView = (Three13CardView*)[self.view viewWithTag:tag];
     [self.view bringSubviewToFront:cardView];
-    [UIView animateWithDuration:0.5 animations:^(void) {
+    [UIView animateWithDuration:0.5 animations:^{
         cardView.frame = frame;
     }];
 }
