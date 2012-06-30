@@ -98,7 +98,6 @@
         cardView.tag = card.number;
         [allCardViews addObject:cardView];
         [self.view addSubview:cardView];
-        [cardView release];
     }
     
     for (Three13Card * card in game.deck.cards) {
@@ -156,7 +155,6 @@
                                                 initWithTarget:self action:@selector(handleTap:)];
     singleTap.numberOfTapsRequired = 1;
     [self.view addGestureRecognizer:singleTap];
-    [singleTap release];
     
 }
 
@@ -522,10 +520,5 @@
 }
 
 
-- (void)dealloc {
-//    NSLog(@"Releasing game model.");
-    [game release];
-    [super dealloc];
-}
 
 @end

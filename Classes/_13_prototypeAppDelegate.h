@@ -15,8 +15,8 @@
     _13_prototypeViewController *viewController;
 }
 
-@property (nonatomic, retain) IBOutlet UIWindow *window;
-@property (nonatomic, retain) IBOutlet _13_prototypeViewController *viewController;
+@property (nonatomic, strong) IBOutlet UIWindow *window;
+@property (nonatomic, strong) IBOutlet _13_prototypeViewController *viewController;
 
 @end
 

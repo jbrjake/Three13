@@ -28,16 +28,16 @@
     CGRect belowFrame;
 }
 
-@property(nonatomic, retain) NSMutableArray * cardViews;
-@property(nonatomic, retain) NSMutableArray * allCardViews;
-@property(nonatomic, retain) Three13CardView * knownThree13CardView;
-@property(nonatomic, retain) Three13CardView * mysteryThree13CardView;
-@property(nonatomic, retain) NSMutableArray * imagesArray;
-@property(nonatomic, retain) IBOutlet UILabel * totalScoreLabel;
-@property(nonatomic, retain) IBOutlet UILabel * scoreLabel;
-@property(nonatomic, retain) IBOutlet UILabel * roundLabel;
-@property(nonatomic, retain) IBOutlet UILabel * levelLabel;
-@property(nonatomic, retain) NSMutableArray * handCardFrames;
+@property(nonatomic, strong) NSMutableArray * cardViews;
+@property(nonatomic, strong) NSMutableArray * allCardViews;
+@property(nonatomic, strong) Three13CardView * knownThree13CardView;
+@property(nonatomic, strong) Three13CardView * mysteryThree13CardView;
+@property(nonatomic, strong) NSMutableArray * imagesArray;
+@property(nonatomic, strong) IBOutlet UILabel * totalScoreLabel;
+@property(nonatomic, strong) IBOutlet UILabel * scoreLabel;
+@property(nonatomic, strong) IBOutlet UILabel * roundLabel;
+@property(nonatomic, strong) IBOutlet UILabel * levelLabel;
+@property(nonatomic, strong) NSMutableArray * handCardFrames;
 @property(nonatomic) CGRect knownCardFrame;
 @property(nonatomic) CGRect mysteryCardFrame;
 @property(nonatomic) CGRect aboveFrame;

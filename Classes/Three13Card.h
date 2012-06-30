@@ -26,8 +26,8 @@ typedef enum {
 @property (nonatomic) NSInteger value;
 @property (nonatomic) NSInteger number;
 @property (nonatomic) Suit suit;
-@property (nonatomic, retain) UIImage * face;
-@property (nonatomic, retain) UIImage * back;
+@property (nonatomic, strong) UIImage * face;
+@property (nonatomic, strong) UIImage * back;
 
 - (id) initWithValue:(NSInteger) aValue suit:(Suit) aSuit number:(NSInteger) aNumber;
 -(void) getFaceImage;

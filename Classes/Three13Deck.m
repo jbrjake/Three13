@@ -19,7 +19,6 @@
                 for(int value = 1; value <= 13; value++) {
                     Three13Card *card = [[Three13Card alloc] initWithValue:value suit:suit number:counter];
                     [cards addObject:card];
-                    [card release];
                     counter++;
                 }
             }            
@@ -46,10 +45,10 @@ int randomSort(id obj1, id obj2, void *context ) {
 - (Three13Card *) draw {
 	
 	if([self cardsRemaining] > 0) {
-		Three13Card *card = [[cards lastObject] retain];
+		Three13Card *card = [cards lastObject];
 		[cards removeLastObject];
 //        NSLog(@"Drawing a %@", card);
-		return [card autorelease];
+		return card;
 	}
 	
 	NSException* myException = [NSException
@@ -79,10 +78,5 @@ int randomSort(id obj1, id obj2, void *context ) {
 	return desc;
 }
 
-- (void) dealloc {
-	[cards release];
-    cards = nil;
-	[super dealloc];
-}
 
 @end

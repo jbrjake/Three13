@@ -10,7 +10,7 @@
 	NSMutableArray *cards;
 }
 
-@property (nonatomic, retain) NSMutableArray * cards;
+@property (nonatomic, strong) NSMutableArray * cards;
 
 - (void) shuffle;
 - (Three13Card *) draw;

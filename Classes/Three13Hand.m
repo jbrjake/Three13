@@ -15,7 +15,6 @@
 
 - (id) init {
 	if(self = [super init] ) {
-        [cards release];
 		cards = [[NSMutableArray alloc] init];
         valueSets = [[NSMutableArray alloc] init];
         suitSets = [[NSMutableArray alloc] init];
@@ -28,26 +27,8 @@
 	return self;
 }
 
--(void) dealloc {
-    [suitSets release];
-    suitSets = nil;
-    [valueSets release];
-    valueSets = nil;
-    [jokerSet release];
-    jokerSet = nil;
-    [valueSetsWithJokers release];
-    valueSetsWithJokers = nil;
-    [suitSetsWithJokers release];
-    suitSetsWithJokers = nil;
-    [allMelds release];
-    allMelds = nil;
-    [bestMeld release];
-    bestMeld = nil;
-    [super dealloc];
-}
 -(void) addCard:( Three13Card*) card {
     [cards addObject:card];
-    [card release];
 }
 
 -(Three13Card*) showCardAt: (NSInteger)index {
@@ -89,7 +70,6 @@ int next_comb(int comb[], int k, int n) {
         [tempSet addObject:[setArray objectAtIndex:comb[i] ]];
     }
     [combinations addObject:tempSet];
-    [tempSet release];
     
     while(next_comb(comb, k, n)) {
         tempSet = [[NSMutableSet alloc] init];
@@ -97,9 +77,7 @@ int next_comb(int comb[], int k, int n) {
             [tempSet addObject:[setArray objectAtIndex:comb[i] ]];
         }
         [combinations addObject:tempSet];
-        [tempSet release];
     }
-    [setArray release];
     return combinations;
 }
 
@@ -117,7 +95,6 @@ int next_comb(int comb[], int k, int n) {
     {
         frequency[card.value-1]++;
         if (frequency[card.value-1] > 1 && card.value-1 != joker ) {
-            [setArrayCopy release];
             return FALSE;
         }
     }
@@ -145,7 +122,6 @@ int next_comb(int comb[], int k, int n) {
         }
     }
     
-    [setArrayCopy release];
     // There's a run if jokers can plug all the holes
     if( gap <= gapLimit )
         return TRUE;
@@ -167,22 +143,18 @@ int next_comb(int comb[], int k, int n) {
         predicate = [NSPredicate predicateWithFormat:@"value == %d",i];
         filteredSet = [[NSSet alloc] initWithSet:[handSet filteredSetUsingPredicate:predicate]];
         [valueSets addObject:filteredSet];
-        [filteredSet release];
     }
     for (int i=0; i < 4; i++) {
         //Sets of cards with suits 0-3
         predicate = [NSPredicate predicateWithFormat:@"suit == %d",i];
         filteredSet = [[NSSet alloc] initWithSet:[handSet filteredSetUsingPredicate:predicate]];
         [suitSets addObject:filteredSet];
-        [filteredSet release];
     }
     //Set of jokers
     predicate = [NSPredicate predicateWithFormat:@"value == %d",[cards count]];
     filteredSet = [[NSSet alloc] initWithSet:[handSet filteredSetUsingPredicate:predicate]];
     [jokerSet setSet:filteredSet];
-    [filteredSet release];
 
-    [handSet release];
     NSLog(@"Value sets: %@", [valueSets description]);
     NSLog(@"Suit sets: %@", [suitSets description]);
     NSLog(@"Joker set: %@", [jokerSet description]);    
@@ -208,7 +180,6 @@ int next_comb(int comb[], int k, int n) {
             }
         }
     }
-    [iterateArray release];
     iterateArray = [[NSArray alloc] initWithArray:suitSets];
     for( NSSet * set in iterateArray )
     {
@@ -226,7 +197,6 @@ int next_comb(int comb[], int k, int n) {
             }
         }
     }
-    [iterateArray release];
 }
 
 -(void) addJokersToSets {
@@ -240,7 +210,6 @@ int next_comb(int comb[], int k, int n) {
         if ( ![jokeredSet isEqualToSet:set] ) {
             [valueSetsWithJokers addObject:jokeredSet];
         }
-        [jokeredSet release];
     }
     // Then discard any set with count < 3 again, because some may have slipped through because of the jokers also being regular cards
     NSMutableArray * iterateArray;
@@ -251,7 +220,6 @@ int next_comb(int comb[], int k, int n) {
             [valueSetsWithJokers removeObject:set];
         }
     }
-    [iterateArray release];
     // Time to iterate through the suitsets array
     [suitSetsWithJokers removeAllObjects];
     for( NSSet * set in suitSets ) {
@@ -262,7 +230,6 @@ int next_comb(int comb[], int k, int n) {
         if ( ![jokeredSet isEqualToSet:set] ) {
             [suitSetsWithJokers addObject:jokeredSet];
         }
-        [jokeredSet release];
     }
     // Then discard any set with count < 3 again, because some may have slipped through because of the jokers also being regular cards
     iterateArray = [[NSMutableArray alloc] initWithArray:suitSetsWithJokers];
@@ -272,7 +239,6 @@ int next_comb(int comb[], int k, int n) {
             [suitSetsWithJokers removeObject:set];
         }
     }
-    [iterateArray release];
 }
 
 -(void) findSetCombinations {
@@ -286,10 +252,8 @@ int next_comb(int comb[], int k, int n) {
         for (i=3; i<entries; i++) {
             NSMutableArray * combos = [self combinationsOf:i For:set];
             [valueSetsWithJokers addObjectsFromArray:combos];
-            [combos release];
         }
     }
-    [iterateArray release];
     
     iterateArray = [[NSMutableArray alloc] initWithArray:suitSetsWithJokers];
     for( NSSet * set in iterateArray )
@@ -298,10 +262,8 @@ int next_comb(int comb[], int k, int n) {
         for (int i=3; i<entries; i++) {
             NSMutableArray * combos = [self combinationsOf:i For:set];
             [suitSetsWithJokers addObjectsFromArray:combos];
-            [combos release];
         }
     }
-    [iterateArray release];
 }
 
 -(void) pruneSuitSetsToRuns {
@@ -313,7 +275,6 @@ int next_comb(int comb[], int k, int n) {
             [suitSetsWithJokers removeObject:set];
         }
     }
-    [sswjCopy release];
 }
 
 -(void) findMeldsOfMelds {
@@ -337,13 +298,10 @@ int next_comb(int comb[], int k, int n) {
                     if (![allMelds containsObject:unionSet] && ![tempArray containsObject:unionSet]) {
                         [tempArray addObject:unionSet];
                     }
-                    [unionSet release];
                 }
             }
             [allMelds addObjectsFromArray:tempArray];
-            [tempArray release];
         }
-        [allMeldsCopy release];
     }
 //    NSLog(@"All melds: %@", allMelds);    
 }

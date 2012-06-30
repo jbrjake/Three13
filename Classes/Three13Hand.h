@@ -22,13 +22,13 @@
 }
 
 @property(nonatomic) NSInteger score;
-@property(nonatomic, retain) NSMutableArray * valueSets;
-@property(nonatomic, retain) NSMutableArray * suitSets;
-@property(nonatomic, retain) NSMutableArray * valueSetsWithJokers;
-@property(nonatomic, retain) NSMutableArray * suitSetsWithJokers;
-@property(nonatomic, retain) NSMutableArray * allMelds;
-@property(nonatomic, retain) NSMutableSet * jokerSet;
-@property(nonatomic, retain) NSMutableArray * bestMeld;
+@property(nonatomic, strong) NSMutableArray * valueSets;
+@property(nonatomic, strong) NSMutableArray * suitSets;
+@property(nonatomic, strong) NSMutableArray * valueSetsWithJokers;
+@property(nonatomic, strong) NSMutableArray * suitSetsWithJokers;
+@property(nonatomic, strong) NSMutableArray * allMelds;
+@property(nonatomic, strong) NSMutableSet * jokerSet;
+@property(nonatomic, strong) NSMutableArray * bestMeld;
 
 -(void) addCard:( Three13Card*) card;
 -(Three13Card*) showCardAt:( NSInteger) index;

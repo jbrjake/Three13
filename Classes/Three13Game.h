@@ -22,10 +22,10 @@
     NSInteger totalScore;    
 }
 
-@property (nonatomic,retain) Three13Deck * deck;
-@property (nonatomic,retain) Three13Hand * hand;
-@property (nonatomic, retain) Three13Card * knownCard;
-@property (nonatomic, retain) Three13Card * mysteryCard;
+@property (nonatomic,strong) Three13Deck * deck;
+@property (nonatomic,strong) Three13Hand * hand;
+@property (nonatomic, strong) Three13Card * knownCard;
+@property (nonatomic, strong) Three13Card * mysteryCard;
 @property (nonatomic) NSInteger state;
 @property (nonatomic) NSInteger level;
 @property (nonatomic) NSInteger round;

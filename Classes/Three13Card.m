@@ -124,13 +124,6 @@
 	return self;
 }
 
--(void) dealloc {
-    [face release];
-    [back release];
-    face = nil;
-    back = nil;
-    [super dealloc];
-}
 
 - (NSString *) valueAsString {
 	switch (self.value) {

@@ -30,9 +30,6 @@
 }
 */
 
-- (void)dealloc {
-    [super dealloc];
-}
 
 - (void) touchesBegan:(NSSet*)touches withEvent:(UIEvent*)event {
     // Retrieve the touch point
