@@ -56,5 +56,8 @@
 -(void) moveCardWithTag:(NSInteger)tag toLocation:(CGRect)frame;
 -(void) flipViewFor:(NSNumber*)cardID;
 -(void) flipViewForCard:(Three13Card *)card;
+
+-(void) displayMessage:(NSString*)text;
+
 @end
 
