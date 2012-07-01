@@ -128,6 +128,10 @@
     totalScoreLabel.text = [NSString stringWithFormat:@"Total Score: %d", game.totalScore];
     roundLabel.text = [NSString stringWithFormat:@"Round: %d", game.round];
     levelLabel.text = [NSString stringWithFormat:@"Level: %d", game.level];
+    scoreLabel.tag = 106;
+    totalScoreLabel.tag = 107;
+    roundLabel.tag = 108;
+    levelLabel.tag = 109;
 //    NSLog(@"Game started, setting known/mystery cards to %d and %d", game.knownCard.number, game.mysteryCard.number);
     
 //    knownThree13CardView = (UIImageView*)[self.view viewWithTag:game.knownCard.number];
@@ -143,7 +147,7 @@
     [self.view addSubview:roundLabel];
     [self.view addSubview:levelLabel];
     [self createGestureRecognizers];
-    [self.view setTag:106];
+    [self.view setTag:110];
     [super viewDidLoad];
 
 }
