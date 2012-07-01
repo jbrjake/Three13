@@ -190,14 +190,26 @@
         }
     }
 
+    NSMutableArray * tappedCards = [[NSMutableArray alloc] init];
     for( NSNumber * cardNumber in [game.hand cardIDs] )
     {
         Three13CardView * view = (Three13CardView*)[self.view viewWithTag:[cardNumber intValue]];
         if ([view pointInside:[sender locationInView:view] withEvent:nil] /*&& view.tag < 105*/) {
-            [self tappedCard:view.tag];
+            [tappedCards addObject:view];
         }
     }
-    
+  
+    int i;
+    int rightTag = -1;
+    int lastZorder = -1;
+    for (i = 0; i < tappedCards.count; i++) {
+        Three13CardView * curCard = [tappedCards objectAtIndex:i];
+        int zOrder = [self.view.subviews indexOfObject:curCard];
+        if (zOrder > lastZorder) {
+            rightTag = curCard.tag;
+        }
+    }
+    [self tappedCard:rightTag];
 }
 
 -(void) gameStarts:(NSNotification *)note {
