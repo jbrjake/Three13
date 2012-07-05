@@ -43,4 +43,7 @@
 -(void) scoreHand;
 -(void) evaluateHand;
 -(void) updateScore;
+
+int next_comb(int comb[], int k, int n);
+
 @end

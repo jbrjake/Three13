@@ -19,4 +19,6 @@
 - (NSInteger) cardsRemaining;
 - (NSMutableArray*) cardIDs;
 
+int randomSort(id obj1, id obj2, void *context );
+
 @end
