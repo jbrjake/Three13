@@ -94,7 +94,7 @@ int next_comb(int comb[], int k, int n) {
     for( Three13Card * card in setArrayCopy )
     {
         frequency[card.value-1]++;
-        if (frequency[card.value-1] > 1 && card.value-1 != joker ) {
+        if (frequency[card.value-1] > 1 && card.value != joker ) {
             return FALSE;
         }
     }
