@@ -35,6 +35,15 @@
     return [cards objectAtIndex:index];
 }
 
+/**
+ * @brief ? Okay, this one I need to come back to
+ * No clue how this works anymore :/
+ * @param comb ?The array in which to store the generated combination? Is this right?
+ * @param k The number of elements to be in each combination generated
+ * @param n The number of elements in the larger set from which each combination is drawn
+ * @return 1 if there are more combinations, 0 if this is the last one available
+ * @see combinationsOf:For:
+ */
 int next_comb(int comb[], int k, int n) {
     int i = k - 1;
     ++comb[i];
@@ -54,6 +63,12 @@ int next_comb(int comb[], int k, int n) {
     return 1;
 }
 
+/**
+ * @brief Generates all possible combinations of size K in the given set
+ * @param k The number of elements that should be in each combination
+ * @param set The set of elements from which to draw each combination
+ * @returns An array of the combinations
+ */
 -(NSMutableArray*) combinationsOf:(NSInteger)k For:(NSSet*)set {
     NSMutableArray * combinations = [[NSMutableArray alloc] init];
     int n = [set count];
@@ -82,6 +97,11 @@ int next_comb(int comb[], int k, int n) {
     return combinations;
 }
 
+/**
+ * @brief Says whether or not there's a numerical sequence in a set, taking jokers into account.
+ * @param set The cards to examine
+ * @return True if there are sequential cards, or enough jokers to fill any gaps in them. False otherwise.
+ */
 -(BOOL) runInSet:(NSSet *)set {
     NSInteger joker = [cards count];
     NSMutableArray * setArray = [NSMutableArray arrayWithArray:[set allObjects]];
