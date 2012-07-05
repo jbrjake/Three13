@@ -28,44 +28,6 @@
     return self;
 }
 
-
--(void) testGame {
-
-    //Build some test hands
-    Three13Hand * testHand1 = [[Three13Hand alloc] init];
-    [testHand1 addCard:[[Three13Card alloc] initWithValue:1 suit:Spades number:0]];
-    [testHand1 addCard:[[Three13Card alloc] initWithValue:4 suit:Hearts number:0]];
-    [testHand1 addCard:[[Three13Card alloc] initWithValue:6 suit:Hearts number:0]];
-    [testHand1 addCard:[[Three13Card alloc] initWithValue:6 suit:Spades number:0]];
-    [testHand1 addCard:[[Three13Card alloc] initWithValue:8 suit:Spades number:0]];
-    [testHand1 addCard:[[Three13Card alloc] initWithValue:9 suit:Spades number:0]];
-    [testHand1 addCard:[[Three13Card alloc] initWithValue:7 suit:Spades number:0]];
-
-    [testHand1 updateScore];
-    Three13Hand * testHand2 = [[Three13Hand alloc] init];
-    [testHand2 addCard:[[Three13Card alloc] initWithValue:6 suit:Clubs number:0]];
-    [testHand2 addCard:[[Three13Card alloc] initWithValue:7 suit:Spades number:0]];
-    [testHand2 addCard:[[Three13Card alloc] initWithValue:7 suit:Spades number:0]];
-    [testHand2 addCard:[[Three13Card alloc] initWithValue:12 suit:Spades number:0]];
-    [testHand2 addCard:[[Three13Card alloc] initWithValue:12 suit:Hearts number:0]];
-    [testHand2 addCard:[[Three13Card alloc] initWithValue:6 suit:Spades number:0]];
-            
-    [testHand2 updateScore];
-
-    Three13Hand * testHand3 = [[Three13Hand alloc] init];
-    [testHand3 addCard:[[Three13Card alloc] initWithValue:1 suit:Hearts number:0]];
-    [testHand3 addCard:[[Three13Card alloc] initWithValue:4 suit:Clubs number:0]];
-    [testHand3 addCard:[[Three13Card alloc] initWithValue:10 suit:Hearts number:0]];
-    [testHand3 addCard:[[Three13Card alloc] initWithValue:11 suit:Hearts number:0]];
-    
-    [testHand3 updateScore];
-    
-    
-    NSLog(@"Test hand 1 %@, thinks it scores %d with cards %@", testHand1.score == 11 ? @"PASSED" : @"FAILED", testHand1.score, testHand1.cards);
-    NSLog(@"Test hand 2 %@, thinks it scores %d with cards %@", testHand2.score == 0? @"PASSED" : @"FAILED", testHand2.score, testHand2.cards);
-    NSLog(@"Test hand 3 %@, thinks it scores %d with cards %@", testHand3.score == 1? @"PASSED" : @"FAILED", testHand3.score, testHand3.cards);
-}
-
 -(void) startGame {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(gameStarted) name:@"Started Game" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(cardDiscarded) name:@"Discarded Card" object:nil];
