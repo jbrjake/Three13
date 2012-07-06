@@ -220,6 +220,7 @@
 		740B8A2212BA776C00E0AB34 /* Three13Game.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Three13Game.m; sourceTree = "<group>"; };
 		740B8C9212BBCA4500E0AB34 /* green-leather.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "green-leather.png"; sourceTree = "<group>"; };
 		740B904912BFFEE600E0AB34 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		743454C115A77C8D00B9C55A /* Three13GameDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Three13GameDelegate.h; sourceTree = "<group>"; };
 		746E005F15A4CA7100BB9F22 /* 313-test.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "313-test.octest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		746E006015A4CA7100BB9F22 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		746E006615A4CA7100BB9F22 /* 313-test-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "313-test-Info.plist"; sourceTree = "<group>"; };
@@ -405,6 +406,7 @@
 		74C6824C12A1BCD800B04C1E /* ts.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = ts.gif; sourceTree = "<group>"; };
 		74C6841E12A4666900B04C1E /* Three13Hand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Three13Hand.h; sourceTree = "<group>"; };
 		74C6841F12A4666900B04C1E /* Three13Hand.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Three13Hand.m; sourceTree = "<group>"; };
+		74EE9D1815A7874300F32415 /* Three13ViewDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Three13ViewDataSource.h; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* _13_prototype-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "_13_prototype-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -444,6 +446,8 @@
 				74C6841F12A4666900B04C1E /* Three13Hand.m */,
 				740B8A2112BA776C00E0AB34 /* Three13Game.h */,
 				740B8A2212BA776C00E0AB34 /* Three13Game.m */,
+				743454C115A77C8D00B9C55A /* Three13GameDelegate.h */,
+				74EE9D1815A7874300F32415 /* Three13ViewDataSource.h */,
 				7474D34812DD72DC0067D62D /* Three13CardView.h */,
 				7474D34912DD72DC0067D62D /* Three13CardView.m */,
 				1D3623240D0F684500981E51 /* _13_prototypeAppDelegate.h */,
