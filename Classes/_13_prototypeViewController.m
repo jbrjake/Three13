@@ -37,13 +37,10 @@
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad {
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(gameStarts:) name:@"Start Game" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(levelStarts:) name:@"Start Level" object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(levelEnds:) name:@"End Level" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(roundStarts:) name:@"Start Round" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(knownChosen:) name:@"Choose Known" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(mysteryChosen:) name:@"Choose Mystery" object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(cardDiscarded:) name:@"Discard Card" object:nil];
 
     self.view.backgroundColor = [UIColor blackColor];
     CGRect hiddenBackground = CGRectMake(self.view.bounds.origin.x, -1000, self.view.bounds.size.width, self.view.bounds.size.height);
@@ -213,6 +210,16 @@
     [self tappedCard:rightTag];
 }
 
+- (void) respondToStartOfGameWithCompletionHandler:(void (^)())completionHandler {
+    //Animate in the backdrop    
+    UIImageView * backView = (UIImageView*)[self.view viewWithTag:105];
+    [UIView transitionWithView:nil duration:0.5 options:UIViewAnimationOptionTransitionFlipFromLeft animations:^{
+		backView.frame = CGRectMake(self.view.bounds.origin.x, self.view.bounds.origin.y, self.view.bounds.size.width, self.view.bounds.size.height);
+	} completion:^(BOOL finished) {
+        completionHandler();
+    } ];
+}
+
 -(void) gameStarts:(NSNotification *)note {
 //    NSLog(@"Game notified view controller of start!");
     
@@ -224,6 +231,35 @@
         [[NSNotificationCenter defaultCenter] postNotificationName:@"Started Game" object:self ];
     } ];
     
+}
+
+- (void) respondToEndOfLevelWithDictionary:(NSMutableDictionary*)dict andCompletionHandler:(void (^)())completionHandler {
+    NSMutableArray * handArray = [dict objectForKey:@"hand"];
+    NSMutableArray * deckArray = [dict objectForKey:@"deck"];
+    
+    [self displayMessage:[NSString stringWithFormat:@"Scored %d", game.currentScore]];
+    
+    [UIView animateWithDuration:0.5 animations:^{
+        for (int i = 0; i < [handArray count]; i++) {
+            NSInteger tag = [[handArray objectAtIndex:i] intValue];
+            Three13CardView * view = (Three13CardView*)[self.view viewWithTag:tag];
+            view.frame = aboveFrame;
+        }
+        for (NSNumber * tag in deckArray) {
+            NSInteger tagInt = [tag intValue];
+            Three13CardView * cardView = (Three13CardView*)[self.view viewWithTag:tagInt];
+            cardView.frame = aboveFrame;
+        }        
+    }
+    completion:^(BOOL finished) {
+        //Start level
+        for (int i = 0; i < [handArray count]; i++) {
+            NSInteger tag = [[handArray objectAtIndex:i] intValue];
+            Three13CardView * view = (Three13CardView*)[self.view viewWithTag:tag];
+            view.image = [imagesArray lastObject]; //back image
+        }        
+        completionHandler();
+    }];     
 }
 
 -(void) levelEnds:(NSNotification *)note {
@@ -446,7 +482,31 @@
         completion:NULL
      ];    
 }
-        
+
+- (void) respondToCardBeingDiscardedWithDictionary:(NSDictionary*)dict andCompletionHandler:(void (^)())completionHandler {
+    NSMutableArray * handArray = [dict objectForKey:@"hand"];
+    NSLog(@"Hand is %@", handArray);
+    NSInteger discardTag = [[dict objectForKey:@"discard"] intValue];
+    
+    [UIView animateWithDuration:0.5
+                     animations:^{
+                         Three13CardView * cardView = (Three13CardView*)[self.view viewWithTag:discardTag];
+                         cardView.frame = belowFrame;
+                         for (int i = 0; i < handArray.count; i++) {
+                             NSInteger cardID = [ [handArray objectAtIndex:i] intValue];
+                             CGRect frame = [[handCardFrames objectAtIndex:i] CGRectValue];
+                             Three13CardView * view = (Three13CardView*)[self.view viewWithTag:cardID];
+                             [self moveCardWithTag:view.tag toLocation:frame];
+                         }                
+                     }
+                     completion:^(BOOL finished) {
+                         if (finished) {
+                             completionHandler();
+                         }
+                     }
+    ];     
+}
+
 -(void) cardDiscarded:(NSNotification *)note {
     NSLog(@"Game notified view controller of discarded card %@!", [note.userInfo objectForKey:@"discard"]);
     NSDictionary * dict = note.userInfo;
