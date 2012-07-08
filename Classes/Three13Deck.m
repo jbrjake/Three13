@@ -45,12 +45,35 @@ int randomSort(id obj1, id obj2, void *context ) {
 	return (arc4random()%3 - 1);    
 }
 
+/**
+ * Fills an array with 500 entries where each is a random choice of -1, 0, or 1.
+ * Then it uses those to sort the card array 500 times.
+ */
 - (void) shuffle {
-	for(int x = 0; x < 500; x++) {
-		[cards sortUsingFunction:randomSort context:nil];
-	}
+    
+    // GCD has a bug preventing access to arrays if they're not wrapped in a struct
+    // http://www.cocoabuilder.com/archive/cocoa/296710-cannot-access-block-variable-of-array-type-inside-block.html
+    __block struct {
+        int randomArray[500];
+    } blockStruct;
+    
+    // Concurrently fills in randomArray as a lookup table for random numbers
+    dispatch_apply((size_t)500, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(size_t i) {
+        blockStruct.randomArray[i] = randomSort(nil, nil, nil); 
+    });
+    
+    // Serially performs 500 sort operations on the card array, each time using a different random
+    // sort direction from the random lookup table. This is a bit convoluted, but necessary since
+    // NSMutableArrays are not thread-safe. So while the random numbers can be generated concurrently
+    // on the global queue, the sorting must occur in a serial queue.
+    dispatch_queue_t queue;
+    queue = dispatch_queue_create("us.ubiquit.313CardSorter", NULL);
+    dispatch_apply((size_t)500, queue, ^(size_t j) {
+        [cards sortUsingComparator:(NSComparator)^(id obj1, id obj2){
+            return blockStruct.randomArray[j];
+        }];
+    });
 }
-
 - (Three13Card *) draw {
 	
 	if([self cardsRemaining] > 0) {
