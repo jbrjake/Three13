@@ -40,7 +40,15 @@
 //    NSLog(@"Start Game completed");
 //  [self testGame];
     
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"Start Game" object:self userInfo:[self gameDict] ];
+    if( [delegate conformsToProtocol:@protocol(Three13GameDelegate)] ) {
+        [delegate respondToStartOfGameWithCompletionHandler:^ {
+            [self gameStarted];
+        }];
+    }
+    else {
+        // Fall back on loose coupling
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"Start Game" object:self userInfo:[self gameDict] ];
+    }
 }
 
 -(void) gameStarted {
@@ -102,7 +110,15 @@
         [hand sortByValue];
         NSMutableDictionary * dict = [self gameDict];
         [dict setObject:[NSNumber numberWithInt:number] forKey:@"discard"];
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"Discard Card" object:self userInfo:dict];
+        if( [delegate conformsToProtocol:@protocol(Three13GameDelegate)] ) {
+            [delegate respondToCardBeingDiscardedWithDictionary:[self gameDict] andCompletionHandler:^ {
+                [self cardDiscarded];
+            }];
+        }
+        else {
+            // Fall back on loose coupling
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"Discard Card" object:self userInfo:[self gameDict] ];
+        }
     }
 }
 
@@ -119,7 +135,15 @@
 }
 
 -(void) endLevel {
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"End Level" object:self userInfo:[self gameDict] ];
+    if( [delegate conformsToProtocol:@protocol(Three13GameDelegate)] ) {
+        [delegate respondToEndOfLevelWithDictionary:[self gameDict] andCompletionHandler:^ {
+            [self levelEnded];
+        }];
+    }
+    else {
+        // Fall back on loose coupling
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"End Level" object:self userInfo:[self gameDict] ];
+    }
 }
 
 -(void) levelEnded {
