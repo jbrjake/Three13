@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "Three13Game.h"
 #import "Three13CardView.h"
-@interface _13_prototypeViewController : UIViewController {
+@interface _13_prototypeViewController : UIViewController <Three13GameDelegate> {
 
     Three13Game * game;
     NSMutableArray * cardViews;

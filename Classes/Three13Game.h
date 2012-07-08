@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "Three13Hand.h"
+#import "Three13GameDelegate.h"
 
 @interface Three13Game : NSObject {
 
@@ -19,7 +20,9 @@
     NSInteger level;
     NSInteger round;
     NSInteger currentScore;
-    NSInteger totalScore;    
+    NSInteger totalScore;
+    
+    id delegate;
 }
 
 @property (nonatomic,strong) Three13Deck * deck;
@@ -31,6 +34,7 @@
 @property (nonatomic) NSInteger round;
 @property (nonatomic) NSInteger currentScore;
 @property (nonatomic) NSInteger totalScore;
+@property (nonatomic, strong) id delegate;
 
 -(void) deal: (NSInteger) cardNumber;
 -(void) startGame;

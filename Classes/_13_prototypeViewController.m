@@ -80,6 +80,7 @@
     }
     
     game = [[Three13Game alloc] init];
+    [game setDelegate:self];
     [game addObserver:self forKeyPath:@"state" options:0 context:nil];
     [game addObserver:self forKeyPath:@"level" options:0 context:nil];
     [game addObserver:self forKeyPath:@"round" options:0 context:nil];

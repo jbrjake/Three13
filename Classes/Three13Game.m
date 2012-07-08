@@ -11,7 +11,7 @@
 
 @implementation Three13Game
 
-@synthesize deck, hand, mysteryCard, knownCard, state, level, round, currentScore, totalScore;
+@synthesize deck, hand, mysteryCard, knownCard, state, level, round, currentScore, totalScore, delegate;
 
 -(id) init  {
     if( self = [super init] ) {
