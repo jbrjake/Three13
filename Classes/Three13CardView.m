@@ -35,15 +35,18 @@
     // Retrieve the touch point
     CGPoint pt = [[touches anyObject] locationInView:self];
     startLocation = pt;
-    CGRect frame = self.frame;
+    CGRect __block frame = self.frame;
     normalFrame = frame;
-    [UIView beginAnimations:@"cardScale" context:nil];
     frame.size.width = frame.size.width * 1.5;
     frame.size.height = frame.size.height * 1.5;
-    self.frame = frame;
-    self.alpha = 0.6;    
-    [UIView commitAnimations];
     
+    [UIView animateWithDuration:0.2f
+                     animations:^{
+                         self.frame = frame;
+                         self.alpha = 0.6;    
+                     }
+    ];
+
     [[self superview] bringSubviewToFront:self];
 }
 - (void) touchesMoved:(NSSet*)touches withEvent:(UIEvent*)event {
@@ -56,23 +59,27 @@
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
-    CGRect frame = self.frame;
-    [UIView beginAnimations:@"cardScaleBack" context:nil];
+    CGRect __block frame = self.frame;
     frame.size.width = normalFrame.size.width;
     frame.size.height = normalFrame.size.height;
-    self.frame = frame;
-    self.alpha = 1.0;    
-    [UIView commitAnimations];
+    [UIView animateWithDuration:0.2f
+                     animations:^{
+                         self.frame = frame;
+                         self.alpha = 1.0;    
+                     }
+    ];
 }
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
-    CGRect frame = self.frame;
-    [UIView beginAnimations:@"cardScaleBack" context:nil];
+    CGRect __block frame = self.frame;
     frame.size.width = normalFrame.size.width;
     frame.size.height = normalFrame.size.height;
-    self.frame = frame;
-    self.alpha = 1.0;    
-    [UIView commitAnimations];
+    [UIView animateWithDuration:0.2f
+                     animations:^{
+                         self.frame = frame;
+                         self.alpha = 1.0;    
+                     }
+    ];
 }
 
 @end
