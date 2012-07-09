@@ -111,7 +111,7 @@
         NSMutableDictionary * dict = [self gameDict];
         [dict setObject:[NSNumber numberWithInt:number] forKey:@"discard"];
         if( [delegate conformsToProtocol:@protocol(Three13GameDelegate)] ) {
-            [delegate respondToCardBeingDiscardedWithDictionary:[self gameDict] andCompletionHandler:^ {
+            [delegate respondToCardBeingDiscardedWithDictionary:dict andCompletionHandler:^ {
                 [self cardDiscarded];
             }];
         }
