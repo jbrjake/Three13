@@ -1,0 +1,43 @@
+Things the view controller does with the model:
+
+- Inits the game
+- Starts the game
+- Accesses the game's cards array.
+- Looks at the game's score, round, and level properties
+- Chooses the known card when the known card view is tapped
+- Chooses the unknown card when the mystery card is tapped
+- Chooses the hand card when a hand card view is tapped for discard
+- Changes how it handles taps based on the game state
+
+Thing the view controller announces:
+- The game view is in place and the game can start
+- The cards have finished being removed from screen in response to a level end event
+- a card view has been removed from screen as discarded
+
+Things the view controller listens for:
+- Game starts
+- Level starts
+- Level ends
+- Round starts
+- Known chosen
+- Mystery chosen
+- Card discarded
+
+
+---
+
+So the clearest way we can clean things up is with game start, level end, and card discarded. Those can be delegate methods that require a completion handler block. So, for example, we could have:
+-(void) endLevel {
+    [delegate respondToEndOfLevelWithCompletionHandler:^{
+        [self levelEnded]
+    }];
+}
+...and in the protocol:
+-(void) respondToEndOfLevelWithCompletionHandler:(void (^)())completionHandler {
+    // do stuff
+    completionHandler();
+}
+
+I can go further than that though, and reconsolidate the levelended logic in one function, just with the level ended code nested in a block expression.
+
+Also, I think I can use the block version of sortusingcomparator to speed up the randomsort?
