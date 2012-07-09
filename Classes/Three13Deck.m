@@ -51,17 +51,6 @@ int randomSort(id obj1, id obj2, void *context ) {
  */
 - (void) shuffle {
     
-    // GCD has a bug preventing access to arrays if they're not wrapped in a struct
-    // http://www.cocoabuilder.com/archive/cocoa/296710-cannot-access-block-variable-of-array-type-inside-block.html
-    __block struct {
-        int randomArray[500];
-    } blockStruct;
-    
-    // Concurrently fills in randomArray as a lookup table for random numbers
-    dispatch_apply((size_t)500, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(size_t i) {
-        blockStruct.randomArray[i] = randomSort(nil, nil, nil); 
-    });
-    
     // Serially performs 500 sort operations on the card array, each time using a different random
     // sort direction from the random lookup table. This is a bit convoluted, but necessary since
     // NSMutableArrays are not thread-safe. So while the random numbers can be generated concurrently
@@ -70,7 +59,7 @@ int randomSort(id obj1, id obj2, void *context ) {
     queue = dispatch_queue_create("us.ubiquit.313CardSorter", NULL);
     dispatch_apply((size_t)500, queue, ^(size_t j) {
         [cards sortUsingComparator:(NSComparator)^(id obj1, id obj2){
-            return blockStruct.randomArray[j];
+            return randomSort(nil, nil, nil);
         }];
     });
 }
