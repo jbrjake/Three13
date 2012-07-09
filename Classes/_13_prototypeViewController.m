@@ -483,7 +483,7 @@
      ];    
 }
 
-- (void) respondToCardBeingDiscardedWithDictionary:(NSDictionary*)dict andCompletionHandler:(void (^)())completionHandler {
+- (void) respondToCardBeingDiscardedWithDictionary:(NSMutableDictionary*)dict andCompletionHandler:(void (^)())completionHandler {
     NSMutableArray * handArray = [dict objectForKey:@"hand"];
     NSLog(@"Hand is %@", handArray);
     NSInteger discardTag = [[dict objectForKey:@"discard"] intValue];

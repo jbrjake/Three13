@@ -11,7 +11,7 @@
 @protocol Three13GameDelegate <NSObject>
 
 - (void) respondToStartOfGameWithCompletionHandler:(void (^)())completionHandler;
-- (void) respondToEndOfLevelWithDictionary:(NSDictionary*)dict andCompletionHandler:(void (^)())completionHandler;
-- (void) respondToCardBeingDiscardedWithDictionary:(NSDictionary*)dict andCompletionHandler:(void (^)())completionHandler;
+- (void) respondToEndOfLevelWithDictionary:(NSMutableDictionary*)dict andCompletionHandler:(void (^)())completionHandler;
+- (void) respondToCardBeingDiscardedWithDictionary:(NSMutableDictionary*)dict andCompletionHandler:(void (^)())completionHandler;
 
 @end
