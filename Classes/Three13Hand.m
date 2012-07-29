@@ -36,9 +36,8 @@
 }
 
 /**
- * @brief ? Okay, this one I need to come back to
- * No clue how this works anymore :/
- * @param comb ?The array in which to store the generated combination? Is this right?
+ * @brief From http://dzone.com/snippets/generate-combinations
+ * @param comb For the first run, this needs to be the ordered set of values. After that, the previous combination is inputted and modified in place.
  * @param k The number of elements to be in each combination generated
  * @param n The number of elements in the larger set from which each combination is drawn
  * @return 1 if there are more combinations, 0 if this is the last one available
