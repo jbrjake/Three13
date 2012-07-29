@@ -58,6 +58,7 @@ int next_comb(int comb[], int k, int n) {
     NSMutableArray * combinations = [[NSMutableArray alloc] init];
     int n = [set count];
     int comb[16];
+    memset(comb, 0, sizeof(comb));
     int i;
 
     NSArray * setArray = [[NSArray alloc] initWithArray:[set allObjects]];
