@@ -109,7 +109,7 @@
         [hand sortBySuit];
         [hand sortByValue];
         NSMutableDictionary * dict = [self gameDict];
-        [dict setObject:[NSNumber numberWithInt:number] forKey:@"discard"];
+        [dict setObject:@(number) forKey:@"discard"];
         if( [delegate conformsToProtocol:@protocol(Three13GameDelegate)] ) {
             [delegate respondToCardBeingDiscardedWithDictionary:dict andCompletionHandler:^ {
                 [self cardDiscarded];
@@ -178,7 +178,7 @@
 }
 
 -(NSMutableDictionary *) gameDict {
-    NSMutableDictionary * dict = [NSMutableDictionary dictionaryWithObjectsAndKeys: [hand cardIDs], @"hand", [deck cardIDs], @"deck", [NSNumber numberWithInt:knownCard.number], @"known", [NSNumber numberWithInt:mysteryCard.number], @"mystery", [NSNumber numberWithInt:0], @"discard", nil ];
+    NSMutableDictionary * dict = [NSMutableDictionary dictionaryWithObjectsAndKeys: [hand cardIDs], @"hand", [deck cardIDs], @"deck", @(knownCard.number), @"known", @(mysteryCard.number), @"mystery", @0, @"discard", nil ];
     return dict;
 }
 

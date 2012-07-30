@@ -448,7 +448,7 @@
             [self.view viewWithTag:mysteryID].frame = frame;
         }
         completion:^(BOOL finished){
-            [self flipViewFor:[NSNumber numberWithInt:mysteryID]];
+            [self flipViewFor:@(mysteryID)];
         }
     ];
 }

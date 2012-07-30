@@ -173,7 +173,7 @@
 
 - (NSComparisonResult)compareValue:(Three13Card *)otherCard
 {
-    return [ [NSNumber numberWithInt:[self value]] compare: [NSNumber numberWithInt:[otherCard value]]];
+    return [ @([self value]) compare: @([otherCard value])];
 }
 
 - (NSComparisonResult)compareSuit:(Three13Card *)otherCard
@@ -183,7 +183,7 @@
 
 - (NSComparisonResult)compareNumber:(Three13Card *)otherCard
 {
-    return [ [NSNumber numberWithInt:[self number]] compare: [NSNumber numberWithInt:[otherCard number]]];
+    return [ @([self number]) compare: @([otherCard number])];
 }
 
 @end

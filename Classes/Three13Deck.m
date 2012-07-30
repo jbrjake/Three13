@@ -86,7 +86,7 @@ int randomSort(id obj1, id obj2, void *context ) {
 -(NSMutableArray*) cardIDs {
     NSMutableArray * cardIDs = [NSMutableArray new];
     for (Three13Card * card in cards) {
-        [cardIDs addObject:[NSNumber numberWithInt:card.number]];
+        [cardIDs addObject:@(card.number)];
     }
     return cardIDs;
 }
