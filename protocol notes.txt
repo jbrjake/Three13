@@ -41,3 +41,21 @@ So the clearest way we can clean things up is with game start, level end, and ca
 I can go further than that though, and reconsolidate the levelended logic in one function, just with the level ended code nested in a block expression.
 
 Also, I think I can use the block version of sortusingcomparator to speed up the randomsort?
+
+--------
+
+For the level starts, round starts, known chosen, and mystery chosen events, I can do something like this:
+
+Game:
+-(void) startNewLevel {
+    . . . .
+    [delegate respondToStartOfLevelWithDictionary:[self dict]];
+}
+
+VC:
+-(void) respondTStartOfLevelWithDictionary:(NSDictionary*)dict {
+    dispatch_async(^{
+    	[self levelStarts:dict];
+    });
+    return;
+}
