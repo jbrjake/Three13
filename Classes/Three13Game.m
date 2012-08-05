@@ -80,7 +80,13 @@
     if( state == 0 ) {
         [hand addCard:knownCard];
         [self setState:1];
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"Choose Known" object:self userInfo:[self gameDict] ];
+        if( [delegate conformsToProtocol:@protocol(Three13GameDelegate)] ) {
+            [delegate respondToKnownCardChosenWithDictionary:[self gameDict]];
+        }
+        else {
+            // Fall back on loose coupling
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"Choose Known" object:self userInfo:[self gameDict] ];
+        }
     }
 }
 
@@ -90,7 +96,13 @@
         [hand addCard:mysteryCard];
 //        NSLog(@"Hand becomes %@", hand);
         [self setState: 1];
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"Choose Mystery" object:self userInfo:[self gameDict] ];
+        if( [delegate conformsToProtocol:@protocol(Three13GameDelegate)] ) {
+            [delegate respondToMysteryCardChosenWithDictionary:[self gameDict]];
+        }
+        else {
+            // Fall back on loose coupling
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"Choose Mystery" object:self userInfo:[self gameDict] ];
+        }
     }
 }
 
@@ -130,7 +142,13 @@
     [self setRound:1];
     [deck reinitialize];
     [self deal:level];
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"Start Level" object:self userInfo:[self gameDict] ];
+    if( [delegate conformsToProtocol:@protocol(Three13GameDelegate)] ) {
+        [delegate respondToStartOfLevelWithDictionary:[self gameDict]];
+    }
+    else {
+        // Fall back on loose coupling
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"Start Level" object:self userInfo:[self gameDict] ];
+    }
 //    NSLog(@"Starting round %d level %d with score %d", round, level, totalScore );
 }
 
@@ -172,7 +190,13 @@
         knownCard = [deck draw];
         mysteryCard = [deck draw];
         [self setRound:round+1];
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"Start Round" object:self userInfo:[self gameDict] ];
+        if( [delegate conformsToProtocol:@protocol(Three13GameDelegate)] ) {
+            [delegate respondToStartOfRoundWithDictionary:[self gameDict]];
+        }
+        else {
+            // Fall back on loose coupling
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"Start Round" object:self userInfo:[self gameDict] ];
+        }
     }
 
 }

@@ -21,6 +21,38 @@
 - (void) respondToStartOfGameWithCompletionHandler:(void (^)())completionHandler;
 
 /*
+ * @brief Informs the delegate a level has begun
+ * The delegate view controller should respond to the event
+ * asynchronously and return right away.
+ * @param dict The current game state, from Three13Game's gameDict: method
+ */
+- (void) respondToStartOfLevelWithDictionary:(NSMutableDictionary*)dict;
+
+/*
+ * @brief Informs the delegate a round has begun
+ * The delegate view controller should respond to the event
+ * asynchronously and return right away.
+ * @param dict The current game state, from Three13Game's gameDict: method
+ */
+- (void) respondToStartOfRoundWithDictionary:(NSMutableDictionary*)dict;
+
+/*
+ * @brief Informs the delegate a known card has been selected
+ * The delegate view controller should respond to the event
+ * asynchronously and return right away.
+ * @param dict The current game state, from Three13Game's gameDict: method
+ */
+- (void) respondToKnownCardChosenWithDictionary:(NSMutableDictionary*)dict;
+
+/*
+ * @brief Informs the delegate a mystery card has been selected
+ * The delegate view controller should respond to the event
+ * asynchronously and return right away.
+ * @param dict The current game state, from Three13Game's gameDict: method
+ */
+- (void) respondToMysteryCardChosenWithDictionary:(NSMutableDictionary*)dict;
+
+/*
  * @brief Informs the delegate a level has ended
  * When the delegate view controller has finished responding
  * (perhaps by animating the cards off screen and displaying the current score),

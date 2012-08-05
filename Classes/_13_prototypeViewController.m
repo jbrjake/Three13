@@ -37,11 +37,6 @@
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad {
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(levelStarts:) name:@"Start Level" object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(roundStarts:) name:@"Start Round" object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(knownChosen:) name:@"Choose Known" object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(mysteryChosen:) name:@"Choose Mystery" object:nil];
-
     self.view.backgroundColor = [UIColor blackColor];
     CGRect hiddenBackground = CGRectMake(self.view.bounds.origin.x, -1000, self.view.bounds.size.width, self.view.bounds.size.height);
     UIImageView * backgroundImage = [[UIImageView alloc] initWithFrame:hiddenBackground];
@@ -324,13 +319,19 @@
      ];
 }
 
--(void) levelStarts:(NSNotification *)note {
+-(void) respondToStartOfLevelWithDictionary:(NSMutableDictionary *)dict {
+    dispatch_queue_t queue = dispatch_get_main_queue();
+    __block NSMutableDictionary * aDict = dict;
+    dispatch_async(queue, ^{
+        [self levelStarts:aDict];
+    });
+}
+
+-(void) levelStarts:(NSMutableDictionary *)dict {
 //    NSLog(@"Game notified view controller of start level!");
     
     [self displayMessage:[NSString stringWithFormat:@"Level %d", game.level]];
 
-    //Animate in the cards for the hand
-    NSDictionary * dict = note.userInfo;
     NSMutableArray * handArray = [dict objectForKey:@"hand"];
     NSMutableArray * deckArray = [dict objectForKey:@"deck"];
     
@@ -355,15 +356,22 @@
         for( NSNumber * tag in handArray) {
             [self flipViewFor:tag];
         }        
-        [self roundStarts:note];        
+        [self roundStarts:dict];
     }];     
 }
 
--(void) roundStarts:(NSNotification *)note {
+-(void) respondToStartOfRoundWithDictionary:(NSMutableDictionary *)dict {
+    dispatch_queue_t queue = dispatch_get_main_queue();
+    __block NSMutableDictionary * aDict = dict;
+    dispatch_async(queue, ^{
+        [self roundStarts:aDict];
+    });
+}
+
+-(void) roundStarts:(NSMutableDictionary *)dict {
 //    NSLog(@"Game notified view controller of start round!");
 //    mysteryThree13CardView = (UIImageView*)[self.view viewWithTag:game.mysteryCard.number];
 //    knownThree13CardView = (UIImageView*)[self.view viewWithTag:game.knownCard.number];
-    NSDictionary * dict = note.userInfo;
     NSInteger knownID = [ [dict objectForKey:@"known"] intValue];
     NSInteger mysteryID = [ [dict objectForKey:@"mystery"] intValue];
     [ (Three13CardView*)[self.view viewWithTag:mysteryID] setImage:[imagesArray lastObject]];
@@ -406,14 +414,21 @@
     }];
 }
 
--(void) knownChosen:(NSNotification *)note {
+- (void) respondToKnownCardChosenWithDictionary:(NSMutableDictionary*)dict {
+    dispatch_queue_t queue = dispatch_get_main_queue();
+    __block NSMutableDictionary * aDict = dict;
+    dispatch_async(queue, ^{
+        [self knownChosen:aDict];
+    });
+}
+
+-(void) knownChosen:(NSMutableDictionary *)dict {
 //    NSLog(@"Game notified view controller of known chosen!");
 
 /*    
     [mysteryThree13CardView.layer removeAnimationForKey:@"animateOpacity"];
     [knownThree13CardView.layer removeAnimationForKey:@"animateOpacity"];
 */
-    NSDictionary * dict = note.userInfo;
     NSMutableArray * handArray = [dict objectForKey:@"hand"];
     NSInteger knownID = [[dict objectForKey:@"known"] intValue];
     NSInteger mysteryID = [[dict objectForKey:@"mystery"] intValue];
@@ -424,14 +439,21 @@
     [self moveCardWithTag:knownID toLocation:frame];    
 }
 
--(void) mysteryChosen:(NSNotification *)note {
+- (void) respondToMysteryCardChosenWithDictionary:(NSMutableDictionary*)dict {
+    dispatch_queue_t queue = dispatch_get_main_queue();
+    __block NSMutableDictionary * aDict = dict;
+    dispatch_async(queue, ^{
+        [self mysteryChosen:aDict];
+    });
+}
+
+-(void) mysteryChosen:(NSMutableDictionary *)dict {
 //    NSLog(@"Game notified view controller of mystery chosen!");
     
 /*
     [mysteryThree13CardView.layer removeAnimationForKey:@"animateOpacity"];
     [knownThree13CardView.layer removeAnimationForKey:@"animateOpacity"];
 */
-    NSDictionary * dict = note.userInfo;
     NSMutableArray * handArray = [dict objectForKey:@"hand"];
     NSInteger knownID = [[dict objectForKey:@"known"] intValue];
     NSInteger mysteryID = [[dict objectForKey:@"mystery"] intValue];

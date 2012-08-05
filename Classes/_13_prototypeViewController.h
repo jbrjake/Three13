@@ -47,10 +47,10 @@
 -(void) createGestureRecognizers;
 -(void) gameStarts:(NSNotification *)note;
 -(void) levelEnds:(NSNotification *)note;
--(void) levelStarts:(NSNotification *)note;
--(void) roundStarts:(NSNotification *)note;
--(void) knownChosen:(NSNotification *)note;
--(void) mysteryChosen:(NSNotification *)note;
+-(void) levelStarts:(NSMutableDictionary *)note;
+-(void) roundStarts:(NSMutableDictionary *)note;
+-(void) knownChosen:(NSMutableDictionary *)note;
+-(void) mysteryChosen:(NSMutableDictionary *)note;
 -(void) cardDiscarded:(NSNotification *)note;
 
 -(void) moveCardWithTag:(NSInteger)tag toLocation:(CGRect)frame;
