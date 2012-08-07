@@ -217,19 +217,6 @@
     });
 }
 
--(void) gameStarts:(NSNotification *)note {
-//    NSLog(@"Game notified view controller of start!");
-    
-    //Animate in the backdrop    
-    UIImageView * backView = (UIImageView*)[self.view viewWithTag:105];
-    [UIView transitionWithView:nil duration:0.5 options:UIViewAnimationOptionTransitionFlipFromLeft animations:^{
-		backView.frame = CGRectMake(self.view.bounds.origin.x, self.view.bounds.origin.y, self.view.bounds.size.width, self.view.bounds.size.height);
-	} completion:^(BOOL finished) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"Started Game" object:self ];
-    } ];
-    
-}
-
 - (void) respondToEndOfLevelWithDictionary:(NSMutableDictionary*)dict andCompletionHandler:(void (^)())completionHandler {
 
     __block NSMutableArray * handArray = [dict objectForKey:@"hand"];
@@ -261,36 +248,6 @@
         }];
  
     });
-}
-
--(void) levelEnds:(NSNotification *)note {
-    NSDictionary * dict = note.userInfo;
-    NSMutableArray * handArray = [dict objectForKey:@"hand"];
-    NSMutableArray * deckArray = [dict objectForKey:@"deck"];
-    
-    [self displayMessage:[NSString stringWithFormat:@"Scored %d", game.currentScore]];
-
-    [UIView animateWithDuration:0.5 animations:^{
-        for (int i = 0; i < [handArray count]; i++) {
-            NSInteger tag = [[handArray objectAtIndex:i] intValue];
-            Three13CardView * view = (Three13CardView*)[self.view viewWithTag:tag];
-            view.frame = aboveFrame;
-        }
-        for (NSNumber * tag in deckArray) {
-            NSInteger tagInt = [tag intValue];
-            Three13CardView * cardView = (Three13CardView*)[self.view viewWithTag:tagInt];
-            cardView.frame = aboveFrame;
-        }        
-    }
-    completion:^(BOOL finished) {
-        //Start level
-        for (int i = 0; i < [handArray count]; i++) {
-            NSInteger tag = [[handArray objectAtIndex:i] intValue];
-            Three13CardView * view = (Three13CardView*)[self.view viewWithTag:tag];
-            view.image = [imagesArray lastObject]; //back image
-        }        
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"Ended Level" object:self ];
-    }];     
 }
 
 -(void) displayMessage:(NSString*)text {
@@ -535,30 +492,6 @@
          ];     
 
     });
-}
-
--(void) cardDiscarded:(NSNotification *)note {
-    NSLog(@"Game notified view controller of discarded card %@!", [note.userInfo objectForKey:@"discard"]);
-    NSDictionary * dict = note.userInfo;
-    NSMutableArray * handArray = [dict objectForKey:@"hand"];
-    NSLog(@"Hand is %@", handArray);
-    NSInteger discardTag = [[dict objectForKey:@"discard"] intValue];
-    
-    [UIView animateWithDuration:0.5
-        animations:^{
-            Three13CardView * cardView = (Three13CardView*)[self.view viewWithTag:discardTag];
-            cardView.frame = belowFrame;
-            for (int i = 0; i < handArray.count; i++) {
-                NSInteger cardID = [ [handArray objectAtIndex:i] intValue];
-                CGRect frame = [[handCardFrames objectAtIndex:i] CGRectValue];
-                Three13CardView * view = (Three13CardView*)[self.view viewWithTag:cardID];
-                [self moveCardWithTag:view.tag toLocation:frame];
-            }                
-        }
-        completion:^(BOOL finished) {
-                [[NSNotificationCenter defaultCenter] postNotificationName:@"Discarded Card" object:self ];
-        }
-     ];     
 }
 
 - (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
