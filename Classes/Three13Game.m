@@ -24,6 +24,7 @@
         round = 1;
         totalScore = 0;
         currentScore = 0;
+        global_queue = dispatch_get_global_queue(0, 0);
     }
     return self;
 }
@@ -42,7 +43,9 @@
     
     if( [delegate conformsToProtocol:@protocol(Three13GameDelegate)] ) {
         [delegate respondToStartOfGameWithCompletionHandler:^ {
-            [self gameStarted];
+            dispatch_async(global_queue, ^{
+                [self gameStarted];
+            });
         }];
     }
     else {
@@ -120,11 +123,13 @@
         [self setState:0];
         [hand sortBySuit];
         [hand sortByValue];
-        NSMutableDictionary * dict = [self gameDict];
+        __block NSMutableDictionary * dict = [self gameDict];
         [dict setObject:@(number) forKey:@"discard"];
         if( [delegate conformsToProtocol:@protocol(Three13GameDelegate)] ) {
             [delegate respondToCardBeingDiscardedWithDictionary:dict andCompletionHandler:^ {
-                [self cardDiscarded];
+                dispatch_async(global_queue, ^{
+                    [self cardDiscarded];
+                });
             }];
         }
         else {
@@ -154,8 +159,11 @@
 
 -(void) endLevel {
     if( [delegate conformsToProtocol:@protocol(Three13GameDelegate)] ) {
-        [delegate respondToEndOfLevelWithDictionary:[self gameDict] andCompletionHandler:^ {
-            [self levelEnded];
+        __block NSMutableDictionary * dict = [self gameDict];
+        [delegate respondToEndOfLevelWithDictionary:dict andCompletionHandler:^ {
+            dispatch_async(global_queue, ^{
+                [self levelEnded]; 
+            });
         }];
     }
     else {

@@ -21,6 +21,7 @@
     NSInteger round;
     NSInteger currentScore;
     NSInteger totalScore;
+    dispatch_queue_t global_queue;
     
     id delegate;
 }
