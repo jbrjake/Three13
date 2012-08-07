@@ -206,13 +206,15 @@
 }
 
 - (void) respondToStartOfGameWithCompletionHandler:(void (^)())completionHandler {
-    //Animate in the backdrop    
-    UIImageView * backView = (UIImageView*)[self.view viewWithTag:105];
-    [UIView transitionWithView:nil duration:0.5 options:UIViewAnimationOptionTransitionFlipFromLeft animations:^{
-		backView.frame = CGRectMake(self.view.bounds.origin.x, self.view.bounds.origin.y, self.view.bounds.size.width, self.view.bounds.size.height);
-	} completion:^(BOOL finished) {
-        completionHandler();
-    } ];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        //Animate in the backdrop
+        UIImageView * backView = (UIImageView*)[self.view viewWithTag:105];
+        [UIView transitionWithView:nil duration:0.5 options:UIViewAnimationOptionTransitionFlipFromLeft animations:^{
+            backView.frame = CGRectMake(self.view.bounds.origin.x, self.view.bounds.origin.y, self.view.bounds.size.width, self.view.bounds.size.height);
+        } completion:^(BOOL finished) {
+            completionHandler();
+        } ];
+    });
 }
 
 -(void) gameStarts:(NSNotification *)note {
@@ -229,32 +231,36 @@
 }
 
 - (void) respondToEndOfLevelWithDictionary:(NSMutableDictionary*)dict andCompletionHandler:(void (^)())completionHandler {
-    NSMutableArray * handArray = [dict objectForKey:@"hand"];
-    NSMutableArray * deckArray = [dict objectForKey:@"deck"];
-    
-    [self displayMessage:[NSString stringWithFormat:@"Scored %d", game.currentScore]];
-    
-    [UIView animateWithDuration:0.5 animations:^{
-        for (int i = 0; i < [handArray count]; i++) {
-            NSInteger tag = [[handArray objectAtIndex:i] intValue];
-            Three13CardView * view = (Three13CardView*)[self.view viewWithTag:tag];
-            view.frame = aboveFrame;
+
+    __block NSMutableArray * handArray = [dict objectForKey:@"hand"];
+    __block NSMutableArray * deckArray = [dict objectForKey:@"deck"];
+
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self displayMessage:[NSString stringWithFormat:@"Scored %d", game.currentScore]];
+        
+        [UIView animateWithDuration:0.5 animations:^{
+            for (int i = 0; i < [handArray count]; i++) {
+                NSInteger tag = [[handArray objectAtIndex:i] intValue];
+                Three13CardView * view = (Three13CardView*)[self.view viewWithTag:tag];
+                view.frame = aboveFrame;
+            }
+            for (NSNumber * tag in deckArray) {
+                NSInteger tagInt = [tag intValue];
+                Three13CardView * cardView = (Three13CardView*)[self.view viewWithTag:tagInt];
+                cardView.frame = aboveFrame;
+            }
         }
-        for (NSNumber * tag in deckArray) {
-            NSInteger tagInt = [tag intValue];
-            Three13CardView * cardView = (Three13CardView*)[self.view viewWithTag:tagInt];
-            cardView.frame = aboveFrame;
-        }        
-    }
-    completion:^(BOOL finished) {
-        //Start level
-        for (int i = 0; i < [handArray count]; i++) {
-            NSInteger tag = [[handArray objectAtIndex:i] intValue];
-            Three13CardView * view = (Three13CardView*)[self.view viewWithTag:tag];
-            view.image = [imagesArray lastObject]; //back image
-        }        
-        completionHandler();
-    }];     
+        completion:^(BOOL finished) {
+            //Start level
+            for (int i = 0; i < [handArray count]; i++) {
+                NSInteger tag = [[handArray objectAtIndex:i] intValue];
+                Three13CardView * view = (Three13CardView*)[self.view viewWithTag:tag];
+                view.image = [imagesArray lastObject]; //back image
+            }
+            completionHandler();
+        }];
+ 
+    });
 }
 
 -(void) levelEnds:(NSNotification *)note {
@@ -506,27 +512,29 @@
 }
 
 - (void) respondToCardBeingDiscardedWithDictionary:(NSMutableDictionary*)dict andCompletionHandler:(void (^)())completionHandler {
-    NSMutableArray * handArray = [dict objectForKey:@"hand"];
+    __block NSMutableArray * handArray = [dict objectForKey:@"hand"];
     NSLog(@"Hand is %@", handArray);
-    NSInteger discardTag = [[dict objectForKey:@"discard"] intValue];
-    
-    [UIView animateWithDuration:0.5
-                     animations:^{
-                         Three13CardView * cardView = (Three13CardView*)[self.view viewWithTag:discardTag];
-                         cardView.frame = belowFrame;
-                         for (int i = 0; i < handArray.count; i++) {
-                             NSInteger cardID = [ [handArray objectAtIndex:i] intValue];
-                             CGRect frame = [[handCardFrames objectAtIndex:i] CGRectValue];
-                             Three13CardView * view = (Three13CardView*)[self.view viewWithTag:cardID];
-                             [self moveCardWithTag:view.tag toLocation:frame];
-                         }                
-                     }
-                     completion:^(BOOL finished) {
-                         if (finished) {
-                             completionHandler();
+    __block NSInteger discardTag = [[dict objectForKey:@"discard"] intValue];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [UIView animateWithDuration:0.5
+                         animations:^{
+                             Three13CardView * cardView = (Three13CardView*)[self.view viewWithTag:discardTag];
+                             cardView.frame = belowFrame;
+                             for (int i = 0; i < handArray.count; i++) {
+                                 NSInteger cardID = [ [handArray objectAtIndex:i] intValue];
+                                 CGRect frame = [[handCardFrames objectAtIndex:i] CGRectValue];
+                                 Three13CardView * view = (Three13CardView*)[self.view viewWithTag:cardID];
+                                 [self moveCardWithTag:view.tag toLocation:frame];
+                             }
                          }
-                     }
-    ];     
+                         completion:^(BOOL finished) {
+                             if (finished) {
+                                 completionHandler();
+                             }
+                         }
+         ];     
+
+    });
 }
 
 -(void) cardDiscarded:(NSNotification *)note {
