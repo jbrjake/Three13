@@ -39,7 +39,6 @@
 @property (nonatomic, strong) id delegate;
 
 -(void) deal: (NSInteger) cardNumber;
--(void) startGame;
 -(void) gameStarted;
 -(void) startNewLevel;
 -(void) checkForWin;

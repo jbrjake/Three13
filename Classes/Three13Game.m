@@ -287,4 +287,8 @@
     return returnArray;
 }
 
+-(NSMutableArray *) cardsInDeck {
+    return deck.cards;
+}
+
 @end
