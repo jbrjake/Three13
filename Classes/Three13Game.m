@@ -278,4 +278,13 @@
     return dict;
 }
 
+-(NSMutableArray *) allCards {
+    NSMutableArray * returnArray = [[NSMutableArray alloc] init];
+    [returnArray addObjectsFromArray:deck.cards];
+    [returnArray addObjectsFromArray:hand.cards];
+    [returnArray addObject:mysteryCard];
+    [returnArray addObject:knownCard];
+    return returnArray;
+}
+
 @end
