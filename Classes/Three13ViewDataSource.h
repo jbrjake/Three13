@@ -22,4 +22,15 @@
  */
 -(void) discardCardWith:(NSInteger)tag;
 
+/*
+ * @brief Accessor for the cards in the deck (not yet played)
+ * @return An NSMutableArray containing the cards still in the deck
+ */
+-(NSMutableArray * ) cardsInDeck;
+
+/*
+ * @brief Lets the VC tell the model to start a game
+ */
+-(void) startGame;
+
 @end
