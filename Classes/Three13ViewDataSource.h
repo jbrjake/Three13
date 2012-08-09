@@ -10,4 +10,16 @@
 
 @protocol Three13ViewDataSource <NSObject>
 
+/*
+ * @brief Informs the data source that the user is selecting a card to add to the hand
+ * @param tag The ID of the card the user is selecting
+ */
+-(void) selectCardWith:(NSInteger)tag;
+
+/*
+ * @brief Informs the data source that the user is selecting a card to discard from the hand
+ * @param tag The ID of the card the user is discarding
+ */
+-(void) discardCardWith:(NSInteger)tag;
+
 @end
