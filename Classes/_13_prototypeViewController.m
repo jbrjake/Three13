@@ -198,6 +198,7 @@
         int zOrder = [self.view.subviews indexOfObject:curCard];
         if (zOrder > lastZorder) {
             rightTag = curCard.tag;
+            lastZorder = zOrder;
         }
     }
     
