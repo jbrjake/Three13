@@ -85,7 +85,7 @@
     //aboveFrame = CGRectMake(self.view.frame.size.width/2, -100, w, h);
 
     // Build a view for each card, tagged by number, and place outside of frame
-    for (Three13Card * card in game.deck.cards) {
+    for (Three13Card * card in [dataSource cardsInDeck]) {
         Three13CardView * cardView = [[Three13CardView alloc] initWithFrame:aboveFrame];
         cardView.layer.cornerRadius = 6.0;
         cardView.layer.masksToBounds = YES;
@@ -95,13 +95,13 @@
         [self.view addSubview:cardView];
     }
     
-    for (Three13Card * card in game.deck.cards) {
+    for (Three13Card * card in [dataSource cardsInDeck]) {
         [imagesArray addObject:card.face];
     }
-    Three13Card * card = [game.deck.cards objectAtIndex:0];
+    Three13Card * card = [[dataSource cardsInDeck] objectAtIndex:0];
     [imagesArray addObject:card.back];
     
-    [game startGame];
+    [dataSource startGame];
 
     scoreLabel.alpha = 0;
     totalScoreLabel.alpha = 0;
