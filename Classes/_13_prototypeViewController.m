@@ -10,7 +10,7 @@
 #import <QuartzCore/QuartzCore.h>
 @implementation _13_prototypeViewController
 
-@synthesize cardViews, allCardViews, knownThree13CardView, mysteryThree13CardView, imagesArray, totalScoreLabel, scoreLabel, roundLabel, levelLabel, handCardFrames, knownCardFrame, mysteryCardFrame, aboveFrame, belowFrame;
+@synthesize cardViews, allCardViews, knownThree13CardView, mysteryThree13CardView, imagesArray, totalScoreLabel, scoreLabel, roundLabel, levelLabel, handCardFrames, knownCardFrame, mysteryCardFrame, aboveFrame, belowFrame, dataSource;
 
 // The designated initializer. Override to perform setup that is required before the view is loaded.
 /*
@@ -73,6 +73,8 @@
     
     game = [[Three13Game alloc] init];
     [game setDelegate:self];
+    [self setDataSource:game];
+    
     [game addObserver:self forKeyPath:@"state" options:0 context:nil];
     [game addObserver:self forKeyPath:@"level" options:0 context:nil];
     [game addObserver:self forKeyPath:@"round" options:0 context:nil];
@@ -172,26 +174,22 @@
 
 -(IBAction) handleTap:(UIGestureRecognizer*)sender {
     
-    if ([[self.view viewWithTag:game.knownCard.number] pointInside:[sender locationInView:[self.view viewWithTag:game.knownCard.number]] withEvent:nil] && game.state == 0) {
-        [self tappedKnownCard];
-        return;
-    }
-    else {
-        if ([[self.view viewWithTag:game.mysteryCard.number] pointInside:[sender locationInView:[self.view viewWithTag:game.mysteryCard.number]] withEvent:nil] && game.state == 0) {
-            [self tappedUnknownCard];
-            return;
-        }
+    // Find tapped card
+    NSMutableArray * tappedCards = [[NSMutableArray alloc] init];
+    NSMutableArray * cardsToCheck = [game allCards];
+    NSMutableArray * cardIDs = [NSMutableArray new];
+    for (Three13Card * card in cardsToCheck) {
+        [cardIDs addObject:@(card.number)];
     }
 
-    NSMutableArray * tappedCards = [[NSMutableArray alloc] init];
-    for( NSNumber * cardNumber in [game.hand cardIDs] )
+    for( NSNumber * cardNumber in cardIDs )
     {
         Three13CardView * view = (Three13CardView*)[self.view viewWithTag:[cardNumber intValue]];
-        if ([view pointInside:[sender locationInView:view] withEvent:nil] /*&& view.tag < 105*/) {
+        if ([view pointInside:[sender locationInView:view] withEvent:nil]) {
             [tappedCards addObject:view];
         }
     }
-  
+    
     int i;
     int rightTag = -1;
     int lastZorder = -1;
@@ -202,7 +200,13 @@
             rightTag = curCard.tag;
         }
     }
-    [self tappedCard:rightTag];
+    
+    if (game.state == 0) {
+        [dataSource selectCardWith:rightTag];
+    }
+    else if (game.state == 1) {
+        [dataSource discardCardWith:rightTag];
+    }
 }
 
 - (void) respondToStartOfGameWithCompletionHandler:(void (^)())completionHandler {
