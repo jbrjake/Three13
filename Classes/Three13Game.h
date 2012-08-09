@@ -9,8 +9,9 @@
 #import <Foundation/Foundation.h>
 #import "Three13Hand.h"
 #import "Three13GameDelegate.h"
+#import "Three13ViewDataSource.h"
 
-@interface Three13Game : NSObject {
+@interface Three13Game : NSObject <Three13ViewDataSource> {
 
     Three13Deck * deck;
     Three13Hand * hand;

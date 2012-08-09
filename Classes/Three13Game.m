@@ -79,6 +79,70 @@
     [self setCurrentScore:hand.score];
 }
 
+-(void) selectCardWith:(NSInteger)tag {
+    if (state == 0) {
+        if( tag == knownCard.number) {
+            [hand addCard:knownCard];
+            [self setState:1];
+            if( [delegate conformsToProtocol:@protocol(Three13GameDelegate)] ) {
+                [delegate respondToKnownCardChosenWithDictionary:[self gameDict]];
+            }
+            else {
+                // Fall back on loose coupling
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"Choose Known" object:self userInfo:[self gameDict] ];
+            }
+        }
+        else if (tag == mysteryCard.number) {
+            [hand addCard:mysteryCard];
+            [self setState: 1];
+            if( [delegate conformsToProtocol:@protocol(Three13GameDelegate)] ) {
+                [delegate respondToMysteryCardChosenWithDictionary:[self gameDict]];
+            }
+            else {
+                // Fall back on loose coupling
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"Choose Mystery" object:self userInfo:[self gameDict] ];
+            }
+
+        }
+        else {
+            NSLog(@"Error, %d is not the mystery or known card!", tag);
+        }
+    }
+    else {
+        NSLog(@"Error, the game is in state %d and needs to be 0 to select", state);
+    }
+}
+
+-(void) discardCardWith:(NSInteger)tag {
+    if( state == 1 ) {
+        NSMutableArray * cardsCopy = [hand.cards copy];
+        for( Three13Card * card in cardsCopy ) {
+            if( card.number == tag ) {
+                NSLog(@"Found a match!");
+                NSLog(@"Hand was %@", hand);
+                [hand.cards removeObject:card];
+                NSLog(@"Hand now is %@", hand);
+            }
+        }
+        [self setState:0];
+        [hand sortBySuit];
+        [hand sortByValue];
+        __block NSMutableDictionary * dict = [self gameDict];
+        [dict setObject:@(tag) forKey:@"discard"];
+        if( [delegate conformsToProtocol:@protocol(Three13GameDelegate)] ) {
+            [delegate respondToCardBeingDiscardedWithDictionary:dict andCompletionHandler:^ {
+                dispatch_async(global_queue, ^{
+                    [self cardDiscarded];
+                });
+            }];
+        }
+        else {
+            // Fall back on loose coupling
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"Discard Card" object:self userInfo:[self gameDict] ];
+        }
+    }
+}
+
 -(void) choseKnownCard {
     if( state == 0 ) {
         [hand addCard:knownCard];
