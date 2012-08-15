@@ -197,21 +197,6 @@
     }
 }
 
--(void) tappedKnownCard {
-//    NSLog(@"Tap is in known card!");
-    [game choseKnownCard];
-}
-
--(void) tappedUnknownCard {
-//    NSLog(@"Tap is in unknown card!");
-    [game choseMysteryCard];
-}
-
--(void) tappedCard: (NSInteger)cardId {
-//    NSLog(@"Tap is in object tagged %d", cardId);
-    [game choseCard:cardId];
-}
-
 #pragma mark UI helpers
 
 -(void) displayMessage:(NSString*)text {
