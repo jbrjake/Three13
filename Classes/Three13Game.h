@@ -41,6 +41,5 @@
 -(void) cardDiscarded;
 -(void) endLevel;
 -(void) levelEnded;
--(NSMutableArray*) allCards;
 -(NSMutableDictionary*) gameDict;
 @end
