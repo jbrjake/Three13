@@ -33,6 +33,7 @@
 }
 */
 
+#pragma mark Setup
 
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad {
@@ -147,7 +148,6 @@
 
 }
 
-
 - (void)createGestureRecognizers {
 //    NSLog(@"Creating gesture recognizers");
     UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc]
@@ -157,20 +157,7 @@
     
 }
 
--(void) tappedKnownCard {
-//    NSLog(@"Tap is in known card!");
-    [game choseKnownCard];
-}
-
--(void) tappedUnknownCard {
-//    NSLog(@"Tap is in unknown card!");
-    [game choseMysteryCard];
-}
-
--(void) tappedCard: (NSInteger)cardId {
-//    NSLog(@"Tap is in object tagged %d", cardId);
-    [game choseCard:cardId];
-}
+#pragma mark Tap handling
 
 -(IBAction) handleTap:(UIGestureRecognizer*)sender {
     
@@ -181,7 +168,7 @@
     for (Three13Card * card in cardsToCheck) {
         [cardIDs addObject:@(card.number)];
     }
-
+    
     for( NSNumber * cardNumber in cardIDs )
     {
         Three13CardView * view = (Three13CardView*)[self.view viewWithTag:[cardNumber intValue]];
@@ -210,6 +197,131 @@
     }
 }
 
+-(void) tappedKnownCard {
+//    NSLog(@"Tap is in known card!");
+    [game choseKnownCard];
+}
+
+-(void) tappedUnknownCard {
+//    NSLog(@"Tap is in unknown card!");
+    [game choseMysteryCard];
+}
+
+-(void) tappedCard: (NSInteger)cardId {
+//    NSLog(@"Tap is in object tagged %d", cardId);
+    [game choseCard:cardId];
+}
+
+#pragma mark UI helpers
+
+-(void) displayMessage:(NSString*)text {
+    CGRect messageFrame = CGRectMake(self.view.frame.size.width/2, self.view.frame.size.height/2, self.view.frame.size.height/3, self.view.frame.size.width/3);
+    UILabel * messageView = [[UILabel alloc] initWithFrame:messageFrame];
+    messageView.center = CGPointMake(self.view.frame.size.width/2, self.view.frame.size.height/2);
+    messageView.backgroundColor = [UIColor blackColor];
+    messageView.alpha = 0.0;
+    messageView.layer.cornerRadius = 6;
+    messageView.layer.masksToBounds = YES;
+    messageView.text = text;
+    messageView.textAlignment = UITextAlignmentCenter;
+    messageView.adjustsFontSizeToFitWidth = YES;
+    messageView.textColor = [UIColor whiteColor];
+    
+    [self.view addSubview:messageView];
+    
+    [UIView animateWithDuration:0.5 delay:0 options:UIViewAnimationOptionCurveEaseInOut
+                     animations:^{
+                         messageView.alpha = 1.0;
+                     }
+                     completion:^(BOOL finished) {
+                         [UIView animateWithDuration:0.5 delay:0 options:UIViewAnimationOptionCurveEaseInOut
+                                          animations:^{
+                                              messageView.alpha = 0.0;
+                                          }
+                                          completion:^(BOOL finished) {
+                                              [messageView removeFromSuperview];
+                                          }
+                          ];
+                     }
+     ];
+}
+
+-(void) flipViewFor:(NSNumber*)cardID {
+    Three13CardView * cardView = (Three13CardView *) [self.view viewWithTag:[cardID intValue]];
+    [ UIView transitionWithView:cardView duration:0.5
+                        options:UIViewAnimationOptionTransitionFlipFromLeft
+                     animations:^{
+                         if( cardView.image == [imagesArray lastObject] )
+                             [ cardView setImage: [imagesArray objectAtIndex:[cardID intValue]]];
+                         else {
+                             [cardView setImage: [imagesArray lastObject]];
+                         }
+                     }
+                     completion:NULL
+     ];
+}
+
+-(void) flipViewForCard:(Three13Card*)card {
+    Three13CardView * cardView = (Three13CardView *) [self.view viewWithTag:card.number];
+    [ UIView transitionWithView:cardView duration:0.5
+                        options:UIViewAnimationOptionTransitionFlipFromLeft
+                     animations:^{
+                         if( cardView.image == card.back )
+                             [ cardView setImage: card.face];
+                         else {
+                             [cardView setImage:card.back];
+                         }
+                     }
+                     completion:NULL
+     ];
+}
+
+- (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+    if ([keyPath isEqualToString:@"state"] && [object isEqual:game] ) {
+        switch (game.state) {
+            case -1:
+                break;
+            case 0:
+                //                NSLog(@"Game started");
+                break;
+            case 1:
+                break;
+            default:
+                break;
+        }
+    }
+    
+    if ([keyPath isEqualToString:@"level"] && [object isEqual:game] ) {
+        //        NSLog(@"On level %d", game.level);
+        levelLabel.text = [NSString stringWithFormat:@"Level: %d", game.level];
+    }
+    
+    if ([keyPath isEqualToString:@"round"] && [object isEqual:game] ) {
+        //        NSLog(@"On round %d", game.round);
+        roundLabel.text = [NSString stringWithFormat:@"Round: %d", game.round];
+    }
+    
+    if ([keyPath isEqualToString:@"currentScore"] && [object isEqual:game] ) {
+        //        NSLog(@"Current score %d", game.currentScore);
+        scoreLabel.text = [NSString stringWithFormat:@"Current Score: %d", game.currentScore];
+    }
+    
+    if ([keyPath isEqualToString:@"totalScore"] && [object isEqual:game] ) {
+        //        NSLog(@"Total score %d", game.totalScore);
+        totalScoreLabel.text = [NSString stringWithFormat:@"Total Score: %d", game.totalScore];
+    }
+}
+
+- (void) moveCardWithTag:(NSInteger)tag toLocation:(CGRect)frame {
+    Three13CardView * cardView = (Three13CardView*)[self.view viewWithTag:tag];
+    [self.view bringSubviewToFront:cardView];
+    [UIView animateWithDuration:0.5 animations:^{
+        cardView.frame = frame;
+    }];
+}
+
+#pragma mark Three13GameDelegate protocol implementation
+
 - (void) respondToStartOfGameWithCompletionHandler:(void (^)())completionHandler {
     dispatch_async(dispatch_get_main_queue(), ^{
         //Animate in the backdrop
@@ -219,6 +331,64 @@
         } completion:^(BOOL finished) {
             completionHandler();
         } ];
+    });
+}
+
+-(void) respondToStartOfLevelWithDictionary:(NSMutableDictionary *)dict {
+    dispatch_queue_t queue = dispatch_get_main_queue();
+    __block NSMutableDictionary * aDict = dict;
+    dispatch_async(queue, ^{
+        [self levelStarts:aDict];
+    });
+}
+
+-(void) respondToStartOfRoundWithDictionary:(NSMutableDictionary *)dict {
+    dispatch_queue_t queue = dispatch_get_main_queue();
+    __block NSMutableDictionary * aDict = dict;
+    dispatch_async(queue, ^{
+        [self roundStarts:aDict];
+    });
+}
+
+- (void) respondToKnownCardChosenWithDictionary:(NSMutableDictionary*)dict {
+    dispatch_queue_t queue = dispatch_get_main_queue();
+    __block NSMutableDictionary * aDict = dict;
+    dispatch_async(queue, ^{
+        [self knownChosen:aDict];
+    });
+}
+
+- (void) respondToMysteryCardChosenWithDictionary:(NSMutableDictionary*)dict {
+    dispatch_queue_t queue = dispatch_get_main_queue();
+    __block NSMutableDictionary * aDict = dict;
+    dispatch_async(queue, ^{
+        [self mysteryChosen:aDict];
+    });
+}
+
+- (void) respondToCardBeingDiscardedWithDictionary:(NSMutableDictionary*)dict andCompletionHandler:(void (^)())completionHandler {
+    __block NSMutableArray * handArray = [dict objectForKey:@"hand"];
+    NSLog(@"Hand is %@", handArray);
+    __block NSInteger discardTag = [[dict objectForKey:@"discard"] intValue];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [UIView animateWithDuration:0.5
+                         animations:^{
+                             Three13CardView * cardView = (Three13CardView*)[self.view viewWithTag:discardTag];
+                             cardView.frame = belowFrame;
+                             for (int i = 0; i < handArray.count; i++) {
+                                 NSInteger cardID = [ [handArray objectAtIndex:i] intValue];
+                                 CGRect frame = [[handCardFrames objectAtIndex:i] CGRectValue];
+                                 Three13CardView * view = (Three13CardView*)[self.view viewWithTag:cardID];
+                                 [self moveCardWithTag:view.tag toLocation:frame];
+                             }
+                         }
+                         completion:^(BOOL finished) {
+                             if (finished) {
+                                 completionHandler();
+                             }
+                         }
+         ];
+        
     });
 }
 
@@ -255,45 +425,7 @@
     });
 }
 
--(void) displayMessage:(NSString*)text {
-    CGRect messageFrame = CGRectMake(self.view.frame.size.width/2, self.view.frame.size.height/2, self.view.frame.size.height/3, self.view.frame.size.width/3);
-    UILabel * messageView = [[UILabel alloc] initWithFrame:messageFrame];
-    messageView.center = CGPointMake(self.view.frame.size.width/2, self.view.frame.size.height/2);
-    messageView.backgroundColor = [UIColor blackColor];
-    messageView.alpha = 0.0;
-    messageView.layer.cornerRadius = 6;
-    messageView.layer.masksToBounds = YES;
-    messageView.text = text;
-    messageView.textAlignment = UITextAlignmentCenter;
-    messageView.adjustsFontSizeToFitWidth = YES;
-    messageView.textColor = [UIColor whiteColor];
-    
-    [self.view addSubview:messageView];
-    
-    [UIView animateWithDuration:0.5 delay:0 options:UIViewAnimationOptionCurveEaseInOut
-                     animations:^{
-                         messageView.alpha = 1.0;
-                     }
-                     completion:^(BOOL finished) {
-                         [UIView animateWithDuration:0.5 delay:0 options:UIViewAnimationOptionCurveEaseInOut
-                                          animations:^{
-                                              messageView.alpha = 0.0;
-                                          }
-                                          completion:^(BOOL finished) {
-                                              [messageView removeFromSuperview];
-                                          }
-                          ];
-                     }
-     ];
-}
-
--(void) respondToStartOfLevelWithDictionary:(NSMutableDictionary *)dict {
-    dispatch_queue_t queue = dispatch_get_main_queue();
-    __block NSMutableDictionary * aDict = dict;
-    dispatch_async(queue, ^{
-        [self levelStarts:aDict];
-    });
-}
+#pragma mark Internal methods
 
 -(void) levelStarts:(NSMutableDictionary *)dict {
 //    NSLog(@"Game notified view controller of start level!");
@@ -326,14 +458,6 @@
         }        
         [self roundStarts:dict];
     }];     
-}
-
--(void) respondToStartOfRoundWithDictionary:(NSMutableDictionary *)dict {
-    dispatch_queue_t queue = dispatch_get_main_queue();
-    __block NSMutableDictionary * aDict = dict;
-    dispatch_async(queue, ^{
-        [self roundStarts:aDict];
-    });
 }
 
 -(void) roundStarts:(NSMutableDictionary *)dict {
@@ -382,14 +506,6 @@
     }];
 }
 
-- (void) respondToKnownCardChosenWithDictionary:(NSMutableDictionary*)dict {
-    dispatch_queue_t queue = dispatch_get_main_queue();
-    __block NSMutableDictionary * aDict = dict;
-    dispatch_async(queue, ^{
-        [self knownChosen:aDict];
-    });
-}
-
 -(void) knownChosen:(NSMutableDictionary *)dict {
 //    NSLog(@"Game notified view controller of known chosen!");
 
@@ -405,14 +521,6 @@
     [self.view viewWithTag:knownID].userInteractionEnabled = YES;
     [self moveCardWithTag:mysteryID toLocation:belowFrame];
     [self moveCardWithTag:knownID toLocation:frame];    
-}
-
-- (void) respondToMysteryCardChosenWithDictionary:(NSMutableDictionary*)dict {
-    dispatch_queue_t queue = dispatch_get_main_queue();
-    __block NSMutableDictionary * aDict = dict;
-    dispatch_async(queue, ^{
-        [self mysteryChosen:aDict];
-    });
 }
 
 -(void) mysteryChosen:(NSMutableDictionary *)dict {
@@ -443,105 +551,7 @@
     ];
 }
 
--(void) flipViewFor:(NSNumber*)cardID {
-    Three13CardView * cardView = (Three13CardView *) [self.view viewWithTag:[cardID intValue]];
-    [ UIView transitionWithView:cardView duration:0.5
-        options:UIViewAnimationOptionTransitionFlipFromLeft
-        animations:^{
-            if( cardView.image == [imagesArray lastObject] )
-                [ cardView setImage: [imagesArray objectAtIndex:[cardID intValue]]];
-            else {
-                [cardView setImage: [imagesArray lastObject]];
-            }
-        }
-        completion:NULL
-    ];    
-}        
-
--(void) flipViewForCard:(Three13Card*)card {
-    Three13CardView * cardView = (Three13CardView *) [self.view viewWithTag:card.number];
-    [ UIView transitionWithView:cardView duration:0.5
-        options:UIViewAnimationOptionTransitionFlipFromLeft
-        animations:^{
-            if( cardView.image == card.back )
-                [ cardView setImage: card.face];
-            else {
-                [cardView setImage:card.back];
-            }
-        }
-        completion:NULL
-     ];    
-}
-
-- (void) respondToCardBeingDiscardedWithDictionary:(NSMutableDictionary*)dict andCompletionHandler:(void (^)())completionHandler {
-    __block NSMutableArray * handArray = [dict objectForKey:@"hand"];
-    NSLog(@"Hand is %@", handArray);
-    __block NSInteger discardTag = [[dict objectForKey:@"discard"] intValue];
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [UIView animateWithDuration:0.5
-                         animations:^{
-                             Three13CardView * cardView = (Three13CardView*)[self.view viewWithTag:discardTag];
-                             cardView.frame = belowFrame;
-                             for (int i = 0; i < handArray.count; i++) {
-                                 NSInteger cardID = [ [handArray objectAtIndex:i] intValue];
-                                 CGRect frame = [[handCardFrames objectAtIndex:i] CGRectValue];
-                                 Three13CardView * view = (Three13CardView*)[self.view viewWithTag:cardID];
-                                 [self moveCardWithTag:view.tag toLocation:frame];
-                             }
-                         }
-                         completion:^(BOOL finished) {
-                             if (finished) {
-                                 completionHandler();
-                             }
-                         }
-         ];     
-
-    });
-}
-
-- (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-    if ([keyPath isEqualToString:@"state"] && [object isEqual:game] ) {
-        switch (game.state) {
-            case -1:
-                break;
-            case 0:
-//                NSLog(@"Game started");
-                break;
-            case 1:
-                break;
-            default:
-                break;
-        }
-    }
-
-    if ([keyPath isEqualToString:@"level"] && [object isEqual:game] ) {
-//        NSLog(@"On level %d", game.level);
-        levelLabel.text = [NSString stringWithFormat:@"Level: %d", game.level];
-    }
-
-    if ([keyPath isEqualToString:@"round"] && [object isEqual:game] ) {
-//        NSLog(@"On round %d", game.round);
-        roundLabel.text = [NSString stringWithFormat:@"Round: %d", game.round];
-    }
-
-    if ([keyPath isEqualToString:@"currentScore"] && [object isEqual:game] ) {
-//        NSLog(@"Current score %d", game.currentScore);
-        scoreLabel.text = [NSString stringWithFormat:@"Current Score: %d", game.currentScore];
-    }
-
-    if ([keyPath isEqualToString:@"totalScore"] && [object isEqual:game] ) {
-//        NSLog(@"Total score %d", game.totalScore);
-        totalScoreLabel.text = [NSString stringWithFormat:@"Total Score: %d", game.totalScore];
-    }
-}
-
-- (void) moveCardWithTag:(NSInteger)tag toLocation:(CGRect)frame {
-    Three13CardView * cardView = (Three13CardView*)[self.view viewWithTag:tag];
-    [self.view bringSubviewToFront:cardView];
-    [UIView animateWithDuration:0.5 animations:^{
-        cardView.frame = frame;
-    }];
-}
+#pragma mark Lifecycle
 
 /*
 // Override to allow orientations other than the default portrait orientation.
