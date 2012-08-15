@@ -29,6 +29,76 @@
     return self;
 }
 
+#pragma mark Internal methods
+
+-(void) deal: (NSInteger) cardNumber {
+    if (level > 13 ) {
+        NSLog(@"Game over!");
+        return;
+    }
+    [deck shuffle];
+    [hand.cards removeAllObjects];
+    for( int i = 0; i < cardNumber; i++ ) {
+        [hand addCard: [deck draw]];
+    }
+    [hand sortBySuit];
+    [hand sortByValue];
+    knownCard = [deck draw];
+    //    NSLog(@"Set known card to %@", knownCard);
+    mysteryCard = [deck draw];
+    //    NSLog(@"Set mystery card to %@", mysteryCard);
+    [hand updateScore];
+    [self setCurrentScore:hand.score];
+}
+
+-(void) checkForWin {
+    //First check for going out
+    //Then check for out of time
+    
+    [hand updateScore];
+    [self setCurrentScore:hand.score];
+    if (hand.score == 0) {
+        //        NSLog(@"It's a win!");
+        [self endLevel];
+    }
+    else if( round > level-1 ) {
+        //       NSLog(@"Out of rounds!");
+        [self setTotalScore:totalScore + hand.score];
+        [self endLevel];
+    }
+    else {
+        //        NSLog(@"Dealing new mystery/known cards");
+        // Deal new mystery/known cards
+        knownCard = [deck draw];
+        mysteryCard = [deck draw];
+        [self setRound:round+1];
+        if( [delegate conformsToProtocol:@protocol(Three13GameDelegate)] ) {
+            [delegate respondToStartOfRoundWithDictionary:[self gameDict]];
+        }
+        else {
+            // Fall back on loose coupling
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"Start Round" object:self userInfo:[self gameDict] ];
+        }
+    }
+    
+}
+
+-(NSMutableDictionary *) gameDict {
+    NSMutableDictionary * dict = [NSMutableDictionary dictionaryWithObjectsAndKeys: [hand cardIDs], @"hand", [deck cardIDs], @"deck", @(knownCard.number), @"known", @(mysteryCard.number), @"mystery", @0, @"discard", nil ];
+    return dict;
+}
+
+-(NSMutableArray *) allCards {
+    NSMutableArray * returnArray = [[NSMutableArray alloc] init];
+    [returnArray addObjectsFromArray:deck.cards];
+    [returnArray addObjectsFromArray:hand.cards];
+    [returnArray addObject:mysteryCard];
+    [returnArray addObject:knownCard];
+    return returnArray;
+}
+
+#pragma mark Three13ViewDataSource protocol implementation
+
 -(void) startGame {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(gameStarted) name:@"Started Game" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(cardDiscarded) name:@"Discarded Card" object:nil];
@@ -54,31 +124,6 @@
     }
 }
 
--(void) gameStarted {
-    NSLog(@"View controller says game started!");
-    [self startNewLevel];
-}
-
--(void) deal: (NSInteger) cardNumber {
-    if (level > 13 ) {
-        NSLog(@"Game over!");
-        return;
-    }
-    [deck shuffle];
-    [hand.cards removeAllObjects];
-    for( int i = 0; i < cardNumber; i++ ) {
-        [hand addCard: [deck draw]];
-    }
-    [hand sortBySuit];
-    [hand sortByValue];
-    knownCard = [deck draw];
-//    NSLog(@"Set known card to %@", knownCard);
-    mysteryCard = [deck draw];
-//    NSLog(@"Set mystery card to %@", mysteryCard);
-    [hand updateScore];
-    [self setCurrentScore:hand.score];
-}
-
 -(void) selectCardWith:(NSInteger)tag {
     if (state == 0) {
         if( tag == knownCard.number) {
@@ -102,7 +147,7 @@
                 // Fall back on loose coupling
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"Choose Mystery" object:self userInfo:[self gameDict] ];
             }
-
+            
         }
         else {
             NSLog(@"Error, %d is not the mystery or known card!", tag);
@@ -143,6 +188,12 @@
     }
 }
 
+-(NSMutableArray *) cardsInDeck {
+    return deck.cards;
+}
+
+#pragma mark Three13GameDelegate callers
+
 -(void) choseKnownCard {
     if( state == 0 ) {
         [hand addCard:knownCard];
@@ -159,9 +210,9 @@
 
 -(void) choseMysteryCard {
     if( state == 0 ) {
-//        NSLog(@"Hand starts as %@", hand);
+        //        NSLog(@"Hand starts as %@", hand);
         [hand addCard:mysteryCard];
-//        NSLog(@"Hand becomes %@", hand);
+        //        NSLog(@"Hand becomes %@", hand);
         [self setState: 1];
         if( [delegate conformsToProtocol:@protocol(Three13GameDelegate)] ) {
             [delegate respondToMysteryCardChosenWithDictionary:[self gameDict]];
@@ -203,10 +254,6 @@
     }
 }
 
--(void) cardDiscarded {
-    [self checkForWin];
-}
-
 -(void) startNewLevel {
     [self setRound:1];
     [deck reinitialize];
@@ -218,7 +265,7 @@
         // Fall back on loose coupling
         [[NSNotificationCenter defaultCenter] postNotificationName:@"Start Level" object:self userInfo:[self gameDict] ];
     }
-//    NSLog(@"Starting round %d level %d with score %d", round, level, totalScore );
+    //    NSLog(@"Starting round %d level %d with score %d", round, level, totalScore );
 }
 
 -(void) endLevel {
@@ -226,7 +273,7 @@
         __block NSMutableDictionary * dict = [self gameDict];
         [delegate respondToEndOfLevelWithDictionary:dict andCompletionHandler:^ {
             dispatch_async(global_queue, ^{
-                [self levelEnded]; 
+                [self levelEnded];
             });
         }];
     }
@@ -236,59 +283,22 @@
     }
 }
 
+#pragma mark Three13GameDelegate completion handlers
+
+-(void) gameStarted {
+    NSLog(@"View controller says game started!");
+    [self startNewLevel];
+}
+
+-(void) cardDiscarded {
+    [self checkForWin];
+}
+
+
 -(void) levelEnded {
     [self setLevel:level+1];
     [self startNewLevel];
 }
 
--(void) checkForWin {
-    //First check for going out
-    //Then check for out of time
-    
-    [hand updateScore];
-    [self setCurrentScore:hand.score];
-    if (hand.score == 0) {
-//        NSLog(@"It's a win!");
-        [self endLevel];
-    }
-    else if( round > level-1 ) {
- //       NSLog(@"Out of rounds!");
-        [self setTotalScore:totalScore + hand.score];
-        [self endLevel];
-    }
-    else {
-//        NSLog(@"Dealing new mystery/known cards");
-        // Deal new mystery/known cards
-        knownCard = [deck draw];
-        mysteryCard = [deck draw];
-        [self setRound:round+1];
-        if( [delegate conformsToProtocol:@protocol(Three13GameDelegate)] ) {
-            [delegate respondToStartOfRoundWithDictionary:[self gameDict]];
-        }
-        else {
-            // Fall back on loose coupling
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"Start Round" object:self userInfo:[self gameDict] ];
-        }
-    }
-
-}
-
--(NSMutableDictionary *) gameDict {
-    NSMutableDictionary * dict = [NSMutableDictionary dictionaryWithObjectsAndKeys: [hand cardIDs], @"hand", [deck cardIDs], @"deck", @(knownCard.number), @"known", @(mysteryCard.number), @"mystery", @0, @"discard", nil ];
-    return dict;
-}
-
--(NSMutableArray *) allCards {
-    NSMutableArray * returnArray = [[NSMutableArray alloc] init];
-    [returnArray addObjectsFromArray:deck.cards];
-    [returnArray addObjectsFromArray:hand.cards];
-    [returnArray addObject:mysteryCard];
-    [returnArray addObject:knownCard];
-    return returnArray;
-}
-
--(NSMutableArray *) cardsInDeck {
-    return deck.cards;
-}
 
 @end
