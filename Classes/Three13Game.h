@@ -24,19 +24,12 @@
     NSInteger totalScore;
     dispatch_queue_t global_queue;
     
-    id delegate;
+    id <Three13GameDelegate> delegate;
 }
 
 @property (nonatomic,strong) Three13Deck * deck;
 @property (nonatomic,strong) Three13Hand * hand;
-@property (nonatomic, strong) Three13Card * knownCard;
-@property (nonatomic, strong) Three13Card * mysteryCard;
-@property (nonatomic) NSInteger state;
-@property (nonatomic) NSInteger level;
-@property (nonatomic) NSInteger round;
-@property (nonatomic) NSInteger currentScore;
-@property (nonatomic) NSInteger totalScore;
-@property (nonatomic, strong) id delegate;
+@property (nonatomic, strong) id <Three13GameDelegate> delegate;
 
 -(void) deal: (NSInteger) cardNumber;
 -(void) gameStarted;
