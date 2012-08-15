@@ -76,7 +76,6 @@
     [game setDelegate:self];
     [self setDataSource:game];
     
-    [dataSource addObserver:self forKeyPath:@"state" options:0 context:nil];
     [dataSource addObserver:self forKeyPath:@"level" options:0 context:nil];
     [dataSource addObserver:self forKeyPath:@"round" options:0 context:nil];
     [dataSource addObserver:self forKeyPath:@"currentScore" options:0 context:nil];
@@ -262,20 +261,6 @@
 }
 
 - (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-    if ([keyPath isEqualToString:@"state"] && [object isEqual:dataSource] ) {
-        switch (dataSource.state) {
-            case -1:
-                break;
-            case 0:
-                //                NSLog(@"Game started");
-                break;
-            case 1:
-                break;
-            default:
-                break;
-        }
-    }
-    
     if ([keyPath isEqualToString:@"level"] && [object isEqual:dataSource] ) {
         //        NSLog(@"On level %d", game.level);
         levelLabel.text = [NSString stringWithFormat:@"Level: %d", dataSource.level];
