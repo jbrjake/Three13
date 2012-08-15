@@ -27,7 +27,7 @@
     CGRect aboveFrame;
     CGRect belowFrame;
     
-    id dataSource;
+    NSObject <Three13ViewDataSource> * dataSource;
 }
 
 @property(nonatomic, strong) NSMutableArray * cardViews;
@@ -44,7 +44,7 @@
 @property(nonatomic) CGRect mysteryCardFrame;
 @property(nonatomic) CGRect aboveFrame;
 @property(nonatomic) CGRect belowFrame;
-@property (nonatomic, strong) id dataSource;
+@property (nonatomic, strong) NSObject <Three13ViewDataSource> * dataSource;
 
 -(IBAction) handleTap:(UIGestureRecognizer*)sender;
 -(void) createGestureRecognizers;
