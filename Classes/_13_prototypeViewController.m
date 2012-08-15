@@ -76,11 +76,11 @@
     [game setDelegate:self];
     [self setDataSource:game];
     
-    [game addObserver:self forKeyPath:@"state" options:0 context:nil];
-    [game addObserver:self forKeyPath:@"level" options:0 context:nil];
-    [game addObserver:self forKeyPath:@"round" options:0 context:nil];
-    [game addObserver:self forKeyPath:@"currentScore" options:0 context:nil];
-    [game addObserver:self forKeyPath:@"totalScore" options:0 context:nil];
+    [dataSource addObserver:self forKeyPath:@"state" options:0 context:nil];
+    [dataSource addObserver:self forKeyPath:@"level" options:0 context:nil];
+    [dataSource addObserver:self forKeyPath:@"round" options:0 context:nil];
+    [dataSource addObserver:self forKeyPath:@"currentScore" options:0 context:nil];
+    [dataSource addObserver:self forKeyPath:@"totalScore" options:0 context:nil];
     
     aboveFrame = belowFrame;
     //aboveFrame = CGRectMake(self.view.frame.size.width/2, -100, w, h);
@@ -120,10 +120,10 @@
     levelLabel.textColor = [UIColor whiteColor];
     levelLabel.shadowColor = [UIColor blackColor];
     levelLabel.shadowOffset = CGSizeMake(1, 1);
-    scoreLabel.text = [NSString stringWithFormat:@"Current Score: %d", game.currentScore];
-    totalScoreLabel.text = [NSString stringWithFormat:@"Total Score: %d", game.totalScore];
-    roundLabel.text = [NSString stringWithFormat:@"Round: %d", game.round];
-    levelLabel.text = [NSString stringWithFormat:@"Level: %d", game.level];
+    scoreLabel.text = [NSString stringWithFormat:@"Current Score: %d", dataSource.currentScore];
+    totalScoreLabel.text = [NSString stringWithFormat:@"Total Score: %d", dataSource.totalScore];
+    roundLabel.text = [NSString stringWithFormat:@"Round: %d", dataSource.round];
+    levelLabel.text = [NSString stringWithFormat:@"Level: %d", dataSource.level];
     scoreLabel.tag = 106;
     totalScoreLabel.tag = 107;
     roundLabel.tag = 108;
@@ -132,11 +132,11 @@
     
 //    knownThree13CardView = (UIImageView*)[self.view viewWithTag:game.knownCard.number];
 //    knownThree13CardView.frame = belowFrame;
-    [self.view viewWithTag:game.knownCard.number].frame = belowFrame;
+    [self.view viewWithTag:dataSource.knownCard.number].frame = belowFrame;
     
 //    mysteryThree13CardView = (UIImageView*)[self.view viewWithTag:game.mysteryCard.number];
 //    mysteryThree13CardView.frame = belowFrame;
-    [self.view viewWithTag:game.mysteryCard.number].frame = belowFrame;
+    [self.view viewWithTag:dataSource.mysteryCard.number].frame = belowFrame;
     
     [self.view addSubview:scoreLabel];
     [self.view addSubview:totalScoreLabel];
@@ -163,7 +163,7 @@
     
     // Find tapped card
     NSMutableArray * tappedCards = [[NSMutableArray alloc] init];
-    NSMutableArray * cardsToCheck = [game allCards];
+    NSMutableArray * cardsToCheck = [dataSource allCards];
     NSMutableArray * cardIDs = [NSMutableArray new];
     for (Three13Card * card in cardsToCheck) {
         [cardIDs addObject:@(card.number)];
@@ -189,10 +189,10 @@
         }
     }
     
-    if (game.state == 0) {
+    if (dataSource.state == 0) {
         [dataSource selectCardWith:rightTag];
     }
-    else if (game.state == 1) {
+    else if (dataSource.state == 1) {
         [dataSource discardCardWith:rightTag];
     }
 }
@@ -277,8 +277,8 @@
 }
 
 - (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-    if ([keyPath isEqualToString:@"state"] && [object isEqual:game] ) {
-        switch (game.state) {
+    if ([keyPath isEqualToString:@"state"] && [object isEqual:dataSource] ) {
+        switch (dataSource.state) {
             case -1:
                 break;
             case 0:
@@ -291,24 +291,24 @@
         }
     }
     
-    if ([keyPath isEqualToString:@"level"] && [object isEqual:game] ) {
+    if ([keyPath isEqualToString:@"level"] && [object isEqual:dataSource] ) {
         //        NSLog(@"On level %d", game.level);
-        levelLabel.text = [NSString stringWithFormat:@"Level: %d", game.level];
+        levelLabel.text = [NSString stringWithFormat:@"Level: %d", dataSource.level];
     }
     
-    if ([keyPath isEqualToString:@"round"] && [object isEqual:game] ) {
+    if ([keyPath isEqualToString:@"round"] && [object isEqual:dataSource] ) {
         //        NSLog(@"On round %d", game.round);
-        roundLabel.text = [NSString stringWithFormat:@"Round: %d", game.round];
+        roundLabel.text = [NSString stringWithFormat:@"Round: %d", dataSource.round];
     }
     
-    if ([keyPath isEqualToString:@"currentScore"] && [object isEqual:game] ) {
+    if ([keyPath isEqualToString:@"currentScore"] && [object isEqual:dataSource] ) {
         //        NSLog(@"Current score %d", game.currentScore);
-        scoreLabel.text = [NSString stringWithFormat:@"Current Score: %d", game.currentScore];
+        scoreLabel.text = [NSString stringWithFormat:@"Current Score: %d", dataSource.currentScore];
     }
     
-    if ([keyPath isEqualToString:@"totalScore"] && [object isEqual:game] ) {
+    if ([keyPath isEqualToString:@"totalScore"] && [object isEqual:dataSource] ) {
         //        NSLog(@"Total score %d", game.totalScore);
-        totalScoreLabel.text = [NSString stringWithFormat:@"Total Score: %d", game.totalScore];
+        totalScoreLabel.text = [NSString stringWithFormat:@"Total Score: %d", dataSource.totalScore];
     }
 }
 
@@ -398,7 +398,7 @@
     __block NSMutableArray * deckArray = [dict objectForKey:@"deck"];
 
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self displayMessage:[NSString stringWithFormat:@"Scored %d", game.currentScore]];
+        [self displayMessage:[NSString stringWithFormat:@"Scored %d", dataSource.currentScore]];
         
         [UIView animateWithDuration:0.5 animations:^{
             for (int i = 0; i < [handArray count]; i++) {
@@ -430,7 +430,7 @@
 -(void) levelStarts:(NSMutableDictionary *)dict {
 //    NSLog(@"Game notified view controller of start level!");
     
-    [self displayMessage:[NSString stringWithFormat:@"Level %d", game.level]];
+    [self displayMessage:[NSString stringWithFormat:@"Level %d", dataSource.level]];
 
     NSMutableArray * handArray = [dict objectForKey:@"hand"];
     NSMutableArray * deckArray = [dict objectForKey:@"deck"];
@@ -468,7 +468,7 @@
     NSInteger mysteryID = [ [dict objectForKey:@"mystery"] intValue];
     [ (Three13CardView*)[self.view viewWithTag:mysteryID] setImage:[imagesArray lastObject]];
     [ (Three13CardView*)[self.view viewWithTag:knownID] setImage:[imagesArray lastObject]];
-    if (game.round == game.level ) {
+    if (dataSource.round == dataSource.level ) {
         [self displayMessage:[NSString stringWithFormat:@"Last Round!"]];
     }
     [UIView transitionWithView:nil duration:0.5 options:UIViewAnimationOptionTransitionFlipFromLeft animations:^{
