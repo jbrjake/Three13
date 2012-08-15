@@ -76,8 +76,7 @@
             [delegate respondToStartOfRoundWithDictionary:[self gameDict]];
         }
         else {
-            // Fall back on loose coupling
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"Start Round" object:self userInfo:[self gameDict] ];
+            NSLog(@"%s: delegate does not conform to protocol", __PRETTY_FUNCTION__);
         }
     }
     
@@ -100,10 +99,6 @@
 #pragma mark Three13ViewDataSource protocol implementation
 
 -(void) startGame {
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(gameStarted) name:@"Started Game" object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(cardDiscarded) name:@"Discarded Card" object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(levelEnded) name:@"Ended Level" object:nil];
-
     [self deal:level];
     [hand updateScore];
 //    NSLog(@"Known and unkonw are %@ and %@", knownCard, mysteryCard);
@@ -119,8 +114,7 @@
         }];
     }
     else {
-        // Fall back on loose coupling
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"Start Game" object:self userInfo:[self gameDict] ];
+        NSLog(@"%s: delegate does not conform to protocol", __PRETTY_FUNCTION__);
     }
 }
 
@@ -133,8 +127,7 @@
                 [delegate respondToKnownCardChosenWithDictionary:[self gameDict]];
             }
             else {
-                // Fall back on loose coupling
-                [[NSNotificationCenter defaultCenter] postNotificationName:@"Choose Known" object:self userInfo:[self gameDict] ];
+                NSLog(@"%s: delegate does not conform to protocol", __PRETTY_FUNCTION__);
             }
         }
         else if (tag == mysteryCard.number) {
@@ -144,10 +137,8 @@
                 [delegate respondToMysteryCardChosenWithDictionary:[self gameDict]];
             }
             else {
-                // Fall back on loose coupling
-                [[NSNotificationCenter defaultCenter] postNotificationName:@"Choose Mystery" object:self userInfo:[self gameDict] ];
-            }
-            
+                NSLog(@"%s: delegate does not conform to protocol", __PRETTY_FUNCTION__);
+            }            
         }
         else {
             NSLog(@"Error, %d is not the mystery or known card!", tag);
@@ -182,8 +173,7 @@
             }];
         }
         else {
-            // Fall back on loose coupling
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"Discard Card" object:self userInfo:[self gameDict] ];
+            NSLog(@"%s: delegate does not conform to protocol", __PRETTY_FUNCTION__);
         }
     }
 }
@@ -202,8 +192,7 @@
             [delegate respondToKnownCardChosenWithDictionary:[self gameDict]];
         }
         else {
-            // Fall back on loose coupling
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"Choose Known" object:self userInfo:[self gameDict] ];
+            NSLog(@"%s: delegate does not conform to protocol", __PRETTY_FUNCTION__);
         }
     }
 }
@@ -218,8 +207,7 @@
             [delegate respondToMysteryCardChosenWithDictionary:[self gameDict]];
         }
         else {
-            // Fall back on loose coupling
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"Choose Mystery" object:self userInfo:[self gameDict] ];
+            NSLog(@"%s: delegate does not conform to protocol", __PRETTY_FUNCTION__);
         }
     }
 }
@@ -248,8 +236,7 @@
             }];
         }
         else {
-            // Fall back on loose coupling
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"Discard Card" object:self userInfo:[self gameDict] ];
+            NSLog(@"%s: delegate does not conform to protocol", __PRETTY_FUNCTION__);
         }
     }
 }
@@ -262,8 +249,7 @@
         [delegate respondToStartOfLevelWithDictionary:[self gameDict]];
     }
     else {
-        // Fall back on loose coupling
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"Start Level" object:self userInfo:[self gameDict] ];
+        NSLog(@"%s: delegate does not conform to protocol", __PRETTY_FUNCTION__);
     }
     //    NSLog(@"Starting round %d level %d with score %d", round, level, totalScore );
 }
@@ -278,8 +264,7 @@
         }];
     }
     else {
-        // Fall back on loose coupling
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"End Level" object:self userInfo:[self gameDict] ];
+        NSLog(@"%s: delegate does not conform to protocol", __PRETTY_FUNCTION__);
     }
 }
 
