@@ -226,7 +226,7 @@
 }
 
 -(void) flipViewFor:(NSNumber*)cardID {
-    Three13CardView * cardView = (Three13CardView *) [self.view viewWithTag:[cardID intValue]];
+    __block Three13CardView * cardView = (Three13CardView *) [self.view viewWithTag:[cardID intValue]];
     [ UIView transitionWithView:cardView duration:0.5
                         options:UIViewAnimationOptionTransitionFlipFromLeft
                      animations:^{
