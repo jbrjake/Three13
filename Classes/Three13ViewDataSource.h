@@ -47,6 +47,5 @@
 @property (nonatomic) NSInteger round;
 @property (nonatomic, strong) Three13Card * knownCard;
 @property (nonatomic, strong) Three13Card * mysteryCard;
-@property (nonatomic) NSInteger state;
 
 @end

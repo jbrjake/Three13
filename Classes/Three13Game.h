@@ -29,6 +29,7 @@
 
 @property (nonatomic,strong) Three13Deck * deck;
 @property (nonatomic,strong) Three13Hand * hand;
+@property (nonatomic) NSInteger state;
 @property (nonatomic, strong) id <Three13GameDelegate> delegate;
 
 -(void) deal: (NSInteger) cardNumber;
