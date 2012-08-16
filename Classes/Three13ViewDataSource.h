@@ -35,11 +35,34 @@
  */
 -(void) selectCardWith:(NSInteger)tag;
 
+/*
+ * @brief The score for the current hand, if someone went out right now
+ */
 @property (nonatomic) NSInteger currentScore;
+
+/*
+ * @brief The score accumulated across all previous levels, not including the current score
+ */
 @property (nonatomic) NSInteger totalScore;
+
+/*
+ * @brief The current level
+ */
 @property (nonatomic) NSInteger level;
+
+/*
+ * @brief The current round of the current level, which never exceeds the level (level 3 has 3 rounds, level 4 has 4 rounds, etc)
+ */
 @property (nonatomic) NSInteger round;
+
+/*
+ * @brief The card available for selection from the discard pile. It's known because it's face up.
+ */
 @property (nonatomic, strong) Three13Card * knownCard;
+
+/*
+ * @brief The card available for selection from the deck. It's a mystery because it's face down.
+ */
 @property (nonatomic, strong) Three13Card * mysteryCard;
 
 @end
