@@ -30,16 +30,10 @@
 -(NSMutableArray*) allCards;
 
 /*
- * @brief Informs the data source that the user is selecting a card to add to the hand
+ * @brief Informs the data source that the user is selecting a card to add to the hand or discard
  * @param tag The ID of the card the user is selecting
  */
 -(void) selectCardWith:(NSInteger)tag;
-
-/*
- * @brief Informs the data source that the user is selecting a card to discard from the hand
- * @param tag The ID of the card the user is discarding
- */
--(void) discardCardWith:(NSInteger)tag;
 
 @property (nonatomic) NSInteger currentScore;
 @property (nonatomic) NSInteger totalScore;
