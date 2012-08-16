@@ -397,8 +397,8 @@
     
     [self displayMessage:[NSString stringWithFormat:@"Level %d", dataSource.level]];
 
-    NSMutableArray * handArray = [dict objectForKey:@"hand"];
-    NSMutableArray * deckArray = [dict objectForKey:@"deck"];
+    __block NSMutableArray * handArray = [dict objectForKey:@"hand"];
+    __block NSMutableArray * deckArray = [dict objectForKey:@"deck"];
     
     [UIView animateWithDuration:0.5 animations:^{
         for (int i = 0; i < [handArray count]; i++) {
