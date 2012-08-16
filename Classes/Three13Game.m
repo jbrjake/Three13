@@ -145,12 +145,6 @@
         }
     }
     else {
-        NSLog(@"Error, the game is in state %d and needs to be 0 to select", state);
-    }
-}
-
--(void) discardCardWith:(NSInteger)tag {
-    if( state == 1 ) {
         NSMutableArray * cardsCopy = [hand.cards copy];
         for( Three13Card * card in cardsCopy ) {
             if( card.number == tag ) {

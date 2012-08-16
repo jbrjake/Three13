@@ -188,12 +188,7 @@
         }
     }
     
-    if (dataSource.state == 0) {
-        [dataSource selectCardWith:rightTag];
-    }
-    else if (dataSource.state == 1) {
-        [dataSource discardCardWith:rightTag];
-    }
+    [dataSource selectCardWith:rightTag];
 }
 
 #pragma mark UI helpers
