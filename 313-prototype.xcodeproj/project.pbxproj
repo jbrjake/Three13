@@ -438,22 +438,10 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				74C681D912A1BBCA00B04C1E /* Three13Card.h */,
-				74C681DA12A1BBCA00B04C1E /* Three13Card.m */,
-				74C681DB12A1BBCA00B04C1E /* Three13Deck.h */,
-				74C681DC12A1BBCA00B04C1E /* Three13Deck.m */,
-				74C6841E12A4666900B04C1E /* Three13Hand.h */,
-				74C6841F12A4666900B04C1E /* Three13Hand.m */,
-				740B8A2112BA776C00E0AB34 /* Three13Game.h */,
-				740B8A2212BA776C00E0AB34 /* Three13Game.m */,
-				743454C115A77C8D00B9C55A /* Three13GameDelegate.h */,
-				74EE9D1815A7874300F32415 /* Three13ViewDataSource.h */,
-				7474D34812DD72DC0067D62D /* Three13CardView.h */,
-				7474D34912DD72DC0067D62D /* Three13CardView.m */,
 				1D3623240D0F684500981E51 /* _13_prototypeAppDelegate.h */,
 				1D3623250D0F684500981E51 /* _13_prototypeAppDelegate.m */,
-				28D7ACF60DDB3853001CB0EB /* _13_prototypeViewController.h */,
-				28D7ACF70DDB3853001CB0EB /* _13_prototypeViewController.m */,
+				6B71BAE415DF45FF00A67237 /* Three13 Model */,
+				6B71BAE615DF463200A67237 /* Three13 UI */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -512,6 +500,34 @@
 				746E006015A4CA7100BB9F22 /* SenTestingKit.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		6B71BAE415DF45FF00A67237 /* Three13 Model */ = {
+			isa = PBXGroup;
+			children = (
+				74C681D912A1BBCA00B04C1E /* Three13Card.h */,
+				74C681DA12A1BBCA00B04C1E /* Three13Card.m */,
+				74C681DB12A1BBCA00B04C1E /* Three13Deck.h */,
+				74C681DC12A1BBCA00B04C1E /* Three13Deck.m */,
+				74C6841E12A4666900B04C1E /* Three13Hand.h */,
+				74C6841F12A4666900B04C1E /* Three13Hand.m */,
+				740B8A2112BA776C00E0AB34 /* Three13Game.h */,
+				740B8A2212BA776C00E0AB34 /* Three13Game.m */,
+				74EE9D1815A7874300F32415 /* Three13ViewDataSource.h */,
+			);
+			name = "Three13 Model";
+			sourceTree = "<group>";
+		};
+		6B71BAE615DF463200A67237 /* Three13 UI */ = {
+			isa = PBXGroup;
+			children = (
+				743454C115A77C8D00B9C55A /* Three13GameDelegate.h */,
+				7474D34812DD72DC0067D62D /* Three13CardView.h */,
+				7474D34912DD72DC0067D62D /* Three13CardView.m */,
+				28D7ACF60DDB3853001CB0EB /* _13_prototypeViewController.h */,
+				28D7ACF70DDB3853001CB0EB /* _13_prototypeViewController.m */,
+			);
+			name = "Three13 UI";
 			sourceTree = "<group>";
 		};
 		746E006415A4CA7100BB9F22 /* 313-test */ = {
