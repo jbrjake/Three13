@@ -10,4 +10,15 @@
 
 @implementation Three13Player
 
+@synthesize hand, state, currentScore, totalScore;
+
+-(id) init  {
+    if( self = [super init] ) {
+        hand = [[Three13Hand alloc] init];
+        state = -1;
+        totalScore = 0;
+        currentScore = 0;
+    }
+    return self;
+}
 @end
