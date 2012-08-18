@@ -14,8 +14,9 @@
     NSInteger state;
     NSInteger currentScore;
     NSInteger totalScore;
-
 }
+
+@property (nonatomic) NSInteger state;
 
 @property (nonatomic,strong) Three13Hand * hand;
 
