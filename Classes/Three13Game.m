@@ -11,19 +11,16 @@
 
 @implementation Three13Game
 
-@synthesize deck, hand, mysteryCard, knownCard, state, level, round, currentScore, totalScore, delegate;
+@synthesize deck, mysteryCard, knownCard, state, level, round, delegate;
 
 -(id) init  {
     if( self = [super init] ) {
         deck = [[Three13Deck alloc] init];
-        hand = [[Three13Hand alloc] init];
         knownCard = [[Three13Card alloc] init];
         mysteryCard = [[Three13Card alloc] init];
         state = -1;
         level = 3;
         round = 1;
-        totalScore = 0;
-        currentScore = 0;
         global_queue = dispatch_get_global_queue(0, 0);
     }
     return self;
