@@ -144,9 +144,12 @@
 }
 
 -(void) selectCardWith:(NSInteger)tag {
+    
+#warning Assuming just one player for now
+    Three13Player * player = [players objectAtIndex:0];
     if (state == 0) {
         if( tag == knownCard.number) {
-            [hand addCard:knownCard];
+            [player.hand addCard:knownCard];
             [self setState:1];
             if( [delegate conformsToProtocol:@protocol(Three13GameDelegate)] ) {
                 [delegate respondToKnownCardChosenWithDictionary:[self gameDict]];
@@ -156,7 +159,7 @@
             }
         }
         else if (tag == mysteryCard.number) {
-            [hand addCard:mysteryCard];
+            [player.hand addCard:mysteryCard];
             [self setState: 1];
             if( [delegate conformsToProtocol:@protocol(Three13GameDelegate)] ) {
                 [delegate respondToMysteryCardChosenWithDictionary:[self gameDict]];
@@ -170,18 +173,18 @@
         }
     }
     else {
-        NSMutableArray * cardsCopy = [hand.cards copy];
+        NSMutableArray * cardsCopy = [player.hand.cards copy];
         for( Three13Card * card in cardsCopy ) {
             if( card.number == tag ) {
                 NSLog(@"Found a match!");
-                NSLog(@"Hand was %@", hand);
-                [hand.cards removeObject:card];
-                NSLog(@"Hand now is %@", hand);
+                NSLog(@"Hand was %@", player.hand);
+                [player.hand.cards removeObject:card];
+                NSLog(@"Hand now is %@", player.hand);
             }
         }
         [self setState:0];
-        [hand sortBySuit];
-        [hand sortByValue];
+        [player.hand sortBySuit];
+        [player.hand sortByValue];
         __block NSMutableDictionary * dict = [self gameDict];
         [dict setObject:@(tag) forKey:@"discard"];
         if( [delegate conformsToProtocol:@protocol(Three13GameDelegate)] ) {
@@ -238,7 +241,8 @@
 }
 
 -(void) cardDiscarded {
-    [self checkForWin];
+#warning Assuming just one player for now.
+    [self checkForWinWithPlayer:[players objectAtIndex:0]];
 }
 
 
