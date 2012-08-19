@@ -32,9 +32,6 @@
 -(void) deal: (NSInteger) cardNumber;
 -(void) gameStarted;
 -(void) startNewLevel;
--(void) choseKnownCard;
--(void) choseMysteryCard;
--(void) choseCard:(NSInteger)number;
 -(void) cardDiscarded;
 -(void) endLevel;
 -(void) levelEnded;
