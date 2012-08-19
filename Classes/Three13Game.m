@@ -111,7 +111,9 @@
 -(NSMutableArray *) allCards {
     NSMutableArray * returnArray = [[NSMutableArray alloc] init];
     [returnArray addObjectsFromArray:deck.cards];
-    [returnArray addObjectsFromArray:hand.cards];
+    for (Three13Player * player in players) {
+        [returnArray addObjectsFromArray:player.hand.cards];
+    }
     [returnArray addObject:mysteryCard];
     [returnArray addObject:knownCard];
     return returnArray;
@@ -121,7 +123,9 @@
 
 -(void) startGame {
     [self deal:level];
-    [hand updateScore];
+    for (Three13Player * player in players) {
+        [player.hand updateScore];
+    }
 //    NSLog(@"Known and unkonw are %@ and %@", knownCard, mysteryCard);
     [self setState:0];
 //    NSLog(@"Start Game completed");
