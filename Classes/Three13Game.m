@@ -49,35 +49,55 @@
     [self setCurrentScore:hand.score];
 }
 
--(void) checkForWin {
+-(void) checkForWinWithPlayer:(Three13Player* )player {
     //First check for going out
     //Then check for out of time
+    int ret = [player checkForWinWith:[self gameDict]];
     
-    [hand updateScore];
-    [self setCurrentScore:hand.score];
-    if (hand.score == 0) {
-        //        NSLog(@"It's a win!");
-        [self endLevel];
+    switch (ret) {
+        case -1:
+            // Keep going
+            // Deal new mystery/known cards
+            knownCard = [deck draw];
+            mysteryCard = [deck draw];
+            if (players.count == [players indexOfObject:player]+1) {
+                // If this is the last player, start a new round
+                [self setRound:round+1];
+                if( [delegate conformsToProtocol:@protocol(Three13GameDelegate)] ) {
+                    [delegate respondToStartOfRoundWithDictionary:[self gameDict]];
+                }
+                else {
+                    NSLog(@"%s: delegate does not conform to protocol", __PRETTY_FUNCTION__);
+                }
+            }
+            break;
+        case  0:
+            // Out of rounds
+            [player setTotalScore:player.totalScore + player.hand.score];
+            if (players.count == [players indexOfObject:player]+1) {
+                // This is the last player to score, end level
+                [self endLevel];
+            }
+            else {
+                // On to the next player
+                knownCard = [deck draw];
+                mysteryCard = [deck draw];
+            }
+            break;
+        case  1:
+            // It's a win
+            if (players.count == [players indexOfObject:player]+1) {
+                [self endLevel];
+            }
+            else {
+                // On to the next player
+                knownCard = [deck draw];
+                mysteryCard = [deck draw];
+            }
+            break;
+        default:
+            break;
     }
-    else if( round > level-1 ) {
-        //       NSLog(@"Out of rounds!");
-        [self setTotalScore:totalScore + hand.score];
-        [self endLevel];
-    }
-    else {
-        //        NSLog(@"Dealing new mystery/known cards");
-        // Deal new mystery/known cards
-        knownCard = [deck draw];
-        mysteryCard = [deck draw];
-        [self setRound:round+1];
-        if( [delegate conformsToProtocol:@protocol(Three13GameDelegate)] ) {
-            [delegate respondToStartOfRoundWithDictionary:[self gameDict]];
-        }
-        else {
-            NSLog(@"%s: delegate does not conform to protocol", __PRETTY_FUNCTION__);
-        }
-    }
-    
 }
 
 -(NSMutableDictionary *) gameDict {

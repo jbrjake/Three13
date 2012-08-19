@@ -30,6 +30,6 @@
  */
 @property (nonatomic) NSInteger totalScore;
 
--(void) checkForWin;
+-(int) checkForWinWith:(NSMutableDictionary *)dict;
 
 @end
