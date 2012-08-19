@@ -7,11 +7,11 @@
 //
 
 #import "Three13Game.h"
-
+#import "Three13Player.h"
 
 @implementation Three13Game
 
-@synthesize deck, mysteryCard, knownCard, state, level, round, delegate;
+@synthesize deck, mysteryCard, knownCard, state, level, round, players, delegate;
 
 -(id) init  {
     if( self = [super init] ) {
@@ -21,6 +21,7 @@
         state = -1;
         level = 3;
         round = 1;
+        [players addObject: [[Three13Player alloc] init] ]; // For now, just one player
         global_queue = dispatch_get_global_queue(0, 0);
     }
     return self;

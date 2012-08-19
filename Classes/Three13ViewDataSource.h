@@ -46,6 +46,11 @@
 @property (nonatomic) NSInteger round;
 
 /*
+ * @brief An array containing the players in the game
+ */
+@property (nonatomic, strong) NSMutableArray * players;
+
+/*
  * @brief The card available for selection from the discard pile. It's known because it's face up.
  */
 @property (nonatomic, strong) Three13Card * knownCard;
