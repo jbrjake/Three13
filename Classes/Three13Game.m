@@ -35,18 +35,19 @@
         return;
     }
     [deck shuffle];
-    [hand.cards removeAllObjects];
-    for( int i = 0; i < cardNumber; i++ ) {
-        [hand addCard: [deck draw]];
+    
+    for (Three13Player * player in players) {
+        [player.hand.cards removeAllObjects];
+        for( int i = 0; i < cardNumber; i++ ) {
+            [player.hand addCard: [deck draw]];
+        }
+        [player.hand sortBySuit];
+        [player.hand sortByValue];
+        [player.hand updateScore];
+        [player setCurrentScore:player.hand.score];
     }
-    [hand sortBySuit];
-    [hand sortByValue];
     knownCard = [deck draw];
-    //    NSLog(@"Set known card to %@", knownCard);
     mysteryCard = [deck draw];
-    //    NSLog(@"Set mystery card to %@", mysteryCard);
-    [hand updateScore];
-    [self setCurrentScore:hand.score];
 }
 
 -(void) checkForWinWithPlayer:(Three13Player* )player {
