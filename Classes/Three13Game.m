@@ -21,7 +21,9 @@
         state = -1;
         level = 3;
         round = 1;
-        [players addObject: [[Three13Player alloc] init] ]; // For now, just one player
+#warning Assuming just one player for now
+        players = [[NSMutableArray alloc] init];
+        [players addObject: [[Three13Player alloc] init] ];
         global_queue = dispatch_get_global_queue(0, 0);
     }
     return self;
