@@ -335,7 +335,10 @@
 }
 
 - (void) respondToCardBeingDiscardedWithDictionary:(NSMutableDictionary*)dict andCompletionHandler:(void (^)())completionHandler {
-    __block NSMutableArray * handArray = [dict objectForKey:@"hand"];
+    NSMutableArray * players = [dict objectForKey:@"players"];
+#warning Assuming one player for now
+    Three13Player * player = [players objectAtIndex:0];
+    __block NSMutableArray * handArray = [player.hand cardIDs];;
     NSLog(@"Hand is %@", handArray);
     __block NSInteger discardTag = [[dict objectForKey:@"discard"] intValue];
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -362,11 +365,15 @@
 
 - (void) respondToEndOfLevelWithDictionary:(NSMutableDictionary*)dict andCompletionHandler:(void (^)())completionHandler {
 
-    __block NSMutableArray * handArray = [dict objectForKey:@"hand"];
+    NSMutableArray * players = [dict objectForKey:@"players"];
+#warning Assuming one player for now
+    Three13Player * player = [players objectAtIndex:0];
+    __block NSMutableArray * handArray = [player.hand cardIDs];;
     __block NSMutableArray * deckArray = [dict objectForKey:@"deck"];
 
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self displayMessage:[NSString stringWithFormat:@"Scored %d", dataSource.currentScore]];
+#warning Not showing scores for now
+//        [self displayMessage:[NSString stringWithFormat:@"Scored %d", dataSource.currentScore]];
         
         [UIView animateWithDuration:0.5 animations:^{
             for (int i = 0; i < [handArray count]; i++) {
@@ -400,7 +407,10 @@
     
     [self displayMessage:[NSString stringWithFormat:@"Level %d", dataSource.level]];
 
-    __block NSMutableArray * handArray = [dict objectForKey:@"hand"];
+    NSMutableArray * players = [dict objectForKey:@"players"];
+#warning Assuming one player for now
+    Three13Player * player = [players objectAtIndex:0];
+    __block NSMutableArray * handArray = [player.hand cardIDs];;
     __block NSMutableArray * deckArray = [dict objectForKey:@"deck"];
     
     [UIView animateWithDuration:0.5 animations:^{
@@ -481,7 +491,10 @@
     [mysteryThree13CardView.layer removeAnimationForKey:@"animateOpacity"];
     [knownThree13CardView.layer removeAnimationForKey:@"animateOpacity"];
 */
-    NSMutableArray * handArray = [dict objectForKey:@"hand"];
+    NSMutableArray * players = [dict objectForKey:@"players"];
+#warning Assuming one player for now
+    Three13Player * player = [players objectAtIndex:0];
+    NSMutableArray * handArray = [player.hand cardIDs];;
     NSInteger knownID = [[dict objectForKey:@"known"] intValue];
     NSInteger mysteryID = [[dict objectForKey:@"mystery"] intValue];
     CGRect frame = [[ handCardFrames objectAtIndex:handArray.count-1] CGRectValue];
@@ -498,7 +511,10 @@
     [mysteryThree13CardView.layer removeAnimationForKey:@"animateOpacity"];
     [knownThree13CardView.layer removeAnimationForKey:@"animateOpacity"];
 */
-    NSMutableArray * handArray = [dict objectForKey:@"hand"];
+    NSMutableArray * players = [dict objectForKey:@"players"];
+#warning Assuming one player for now
+    Three13Player * player = [players objectAtIndex:0];
+    NSMutableArray * handArray = [player.hand cardIDs];;
     NSInteger knownID = [[dict objectForKey:@"known"] intValue];
     NSInteger mysteryID = [[dict objectForKey:@"mystery"] intValue];
 
