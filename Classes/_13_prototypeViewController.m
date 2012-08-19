@@ -119,8 +119,9 @@
     levelLabel.textColor = [UIColor whiteColor];
     levelLabel.shadowColor = [UIColor blackColor];
     levelLabel.shadowOffset = CGSizeMake(1, 1);
-    scoreLabel.text = [NSString stringWithFormat:@"Current Score: %d", dataSource.currentScore];
-    totalScoreLabel.text = [NSString stringWithFormat:@"Total Score: %d", dataSource.totalScore];
+#warning Not showing scores for now
+//    scoreLabel.text = [NSString stringWithFormat:@"Current Score: %d", dataSource.currentScore];
+//    totalScoreLabel.text = [NSString stringWithFormat:@"Total Score: %d", dataSource.totalScore];
     roundLabel.text = [NSString stringWithFormat:@"Round: %d", dataSource.round];
     levelLabel.text = [NSString stringWithFormat:@"Level: %d", dataSource.level];
     scoreLabel.tag = 106;
@@ -268,12 +269,14 @@
     
     if ([keyPath isEqualToString:@"currentScore"] && [object isEqual:dataSource] ) {
         //        NSLog(@"Current score %d", game.currentScore);
-        scoreLabel.text = [NSString stringWithFormat:@"Current Score: %d", dataSource.currentScore];
+#warning Not showing scores for now
+//        scoreLabel.text = [NSString stringWithFormat:@"Current Score: %d", dataSource.currentScore];
     }
     
     if ([keyPath isEqualToString:@"totalScore"] && [object isEqual:dataSource] ) {
         //        NSLog(@"Total score %d", game.totalScore);
-        totalScoreLabel.text = [NSString stringWithFormat:@"Total Score: %d", dataSource.totalScore];
+#warning Not showing scores for now
+//        totalScoreLabel.text = [NSString stringWithFormat:@"Total Score: %d", dataSource.totalScore];
     }
 }
 
