@@ -10,7 +10,7 @@
 
 @protocol Three13GameDelegate <NSObject>
 
-/*
+/**
  * @brief Informs the delegate the game has begun
  * When the delegate view controller has finished responding
  * (perhaps by animating the game view into place),
@@ -20,7 +20,7 @@
  */
 - (void) respondToStartOfGameWithCompletionHandler:(void (^)())completionHandler;
 
-/*
+/**
  * @brief Informs the delegate a level has begun
  * The delegate view controller should respond to the event
  * asynchronously and return right away.
@@ -28,7 +28,7 @@
  */
 - (void) respondToStartOfLevelWithDictionary:(NSMutableDictionary*)dict;
 
-/*
+/**
  * @brief Informs the delegate a round has begun
  * The delegate view controller should respond to the event
  * asynchronously and return right away.
@@ -36,7 +36,7 @@
  */
 - (void) respondToStartOfRoundWithDictionary:(NSMutableDictionary*)dict;
 
-/*
+/**
  * @brief Informs the delegate a known card has been selected
  * The delegate view controller should respond to the event
  * asynchronously and return right away.
@@ -44,7 +44,7 @@
  */
 - (void) respondToKnownCardChosenWithDictionary:(NSMutableDictionary*)dict;
 
-/*
+/**
  * @brief Informs the delegate a mystery card has been selected
  * The delegate view controller should respond to the event
  * asynchronously and return right away.
@@ -52,7 +52,7 @@
  */
 - (void) respondToMysteryCardChosenWithDictionary:(NSMutableDictionary*)dict;
 
-/*
+/**
  * @brief Informs the delegate a card has been discarded (i.e. the round is over)
  * When the delegate view controller has finished responding
  * (perhaps by animating the discarded card to the discard pile),
@@ -63,7 +63,7 @@
  */
 - (void) respondToCardBeingDiscardedWithDictionary:(NSMutableDictionary*)dict andCompletionHandler:(void (^)())completionHandler;
 
-/*
+/**
  * @brief Informs the delegate a level has ended
  * When the delegate view controller has finished responding
  * (perhaps by animating the cards off screen and displaying the current score),

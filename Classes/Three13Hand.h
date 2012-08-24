@@ -38,6 +38,8 @@
 -(void) pruneSetsToSize;
 -(void) addJokersToSets;
 -(void) findSetCombinations;
+-(NSMutableArray*) combinationsOf:(NSInteger)k For:(NSSet*)set;
+-(BOOL) runInSet:(NSSet *)set;
 -(void) pruneSuitSetsToRuns;
 -(void) findMeldsOfMelds;
 -(void) scoreHand;

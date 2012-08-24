@@ -20,12 +20,12 @@
 
 @property (nonatomic,strong) Three13Hand * hand;
 
-/*
+/**
  * @brief The score for the current hand, if someone went out right now
  */
 @property (nonatomic) NSInteger currentScore;
 
-/*
+/**
  * @brief The score accumulated across all previous levels, not including the current score
  */
 @property (nonatomic) NSInteger totalScore;
