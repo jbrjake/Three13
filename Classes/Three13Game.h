@@ -20,6 +20,7 @@
     NSInteger level;
     NSInteger round;
     NSMutableArray * players;
+    NSInteger currentPlayer;
     dispatch_queue_t global_queue;
     
     id <Three13GameDelegate> delegate;

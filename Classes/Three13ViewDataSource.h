@@ -51,6 +51,11 @@
 @property (nonatomic, strong) NSMutableArray * players;
 
 /**
+ * @brief The index of the current player in the players array
+ */
+@property (nonatomic) NSInteger currentPlayer;
+
+/**
  * @brief The card available for selection from the discard pile. It's known because it's face up.
  */
 @property (nonatomic, strong) Three13Card * knownCard;
