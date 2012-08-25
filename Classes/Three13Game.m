@@ -65,13 +65,7 @@
             mysteryCard = [deck draw];
             if (players.count == [players indexOfObject:player]+1) {
                 // If this is the last player, start a new round
-                [self setRound:round+1];
-                if( [delegate conformsToProtocol:@protocol(Three13GameDelegate)] ) {
-                    [delegate respondToStartOfRoundWithDictionary:[self gameDict]];
-                }
-                else {
-                    NSLog(@"%s: delegate does not conform to protocol", __PRETTY_FUNCTION__);
-                }
+                [self startNewRound];
             }
             break;
         case  0:
@@ -207,8 +201,8 @@
 #pragma mark Three13GameDelegate callers
 
 -(void) startNewLevel {
-    [self setRound:1];
     [deck reinitialize];
+    [self setRound:1];
     [self deal:level];
     if( [delegate conformsToProtocol:@protocol(Three13GameDelegate)] ) {
         [delegate respondToStartOfLevelWithDictionary:[self gameDict]];
@@ -217,6 +211,16 @@
         NSLog(@"%s: delegate does not conform to protocol", __PRETTY_FUNCTION__);
     }
     //    NSLog(@"Starting round %d level %d with score %d", round, level, totalScore );
+}
+
+-(void) startNewRound {
+    [self setRound:round+1];
+    if( [delegate conformsToProtocol:@protocol(Three13GameDelegate)] ) {
+        [delegate respondToStartOfRoundWithDictionary:[self gameDict]];
+    }
+    else {
+        NSLog(@"%s: delegate does not conform to protocol", __PRETTY_FUNCTION__);
+    }
 }
 
 -(void) endLevel {

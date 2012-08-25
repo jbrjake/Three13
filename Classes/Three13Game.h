@@ -33,6 +33,7 @@
 -(void) deal: (NSInteger) cardNumber;
 -(void) gameStarted;
 -(void) startNewLevel;
+-(void) startNewRound;
 -(void) cardDiscarded;
 -(void) endLevel;
 -(void) levelEnded;
