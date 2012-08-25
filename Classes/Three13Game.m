@@ -52,6 +52,13 @@
     mysteryCard = [deck draw];
 }
 
+/**
+ * @brief Bumps currentPlayer during a round
+ */
+-(void) iteratePlayers {
+    self.currentPlayer++;
+}
+
 -(void) checkForWinWithPlayer:(Three13Player* )player {
     //First check for going out
     //Then check for out of time

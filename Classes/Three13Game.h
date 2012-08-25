@@ -37,5 +37,6 @@
 -(void) cardDiscarded;
 -(void) endLevel;
 -(void) levelEnded;
+-(void) iteratePlayers;
 -(NSMutableDictionary*) gameDict;
 @end
