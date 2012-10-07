@@ -149,6 +149,7 @@
 #warning Assuming just one player for now
     Three13Player * player = [players objectAtIndex:0];
     if (state == 0) {
+        // Selecting card
         if( tag == knownCard.number) {
             [player.hand addCard:knownCard];
             [self setState:1];
@@ -174,6 +175,7 @@
         }
     }
     else {
+        // Discarding card
         NSMutableArray * cardsCopy = [player.hand.cards copy];
         for( Three13Card * card in cardsCopy ) {
             if( card.number == tag ) {

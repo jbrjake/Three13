@@ -16,6 +16,12 @@
     NSInteger totalScore;
 }
 
+/**
+ * @brief The player's game state
+ * * -1: Waiting for turn
+ * *  0: Selecting card
+ * *  1: Discarding card
+ */
 @property (nonatomic) NSInteger state;
 
 @property (nonatomic,strong) Three13Hand * hand;
