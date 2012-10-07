@@ -1,0 +1,64 @@
+Game flow:
+
+* Start screen:
+
+Three Thirteen
+
+Continue
+New Game
+
+* Continue:
+
+List of games in progress
+
+* New Game
+
+Play...
+Just on this <device>
+On multiple devices
+
+* Play Just On This Device
+
+Play just on this <device>....
+By myself
+With others
+
+* Play On Multiple Devices
+
+If no servers present, prompts to start server
+If a server is present, connects as a client
+
+-----------
+
+It should look like (maybe be?) one view. So if you click Continue, the name of the game and New Game fade away and Continue floats to the top, with the list of games fading in below it. If you click New Game, the name of the game and Continue fade away, New Game floats to the top, etc.
+
+
+--------
+
+Logic flow for multiplayer:
+
+1: Start game
+2: Start level 1
+3: Start round 1
+4: Start player 0
+5: Player 0 selects card
+6: Player 0 discards card
+...
+7: Start player N
+8: Player N selects card
+9: Player N discards card
+10: If any player has gone out, end level.
+11: Otherwise, start round 2
+
+Logic flow for solitaire:
+
+1: Start game
+2: Start level 1
+3: Start round 1
+4: Start player 0
+5: Player 0 selects card
+6: Player 0 discards card
+10: If player has gone out, end level.
+11: Or if rounds == level, end level
+12: Otherwise, start new round
+
