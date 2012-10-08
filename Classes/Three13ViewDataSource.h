@@ -36,6 +36,20 @@
 -(void) selectCardWith:(NSInteger)tag;
 
 /**
+ * @brief Accessor for the score of a player in the current round
+ * This is the score the player would have if he or she were forced to lay cards on the table right now.
+ * @param index The index of the player, in the data source's players array.
+ */
+-(NSInteger) currentScoreForPlayerWithIndex:(NSInteger)index;
+
+/**
+ * @brief Accessor for the total score of a player so far in the game
+ * This is the "real" score, as it includes only points already assessed in the game. It does not include the current score.
+ * @param index The index of the player, in the data source's players array.
+ */
+-(NSInteger) totalScoreForPlayerWithIndex:(NSInteger)index;
+
+/**
  * @brief The current level
  */
 @property (nonatomic) NSInteger level;

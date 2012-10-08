@@ -210,6 +210,14 @@
     return deck.cards;
 }
 
+-(NSInteger) currentScoreForPlayerWithIndex:(NSInteger)index {
+    return [(Three13Player*)self.players[index] currentScore];
+}
+
+-(NSInteger) totalScoreForPlayerWithIndex:(NSInteger)index {
+    return [(Three13Player*)self.players[index] totalScore];
+}
+
 #pragma mark Three13GameDelegate callers
 
 -(void) startNewLevel {
