@@ -206,6 +206,7 @@
     messageView.textAlignment = UITextAlignmentCenter;
     messageView.adjustsFontSizeToFitWidth = YES;
     messageView.textColor = [UIColor whiteColor];
+    messageView.tag = 111;
     
     [self.view addSubview:messageView];
     
