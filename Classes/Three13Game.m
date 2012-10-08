@@ -183,22 +183,25 @@
                 NSLog(@"Hand was %@", player.hand);
                 [player.hand.cards removeObject:card];
                 NSLog(@"Hand now is %@", player.hand);
+                [self setState:0];
+                [player.hand sortBySuit];
+                [player.hand sortByValue];
+                __block NSMutableDictionary * dict = [self gameDict];
+                [dict setObject:@(tag) forKey:@"discard"];
+                if( [delegate conformsToProtocol:@protocol(Three13GameDelegate)] ) {
+                    [delegate respondToCardBeingDiscardedWithDictionary:dict andCompletionHandler:^ {
+                        dispatch_async(global_queue, ^{
+                            [self cardDiscarded];
+                        });
+                    }];
+                }
+                else {
+                    NSLog(@"%s: delegate does not conform to protocol", __PRETTY_FUNCTION__);
+                }
             }
-        }
-        [self setState:0];
-        [player.hand sortBySuit];
-        [player.hand sortByValue];
-        __block NSMutableDictionary * dict = [self gameDict];
-        [dict setObject:@(tag) forKey:@"discard"];
-        if( [delegate conformsToProtocol:@protocol(Three13GameDelegate)] ) {
-            [delegate respondToCardBeingDiscardedWithDictionary:dict andCompletionHandler:^ {
-                dispatch_async(global_queue, ^{
-                    [self cardDiscarded];
-                });
-            }];
-        }
-        else {
-            NSLog(@"%s: delegate does not conform to protocol", __PRETTY_FUNCTION__);
+            else {
+                NSLog(@"Error, %d is not a valid card to discard!", tag);
+            }
         }
     }
 }
