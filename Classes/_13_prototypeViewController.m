@@ -78,8 +78,11 @@
     
     [dataSource addObserver:self forKeyPath:@"level" options:0 context:nil];
     [dataSource addObserver:self forKeyPath:@"round" options:0 context:nil];
-    [dataSource addObserver:self forKeyPath:@"currentScore" options:0 context:nil];
-    [dataSource addObserver:self forKeyPath:@"totalScore" options:0 context:nil];
+    
+    for (id player in dataSource.players) {
+        [player addObserver:self forKeyPath:@"currentScore" options:0 context:nil];
+        [player addObserver:self forKeyPath:@"totalScore" options:0 context:nil];
+    }
     
     aboveFrame = belowFrame;
     //aboveFrame = CGRectMake(self.view.frame.size.width/2, -100, w, h);
@@ -119,9 +122,8 @@
     levelLabel.textColor = [UIColor whiteColor];
     levelLabel.shadowColor = [UIColor blackColor];
     levelLabel.shadowOffset = CGSizeMake(1, 1);
-#warning Not showing scores for now
-//    scoreLabel.text = [NSString stringWithFormat:@"Current Score: %d", dataSource.currentScore];
-//    totalScoreLabel.text = [NSString stringWithFormat:@"Total Score: %d", dataSource.totalScore];
+    scoreLabel.text = [NSString stringWithFormat:@"Current Score: %d", [dataSource currentScoreForPlayerWithIndex:dataSource.currentPlayer]];
+    totalScoreLabel.text = [NSString stringWithFormat:@"Total Score: %d", [dataSource totalScoreForPlayerWithIndex:dataSource.currentPlayer]];
     roundLabel.text = [NSString stringWithFormat:@"Round: %d", dataSource.round];
     levelLabel.text = [NSString stringWithFormat:@"Level: %d", dataSource.level];
     scoreLabel.tag = 106;
@@ -272,16 +274,18 @@
         });
     }
     
-    if ([keyPath isEqualToString:@"currentScore"] && [object isEqual:dataSource] ) {
+    if ([keyPath isEqualToString:@"currentScore"] && [object isEqual:dataSource.players[dataSource.currentPlayer]] ) {
         //        NSLog(@"Current score %d", game.currentScore);
-#warning Not showing scores for now
-//        scoreLabel.text = [NSString stringWithFormat:@"Current Score: %d", dataSource.currentScore];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            scoreLabel.text = [NSString stringWithFormat:@"Current Score: %@", [object valueForKeyPath:@"currentScore"]];
+        });
     }
     
-    if ([keyPath isEqualToString:@"totalScore"] && [object isEqual:dataSource] ) {
+    if ([keyPath isEqualToString:@"totalScore"] && [object isEqual:dataSource.players[dataSource.currentPlayer]] ) {
         //        NSLog(@"Total score %d", game.totalScore);
-#warning Not showing scores for now
-//        totalScoreLabel.text = [NSString stringWithFormat:@"Total Score: %d", dataSource.totalScore];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            totalScoreLabel.text = [NSString stringWithFormat:@"Total Score: %@", [object valueForKeyPath:@"totalScore"]];
+        });
     }
 }
 
@@ -561,6 +565,12 @@
 	// Release any retained subviews of the main view.
 	// e.g. self.myOutlet = nil;
     self.scoreLabel = nil;
+    
+    for (id player in dataSource.players) {
+        [player removeObserver:self forKeyPath:@"currentScore"];
+        [player removeObserver:self forKeyPath:@"totalScore"];
+    }
+
 }
 
 
