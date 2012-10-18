@@ -260,12 +260,16 @@
 - (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
     if ([keyPath isEqualToString:@"level"] && [object isEqual:dataSource] ) {
         //        NSLog(@"On level %d", game.level);
-        levelLabel.text = [NSString stringWithFormat:@"Level: %d", dataSource.level];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            levelLabel.text = [NSString stringWithFormat:@"Level: %d", dataSource.level];
+        });
     }
     
     if ([keyPath isEqualToString:@"round"] && [object isEqual:dataSource] ) {
         //        NSLog(@"On round %d", game.round);
-        roundLabel.text = [NSString stringWithFormat:@"Round: %d", dataSource.round];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.roundLabel.text = [NSString stringWithFormat:@"Round: %d", dataSource.round];
+        });
     }
     
     if ([keyPath isEqualToString:@"currentScore"] && [object isEqual:dataSource] ) {
