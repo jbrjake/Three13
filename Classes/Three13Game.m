@@ -70,6 +70,7 @@
             // Deal new mystery/known cards
             knownCard = [deck draw];
             mysteryCard = [deck draw];
+            [self iteratePlayers];
             if (players.count == [players indexOfObject:player]+1) {
                 // If this is the last player, start a new round
                 [self startNewRound];
@@ -86,6 +87,7 @@
                 // On to the next player
                 knownCard = [deck draw];
                 mysteryCard = [deck draw];
+                [self iteratePlayers];
             }
             break;
         case  1:
@@ -97,6 +99,7 @@
                 // On to the next player
                 knownCard = [deck draw];
                 mysteryCard = [deck draw];
+                [self iteratePlayers];
             }
             break;
         default:
@@ -227,6 +230,7 @@
 -(void) startNewLevel {
     [deck reinitialize];
     [self setRound:1];
+    [self setCurrentPlayer:0];
     [self deal:level];
     if( [delegate conformsToProtocol:@protocol(Three13GameDelegate)] ) {
         [delegate respondToStartOfLevelWithDictionary:[self gameDict]];
@@ -239,6 +243,7 @@
 
 -(void) startNewRound {
     [self setRound:round+1];
+    [self setCurrentPlayer:0];
     if( [delegate conformsToProtocol:@protocol(Three13GameDelegate)] ) {
         [delegate respondToStartOfRoundWithDictionary:[self gameDict]];
     }
