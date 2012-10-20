@@ -74,7 +74,7 @@
             // Deal new mystery/known cards
             knownCard = [deck draw];
             mysteryCard = [deck draw];
-            [self iteratePlayers];
+            [self startNewTurn];
             if (players.count == [players indexOfObject:player]+1) {
                 // If this is the last player, start a new round
                 [self startNewRound];
@@ -91,7 +91,7 @@
                 // On to the next player
                 knownCard = [deck draw];
                 mysteryCard = [deck draw];
-                [self iteratePlayers];
+                [self startNewTurn];
             }
             break;
         case  1:
@@ -103,7 +103,7 @@
                 // On to the next player
                 knownCard = [deck draw];
                 mysteryCard = [deck draw];
-                [self iteratePlayers];
+                [self startNewTurn];
             }
             break;
         default:
@@ -250,6 +250,16 @@
     [self setCurrentPlayer:0];
     if( [delegate conformsToProtocol:@protocol(Three13GameDelegate)] ) {
         [delegate respondToStartOfRoundWithDictionary:[self gameDict]];
+    }
+    else {
+        NSLog(@"%s: delegate does not conform to protocol", __PRETTY_FUNCTION__);
+    }
+}
+
+-(void) startNewTurn {
+    [self iteratePlayers];
+    if( [delegate conformsToProtocol:@protocol(Three13GameDelegate)] ) {
+        [delegate respondToStartOfTurnWithDictionary:[self gameDict]];
     }
     else {
         NSLog(@"%s: delegate does not conform to protocol", __PRETTY_FUNCTION__);
