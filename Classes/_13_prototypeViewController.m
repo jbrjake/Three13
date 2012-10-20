@@ -500,35 +500,30 @@
 
 -(void) turnStarts:(NSMutableDictionary *)dict {
     [self displayMessage:[NSString stringWithFormat:@"Player %d's Turn", dataSource.currentPlayer+1]];
-
-    NSMutableArray * players = [dict objectForKey:@"players"];
-
-    // Remove old hand
-    NSInteger currentPlayer = [[dict objectForKey:@"currentPlayer"] intValue];
-    if (currentPlayer > 0 ) {
-        // We need to remove the previous player's hand from view
-#warning This stuff should be refactored to not require such tight coupling between VC and model
-        Three13Player * lastPlayer = [players objectAtIndex:currentPlayer-1];
-        __block NSMutableArray * handArray = [lastPlayer.hand cardIDs];
-
-        [UIView animateWithDuration:0.5 animations:^{
-            for (int i = 0; i < [handArray count]; i++) {
-                NSInteger tag = [[handArray objectAtIndex:i] intValue];
-                Three13CardView * view = (Three13CardView*)[self.view viewWithTag:tag];
-                [self.view bringSubviewToFront:view];
-                view.image = [imagesArray lastObject]; //back image
-                view.frame = aboveFrame;
-            }
-        }
-        completion:NULL];
-    }
     
-    // Set up new hand
-    Three13Player * player = [players objectAtIndex:currentPlayer];
-    __block NSMutableArray * handArray = [player.hand cardIDs];;
+    NSMutableArray * players = [dict objectForKey:@"players"];
+    NSInteger currentPlayerIndex = [[dict objectForKey:@"currentPlayer"] intValue];
+    Three13Player * currentPlayer = [players objectAtIndex:currentPlayerIndex];
+    __block NSMutableArray * handArray = [currentPlayer.hand cardIDs];;
     __block NSMutableArray * deckArray = [dict objectForKey:@"deck"];
     
     [UIView animateWithDuration:0.5 animations:^{
+		if (currentPlayerIndex > 0)
+		{
+            Three13Player * lastPlayer = [players objectAtIndex:currentPlayerIndex-1];
+            __block NSMutableArray * lastHandArray = [lastPlayer.hand cardIDs];
+			// We need to remove the previous player's hand from view
+#warning This stuff should be refactored to not require such tight coupling between VC and model
+	        for (int i = 0; i < [lastHandArray count]; i++) {
+	            NSInteger tag = [[lastHandArray objectAtIndex:i] intValue];
+	            Three13CardView * view = (Three13CardView*)[self.view viewWithTag:tag];
+	            [self.view bringSubviewToFront:view];
+	            view.image = [imagesArray lastObject]; //back image
+	            view.frame = aboveFrame;
+	        }
+		}
+        
+	    // Set up new hand
         for (int i = 0; i < [handArray count]; i++) {
             NSInteger tag = [[handArray objectAtIndex:i] intValue];
             CGRect frame = [[handCardFrames objectAtIndex:i] CGRectValue];
@@ -543,36 +538,30 @@
             Three13CardView * cardView = (Three13CardView*)[self.view viewWithTag:tagInt];
             cardView.frame = aboveFrame;
         }
+		
+	    // Setup known and unknown
+	    NSInteger knownID = [ [dict objectForKey:@"known"] intValue];
+	    NSInteger mysteryID = [ [dict objectForKey:@"mystery"] intValue];
+	    [ (Three13CardView*)[self.view viewWithTag:mysteryID] setImage:[imagesArray lastObject]];
+	    [ (Three13CardView*)[self.view viewWithTag:knownID] setImage:[imagesArray lastObject]];
+		
+        [self.view viewWithTag:knownID].userInteractionEnabled = NO;
+        [self.view viewWithTag:mysteryID].userInteractionEnabled = NO;
+        [self.view viewWithTag:knownID].frame = knownCardFrame;
+        [self.view viewWithTag:mysteryID].frame = mysteryCardFrame;
     }
     completion:^(BOOL finished) {
         //Start round
         for( NSNumber * tag in handArray) {
             [self flipViewFor:tag];
         }
-//        [self roundStarts:dict];
-    }];
-
-    // Setup known and unknown
-    NSInteger knownID = [ [dict objectForKey:@"known"] intValue];
-    NSInteger mysteryID = [ [dict objectForKey:@"mystery"] intValue];
-    [ (Three13CardView*)[self.view viewWithTag:mysteryID] setImage:[imagesArray lastObject]];
-    [ (Three13CardView*)[self.view viewWithTag:knownID] setImage:[imagesArray lastObject]];
-    [UIView transitionWithView:nil duration:0.5 options:UIViewAnimationOptionTransitionFlipFromLeft animations:^{
-        [self.view viewWithTag:knownID].userInteractionEnabled = NO;
-        [self.view viewWithTag:mysteryID].userInteractionEnabled = NO;
-        [self.view viewWithTag:knownID].frame = knownCardFrame;
-        [self.view viewWithTag:mysteryID].frame = mysteryCardFrame;
-    } completion:^(BOOL finished) {
         [self flipViewFor:[dict objectForKey:@"known"]];
         //Reveal score labels
-        [UIView transitionWithView:nil duration:0.5 options:0 animations:^{
-            scoreLabel.alpha = 1.0;
-            totalScoreLabel.alpha = 1.0;
-            roundLabel.alpha = 1.0;
-            levelLabel.alpha = 1.0;
-        } completion: NULL
-         ];
-    }];    
+        scoreLabel.alpha = 1.0;
+        totalScoreLabel.alpha = 1.0;
+        roundLabel.alpha = 1.0;
+        levelLabel.alpha = 1.0;
+    }];
 }
 
 -(void) knownChosen:(NSMutableDictionary *)dict {
