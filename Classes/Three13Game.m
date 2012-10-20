@@ -268,9 +268,8 @@
     [self startNewLevel];
 }
 
--(void) cardDiscarded {
-#warning Assuming just one player for now.
-    [self checkForWinWithPlayer:[players objectAtIndex:0]];
+-(void) cardDiscardedByPlayerWithIndex:(NSInteger)index {
+    [self checkForWinWithPlayer:[players objectAtIndex:index]];
 }
 
 

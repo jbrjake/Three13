@@ -34,7 +34,7 @@
 -(void) gameStarted;
 -(void) startNewLevel;
 -(void) startNewRound;
--(void) cardDiscarded;
+-(void) cardDiscardedByPlayerWithIndex:(NSInteger)index;
 -(void) endLevel;
 -(void) levelEnded;
 -(void) iteratePlayers;
