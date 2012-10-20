@@ -191,8 +191,7 @@
         }
     }
  
-#warning Assuming one player for now
-    [dataSource selectCardWith:rightTag byPlayerWithIndex:0];
+    [dataSource selectCardWith:rightTag byPlayerWithIndex:dataSource.currentPlayer];
 }
 
 #pragma mark UI helpers
@@ -346,8 +345,7 @@
 
 - (void) respondToCardBeingDiscardedWithDictionary:(NSMutableDictionary*)dict andCompletionHandler:(void (^)())completionHandler {
     NSMutableArray * players = [dict objectForKey:@"players"];
-#warning Assuming one player for now
-    Three13Player * player = [players objectAtIndex:0];
+    Three13Player * player = [players objectAtIndex:[[dict objectForKey:@"currentPlayer"]intValue]];
     __block NSMutableArray * handArray = [player.hand cardIDs];;
     NSLog(@"Hand is %@", handArray);
     __block NSInteger discardTag = [[dict objectForKey:@"discard"] intValue];
@@ -376,8 +374,7 @@
 - (void) respondToEndOfLevelWithDictionary:(NSMutableDictionary*)dict andCompletionHandler:(void (^)())completionHandler {
 
     NSMutableArray * players = [dict objectForKey:@"players"];
-#warning Assuming one player for now
-    Three13Player * player = [players objectAtIndex:0];
+    Three13Player * player = [players objectAtIndex:[[dict objectForKey:@"currentPlayer"]intValue]];
     __block NSMutableArray * handArray = [player.hand cardIDs];;
     __block NSMutableArray * deckArray = [dict objectForKey:@"deck"];
 
@@ -418,8 +415,7 @@
     [self displayMessage:[NSString stringWithFormat:@"Level %d", dataSource.level]];
 
     NSMutableArray * players = [dict objectForKey:@"players"];
-#warning Assuming one player for now
-    Three13Player * player = [players objectAtIndex:0];
+    Three13Player * player = [players objectAtIndex:[[dict objectForKey:@"currentPlayer"]intValue]];
     __block NSMutableArray * handArray = [player.hand cardIDs];;
     __block NSMutableArray * deckArray = [dict objectForKey:@"deck"];
     
@@ -502,8 +498,7 @@
     [knownThree13CardView.layer removeAnimationForKey:@"animateOpacity"];
 */
     NSMutableArray * players = [dict objectForKey:@"players"];
-#warning Assuming one player for now
-    Three13Player * player = [players objectAtIndex:0];
+    Three13Player * player = [players objectAtIndex:[[dict objectForKey:@"currentPlayer"]intValue]];
     NSMutableArray * handArray = [player.hand cardIDs];;
     NSInteger knownID = [[dict objectForKey:@"known"] intValue];
     NSInteger mysteryID = [[dict objectForKey:@"mystery"] intValue];
@@ -522,8 +517,7 @@
     [knownThree13CardView.layer removeAnimationForKey:@"animateOpacity"];
 */
     NSMutableArray * players = [dict objectForKey:@"players"];
-#warning Assuming one player for now
-    Three13Player * player = [players objectAtIndex:0];
+    Three13Player * player = [players objectAtIndex:[[dict objectForKey:@"currentPlayer"]intValue]];
     NSMutableArray * handArray = [player.hand cardIDs];;
     NSInteger knownID = [[dict objectForKey:@"known"] intValue];
     NSInteger mysteryID = [[dict objectForKey:@"mystery"] intValue];
