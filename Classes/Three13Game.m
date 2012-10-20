@@ -58,6 +58,9 @@
  */
 -(void) iteratePlayers {
     self.currentPlayer++;
+    if (currentPlayer > players.count - 1) {
+        currentPlayer = 0;
+    }
 }
 
 -(void) checkForWinWithPlayer:(Three13Player* )player {
