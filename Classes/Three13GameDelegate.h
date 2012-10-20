@@ -37,6 +37,14 @@
 - (void) respondToStartOfRoundWithDictionary:(NSMutableDictionary*)dict;
 
 /**
+ * @brief Informs the delegate a player is about to take a turn in a round
+ * The delegate view controller should respond to the event
+ * asynchronously and return right away.
+ * @param dict The current game state, from Three13Game's gameDict: method
+ */
+- (void) respondToStartOfTurnWithDictionary:(NSMutableDictionary*)dict;
+
+/**
  * @brief Informs the delegate a known card has been selected
  * The delegate view controller should respond to the event
  * asynchronously and return right away.
