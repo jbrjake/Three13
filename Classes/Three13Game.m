@@ -21,8 +21,9 @@
         state = -1;
         level = 3;
         round = 1;
-#warning Assuming just one player for now
+#warning Assuming pass and play for now
         players = [[NSMutableArray alloc] init];
+        [players addObject: [[Three13Player alloc] init] ];
         [players addObject: [[Three13Player alloc] init] ];
         global_queue = dispatch_get_global_queue(0, 0);
     }
