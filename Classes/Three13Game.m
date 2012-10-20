@@ -195,7 +195,7 @@
                 if( [delegate conformsToProtocol:@protocol(Three13GameDelegate)] ) {
                     [delegate respondToCardBeingDiscardedWithDictionary:dict andCompletionHandler:^ {
                         dispatch_async(global_queue, ^{
-                            [self cardDiscarded];
+                            [self cardDiscardedByPlayerWithIndex:index];
                         });
                     }];
                 }
