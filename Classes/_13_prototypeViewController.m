@@ -190,8 +190,9 @@
             lastZorder = zOrder;
         }
     }
-    
-    [dataSource selectCardWith:rightTag];
+ 
+#warning Assuming one player for now
+    [dataSource selectCardWith:rightTag byPlayerWithIndex:0];
 }
 
 #pragma mark UI helpers

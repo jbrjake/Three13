@@ -32,8 +32,9 @@
 /**
  * @brief Informs the data source that the user is selecting a card to add to the hand or discard
  * @param tag The ID of the card the user is selecting
+ * @param index The index of the player in the players array who is selecting the card
  */
--(void) selectCardWith:(NSInteger)tag;
+-(void) selectCardWith:(NSInteger)tag byPlayerWithIndex:(NSInteger)index;
 
 /**
  * @brief Accessor for the score of a player in the current round

@@ -144,10 +144,14 @@
     }
 }
 
--(void) selectCardWith:(NSInteger)tag {
+-(void) selectCardWith:(NSInteger)tag byPlayerWithIndex:(NSInteger)index {
+
+    if (index != self.currentPlayer ) {
+        NSLog(@"Wrong player");
+        return;
+    }
     
-#warning Assuming just one player for now
-    Three13Player * player = [players objectAtIndex:0];
+    Three13Player * player = [players objectAtIndex:index];
     if (state == 0) {
         // Selecting card
         if( tag == knownCard.number) {
