@@ -89,6 +89,8 @@
             }
             else {
                 // On to the next player
+                // Setting the round to the level to make sure we end on this round
+                [self setRound:level];
                 knownCard = [deck draw];
                 mysteryCard = [deck draw];
                 [self startNewTurn];
@@ -101,6 +103,8 @@
             }
             else {
                 // On to the next player
+                // Setting the round to the level to make sure we end on this round
+                [self setRound:level];
                 knownCard = [deck draw];
                 mysteryCard = [deck draw];
                 [self startNewTurn];
