@@ -508,11 +508,16 @@
     __block NSMutableArray * deckArray = [dict objectForKey:@"deck"];
     
     [UIView animateWithDuration:0.5 animations:^{
-		if (currentPlayerIndex > 0)
+		if (currentPlayerIndex > 0 || [dict[@"round"] intValue] > 0)
 		{
-            Three13Player * lastPlayer = [players objectAtIndex:currentPlayerIndex-1];
-            __block NSMutableArray * lastHandArray = [lastPlayer.hand cardIDs];
 			// We need to remove the previous player's hand from view
+            int lastPlayerIndex = currentPlayerIndex - 1;
+            if (currentPlayerIndex == 0) {
+                // Then the last player was player[N], not -1
+                lastPlayerIndex = [dict[@"players"] count] - 1;
+            }
+            Three13Player * lastPlayer = [players objectAtIndex:lastPlayerIndex];
+            __block NSMutableArray * lastHandArray = [lastPlayer.hand cardIDs];
 #warning This stuff should be refactored to not require such tight coupling between VC and model
 	        for (int i = 0; i < [lastHandArray count]; i++) {
 	            NSInteger tag = [[lastHandArray objectAtIndex:i] intValue];
