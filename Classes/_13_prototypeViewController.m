@@ -522,45 +522,51 @@
 	            view.frame = aboveFrame;
 	        }
 		}
-        
-	    // Set up new hand
-        for (int i = 0; i < [handArray count]; i++) {
-            NSInteger tag = [[handArray objectAtIndex:i] intValue];
-            CGRect frame = [[handCardFrames objectAtIndex:i] CGRectValue];
-            Three13CardView * view = (Three13CardView*)[self.view viewWithTag:tag];
-            [self.view bringSubviewToFront:view];
-            view.image = [imagesArray lastObject]; //back image
-            view.frame = frame;
-            //            [self moveCardWithTag:view.tag toLocation:frame];
-        }
-        for (NSNumber * tag in deckArray) {
-            NSInteger tagInt = [tag intValue];
-            Three13CardView * cardView = (Three13CardView*)[self.view viewWithTag:tagInt];
-            cardView.frame = aboveFrame;
-        }
-		
-	    // Setup known and unknown
-	    NSInteger knownID = [ [dict objectForKey:@"known"] intValue];
-	    NSInteger mysteryID = [ [dict objectForKey:@"mystery"] intValue];
-	    [ (Three13CardView*)[self.view viewWithTag:mysteryID] setImage:[imagesArray lastObject]];
-	    [ (Three13CardView*)[self.view viewWithTag:knownID] setImage:[imagesArray lastObject]];
-		
-        [self.view viewWithTag:knownID].userInteractionEnabled = NO;
-        [self.view viewWithTag:mysteryID].userInteractionEnabled = NO;
-        [self.view viewWithTag:knownID].frame = knownCardFrame;
-        [self.view viewWithTag:mysteryID].frame = mysteryCardFrame;
     }
     completion:^(BOOL finished) {
-        //Start round
-        for( NSNumber * tag in handArray) {
-            [self flipViewFor:tag];
-        }
-        [self flipViewFor:[dict objectForKey:@"known"]];
-        //Reveal score labels
-        scoreLabel.alpha = 1.0;
-        totalScoreLabel.alpha = 1.0;
-        roundLabel.alpha = 1.0;
-        levelLabel.alpha = 1.0;
+	    [UIView animateWithDuration:0.5 animations:^{
+		    // Set up new hand
+	        for (int i = 0; i < [handArray count]; i++) {
+	            NSInteger tag = [[handArray objectAtIndex:i] intValue];
+	            CGRect frame = [[handCardFrames objectAtIndex:i] CGRectValue];
+	            Three13CardView * view = (Three13CardView*)[self.view viewWithTag:tag];
+	            [self.view bringSubviewToFront:view];
+	            view.image = [imagesArray lastObject]; //back image
+	            view.frame = frame;
+	            //            [self moveCardWithTag:view.tag toLocation:frame];
+	        }
+	        for (NSNumber * tag in deckArray) {
+	            NSInteger tagInt = [tag intValue];
+	            Three13CardView * cardView = (Three13CardView*)[self.view viewWithTag:tagInt];
+	            cardView.frame = aboveFrame;
+	        }
+	    }
+	    completion:^(BOOL finished) {
+	        //Start round
+	        for( NSNumber * tag in handArray) {
+	            [self flipViewFor:tag];
+	        }
+		    [UIView animateWithDuration:0.5 animations:^{
+			    // Setup known and unknown
+			    NSInteger knownID = [ [dict objectForKey:@"known"] intValue];
+			    NSInteger mysteryID = [ [dict objectForKey:@"mystery"] intValue];
+			    [ (Three13CardView*)[self.view viewWithTag:mysteryID] setImage:[imagesArray lastObject]];
+			    [ (Three13CardView*)[self.view viewWithTag:knownID] setImage:[imagesArray lastObject]];
+		
+		        [self.view viewWithTag:knownID].userInteractionEnabled = NO;
+		        [self.view viewWithTag:mysteryID].userInteractionEnabled = NO;
+		        [self.view viewWithTag:knownID].frame = knownCardFrame;
+		        [self.view viewWithTag:mysteryID].frame = mysteryCardFrame;
+		    }
+		    completion:^(BOOL finished) {
+		        [self flipViewFor:[dict objectForKey:@"known"]];
+		        //Reveal score labels
+		        scoreLabel.alpha = 1.0;
+		        totalScoreLabel.alpha = 1.0;
+		        roundLabel.alpha = 1.0;
+		        levelLabel.alpha = 1.0;
+		    }];
+	    }];
     }];
 }
 
