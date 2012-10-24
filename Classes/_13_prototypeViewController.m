@@ -469,6 +469,11 @@
         [self flipViewFor:[dict objectForKey:@"known"]];
         //Reveal score labels
         [UIView transitionWithView:nil duration:0.5 options:0 animations:^{
+            
+            Three13Player * player = [dict[@"players"] objectAtIndex:[dict[@"currentPlayerIndex"]intValue]];
+            scoreLabel.text = [NSString stringWithFormat:@"Current Score: %d", player.currentScore];
+            totalScoreLabel.text = [NSString stringWithFormat:@"Total Score: %d", player.totalScore];
+
             scoreLabel.alpha = 1.0;
             totalScoreLabel.alpha = 1.0;
             roundLabel.alpha = 1.0;
@@ -562,6 +567,10 @@
 		    }
 		    completion:^(BOOL finished) {
 		        [self flipViewFor:[dict objectForKey:@"known"]];
+                
+                scoreLabel.text = [NSString stringWithFormat:@"Current Score: %d", currentPlayer.currentScore];
+                totalScoreLabel.text = [NSString stringWithFormat:@"Total Score: %d", currentPlayer.totalScore];
+
 		        //Reveal score labels
 		        scoreLabel.alpha = 1.0;
 		        totalScoreLabel.alpha = 1.0;
