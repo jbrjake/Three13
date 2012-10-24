@@ -253,9 +253,12 @@
     
     // Check if it's time to end the level -- if someone went out
     NSString * levelString = [NSString stringWithFormat:@"%u", self.level];
-    if (currentPlayer == [self.firstPlayerOutForLevels[levelString] intValue]) {
-        [self endLevel];
-        return;
+
+    if (self.firstPlayerOutForLevels[levelString] != nil ) {
+        if (currentPlayer == [self.firstPlayerOutForLevels[levelString] intValue]) {
+            [self endLevel];
+            return;
+        }
     }
     
     if( [delegate conformsToProtocol:@protocol(Three13GameDelegate)] ) {
@@ -293,6 +296,10 @@
 
 
 -(void) levelEnded {
+    for (Three13Player * player in players) {
+        [player setTotalScore: player.totalScore + player.currentScore];
+    }
+    
     [self setLevel:level+1];
     [self startNewLevel];
 }
