@@ -29,6 +29,7 @@
 @property (nonatomic,strong) Three13Deck * deck;
 @property (nonatomic) NSInteger state;
 @property (nonatomic, strong) id <Three13GameDelegate> delegate;
+@property NSMutableDictionary * firstPlayerOutForLevels;
 
 -(void) deal: (NSInteger) cardNumber;
 -(void) gameStarted;

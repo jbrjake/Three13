@@ -460,9 +460,6 @@
     NSInteger mysteryID = [ [dict objectForKey:@"mystery"] intValue];
     [ (Three13CardView*)[self.view viewWithTag:mysteryID] setImage:[imagesArray lastObject]];
     [ (Three13CardView*)[self.view viewWithTag:knownID] setImage:[imagesArray lastObject]];
-    if (dataSource.round == dataSource.level ) {
-        [self displayMessage:[NSString stringWithFormat:@"Last Round!"]];
-    }
     [UIView transitionWithView:nil duration:0.5 options:UIViewAnimationOptionTransitionFlipFromLeft animations:^{
         [self.view viewWithTag:knownID].userInteractionEnabled = NO;
         [self.view viewWithTag:mysteryID].userInteractionEnabled = NO;

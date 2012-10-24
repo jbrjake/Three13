@@ -21,6 +21,7 @@
  * * -1: Waiting for turn
  * *  0: Selecting card
  * *  1: Discarding card
+ * *  2: Out (reached 0 points for the level)
  */
 @property (nonatomic) NSInteger state;
 

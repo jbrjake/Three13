@@ -25,6 +25,7 @@
         players = [[NSMutableArray alloc] init];
         [players addObject: [[Three13Player alloc] init] ];
         [players addObject: [[Three13Player alloc] init] ];
+        _firstPlayerOutForLevels = [[NSMutableDictionary alloc] init];
         global_queue = dispatch_get_global_queue(0, 0);
     }
     return self;
@@ -67,9 +68,12 @@
     //First check for going out
     //Then check for out of time
     int ret = [player checkForWinWith:[self gameDict]];
-    
+
+    // This is for Case 1, but ARC doesn't like objects alloc'd in switches
+    NSString * levelString = [NSString stringWithFormat:@"%u", self.level];
+
     switch (ret) {
-        case -1:
+        case 0:
             // Keep going
             // Deal new mystery/known cards
             knownCard = [deck draw];
@@ -80,35 +84,19 @@
                 [self startNewRound];
             }
             break;
-        case  0:
-            // Out of rounds
-            [player setTotalScore:player.totalScore + player.hand.score];
-            if (players.count == [players indexOfObject:player]+1) {
-                // This is the last player to score, end level
-                [self endLevel];
-            }
-            else {
-                // On to the next player
-                // Setting the round to the level to make sure we end on this round
-                [self setRound:level];
-                knownCard = [deck draw];
-                mysteryCard = [deck draw];
-                [self startNewTurn];
-            }
-            break;
         case  1:
             // It's a win
-            if (players.count == [players indexOfObject:player]+1) {
-                [self endLevel];
+            player.state = 2;
+
+            // Record the win
+            if (self.firstPlayerOutForLevels[levelString] == nil) {
+                self.firstPlayerOutForLevels[levelString] = @([players indexOfObject:player]);
             }
-            else {
-                // On to the next player
-                // Setting the round to the level to make sure we end on this round
-                [self setRound:level];
-                knownCard = [deck draw];
-                mysteryCard = [deck draw];
-                [self startNewTurn];
-            }
+           
+            // On to the next player
+            knownCard = [deck draw];
+            mysteryCard = [deck draw];
+            [self startNewTurn];
             break;
         default:
             break;
@@ -262,6 +250,14 @@
 
 -(void) startNewTurn {
     [self iteratePlayers];
+    
+    // Check if it's time to end the level -- if someone went out
+    NSString * levelString = [NSString stringWithFormat:@"%u", self.level];
+    if (currentPlayer == [self.firstPlayerOutForLevels[levelString] intValue]) {
+        [self endLevel];
+        return;
+    }
+    
     if( [delegate conformsToProtocol:@protocol(Three13GameDelegate)] ) {
         [delegate respondToStartOfTurnWithDictionary:[self gameDict]];
     }
