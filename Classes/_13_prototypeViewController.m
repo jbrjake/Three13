@@ -456,6 +456,7 @@
 //    NSLog(@"Game notified view controller of start round!");
 //    mysteryThree13CardView = (UIImageView*)[self.view viewWithTag:game.mysteryCard.number];
 //    knownThree13CardView = (UIImageView*)[self.view viewWithTag:game.knownCard.number];
+    [self displayMessage:[NSString stringWithFormat:@"Player %d's Turn", dataSource.currentPlayer+1]];
     NSInteger knownID = [ [dict objectForKey:@"known"] intValue];
     NSInteger mysteryID = [ [dict objectForKey:@"mystery"] intValue];
     [ (Three13CardView*)[self.view viewWithTag:mysteryID] setImage:[imagesArray lastObject]];
