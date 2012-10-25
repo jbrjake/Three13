@@ -110,7 +110,7 @@
     }
     
     self.face = [UIImage imageNamed:[NSString stringWithFormat:@"%@-%@-150.png", suitURL, valueURL]];
-    self.back = [UIImage imageNamed:@"back-blue-150-2.png"];
+    self.back = [UIImage imageNamed:@"back-blue-150-1.png"];
     
 }
 
