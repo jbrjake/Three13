@@ -19,6 +19,7 @@
 		740B8A2312BA776C00E0AB34 /* Three13Game.m in Sources */ = {isa = PBXBuildFile; fileRef = 740B8A2212BA776C00E0AB34 /* Three13Game.m */; };
 		740B8C9312BBCA4500E0AB34 /* green-leather.png in Resources */ = {isa = PBXBuildFile; fileRef = 740B8C9212BBCA4500E0AB34 /* green-leather.png */; };
 		740B904A12BFFEE600E0AB34 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 740B904912BFFEE600E0AB34 /* QuartzCore.framework */; };
+		7453688B163A04E500AC1535 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7453688A163A04E500AC1535 /* Default-568h@2x.png */; };
 		746E006115A4CA7100BB9F22 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 746E006015A4CA7100BB9F22 /* SenTestingKit.framework */; };
 		746E006215A4CA7100BB9F22 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		746E006315A4CA7100BB9F22 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
@@ -226,6 +227,7 @@
 		740B8C9212BBCA4500E0AB34 /* green-leather.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "green-leather.png"; sourceTree = "<group>"; };
 		740B904912BFFEE600E0AB34 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		743454C115A77C8D00B9C55A /* Three13GameDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Three13GameDelegate.h; sourceTree = "<group>"; };
+		7453688A163A04E500AC1535 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		746E005F15A4CA7100BB9F22 /* 313-test.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "313-test.octest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		746E006015A4CA7100BB9F22 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		746E006615A4CA7100BB9F22 /* 313-test-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "313-test-Info.plist"; sourceTree = "<group>"; };
@@ -465,6 +467,7 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
+				7453688A163A04E500AC1535 /* Default-568h@2x.png */,
 				080E96DDFE201D6D7F000001 /* Classes */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
@@ -1000,6 +1003,7 @@
 				7474D41312DD821A0067D62D /* spades-q-150.png in Resources */,
 				7478728515A0C0240000EE2E /* green-leather@2x.png in Resources */,
 				7478728715A0C29A0000EE2E /* back-blue-150-1@2x.png in Resources */,
+				7453688B163A04E500AC1535 /* Default-568h@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
