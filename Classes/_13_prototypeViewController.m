@@ -78,8 +78,11 @@
     
     [dataSource addObserver:self forKeyPath:@"level" options:0 context:nil];
     [dataSource addObserver:self forKeyPath:@"round" options:0 context:nil];
-    [dataSource addObserver:self forKeyPath:@"currentScore" options:0 context:nil];
-    [dataSource addObserver:self forKeyPath:@"totalScore" options:0 context:nil];
+    
+    for (id player in dataSource.players) {
+        [player addObserver:self forKeyPath:@"currentScore" options:0 context:nil];
+        [player addObserver:self forKeyPath:@"totalScore" options:0 context:nil];
+    }
     
     aboveFrame = belowFrame;
     //aboveFrame = CGRectMake(self.view.frame.size.width/2, -100, w, h);
@@ -119,8 +122,8 @@
     levelLabel.textColor = [UIColor whiteColor];
     levelLabel.shadowColor = [UIColor blackColor];
     levelLabel.shadowOffset = CGSizeMake(1, 1);
-    scoreLabel.text = [NSString stringWithFormat:@"Current Score: %d", dataSource.currentScore];
-    totalScoreLabel.text = [NSString stringWithFormat:@"Total Score: %d", dataSource.totalScore];
+    scoreLabel.text = [NSString stringWithFormat:@"Current Score: %d", [dataSource currentScoreForPlayerWithIndex:dataSource.currentPlayer]];
+    totalScoreLabel.text = [NSString stringWithFormat:@"Total Score: %d", [dataSource totalScoreForPlayerWithIndex:dataSource.currentPlayer]];
     roundLabel.text = [NSString stringWithFormat:@"Round: %d", dataSource.round];
     levelLabel.text = [NSString stringWithFormat:@"Level: %d", dataSource.level];
     scoreLabel.tag = 106;
@@ -187,8 +190,8 @@
             lastZorder = zOrder;
         }
     }
-    
-    [dataSource selectCardWith:rightTag];
+ 
+    [dataSource selectCardWith:rightTag byPlayerWithIndex:dataSource.currentPlayer];
 }
 
 #pragma mark UI helpers
@@ -205,6 +208,7 @@
     messageView.textAlignment = UITextAlignmentCenter;
     messageView.adjustsFontSizeToFitWidth = YES;
     messageView.textColor = [UIColor whiteColor];
+    messageView.tag = 111;
     
     [self.view addSubview:messageView];
     
@@ -258,22 +262,30 @@
 - (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
     if ([keyPath isEqualToString:@"level"] && [object isEqual:dataSource] ) {
         //        NSLog(@"On level %d", game.level);
-        levelLabel.text = [NSString stringWithFormat:@"Level: %d", dataSource.level];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            levelLabel.text = [NSString stringWithFormat:@"Level: %d", dataSource.level];
+        });
     }
     
     if ([keyPath isEqualToString:@"round"] && [object isEqual:dataSource] ) {
         //        NSLog(@"On round %d", game.round);
-        roundLabel.text = [NSString stringWithFormat:@"Round: %d", dataSource.round];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.roundLabel.text = [NSString stringWithFormat:@"Round: %d", dataSource.round];
+        });
     }
     
-    if ([keyPath isEqualToString:@"currentScore"] && [object isEqual:dataSource] ) {
+    if ([keyPath isEqualToString:@"currentScore"] && [object isEqual:dataSource.players[dataSource.currentPlayer]] ) {
         //        NSLog(@"Current score %d", game.currentScore);
-        scoreLabel.text = [NSString stringWithFormat:@"Current Score: %d", dataSource.currentScore];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            scoreLabel.text = [NSString stringWithFormat:@"Current Score: %@", [object valueForKeyPath:@"currentScore"]];
+        });
     }
     
-    if ([keyPath isEqualToString:@"totalScore"] && [object isEqual:dataSource] ) {
+    if ([keyPath isEqualToString:@"totalScore"] && [object isEqual:dataSource.players[dataSource.currentPlayer]] ) {
         //        NSLog(@"Total score %d", game.totalScore);
-        totalScoreLabel.text = [NSString stringWithFormat:@"Total Score: %d", dataSource.totalScore];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            totalScoreLabel.text = [NSString stringWithFormat:@"Total Score: %@", [object valueForKeyPath:@"totalScore"]];
+        });
     }
 }
 
@@ -315,6 +327,14 @@
     });
 }
 
+- (void) respondToStartOfTurnWithDictionary:(NSMutableDictionary*)dict {
+    dispatch_queue_t queue = dispatch_get_main_queue();
+    __block NSMutableDictionary * aDict = dict;
+    dispatch_async(queue, ^{
+        [self turnStarts:aDict];
+    });
+    
+}
 - (void) respondToKnownCardChosenWithDictionary:(NSMutableDictionary*)dict {
     dispatch_queue_t queue = dispatch_get_main_queue();
     __block NSMutableDictionary * aDict = dict;
@@ -332,7 +352,9 @@
 }
 
 - (void) respondToCardBeingDiscardedWithDictionary:(NSMutableDictionary*)dict andCompletionHandler:(void (^)())completionHandler {
-    __block NSMutableArray * handArray = [dict objectForKey:@"hand"];
+    NSMutableArray * players = [dict objectForKey:@"players"];
+    Three13Player * player = [players objectAtIndex:[[dict objectForKey:@"currentPlayer"]intValue]];
+    __block NSMutableArray * handArray = [player.hand cardIDs];;
     NSLog(@"Hand is %@", handArray);
     __block NSInteger discardTag = [[dict objectForKey:@"discard"] intValue];
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -359,11 +381,14 @@
 
 - (void) respondToEndOfLevelWithDictionary:(NSMutableDictionary*)dict andCompletionHandler:(void (^)())completionHandler {
 
-    __block NSMutableArray * handArray = [dict objectForKey:@"hand"];
+    NSMutableArray * players = [dict objectForKey:@"players"];
+    Three13Player * player = [players objectAtIndex:[[dict objectForKey:@"currentPlayer"]intValue]];
+    __block NSMutableArray * handArray = [player.hand cardIDs];;
     __block NSMutableArray * deckArray = [dict objectForKey:@"deck"];
 
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self displayMessage:[NSString stringWithFormat:@"Scored %d", dataSource.currentScore]];
+#warning Not showing scores for now
+//        [self displayMessage:[NSString stringWithFormat:@"Scored %d", dataSource.currentScore]];
         
         [UIView animateWithDuration:0.5 animations:^{
             for (int i = 0; i < [handArray count]; i++) {
@@ -397,7 +422,9 @@
     
     [self displayMessage:[NSString stringWithFormat:@"Level %d", dataSource.level]];
 
-    __block NSMutableArray * handArray = [dict objectForKey:@"hand"];
+    NSMutableArray * players = [dict objectForKey:@"players"];
+    Three13Player * player = [players objectAtIndex:[[dict objectForKey:@"currentPlayer"]intValue]];
+    __block NSMutableArray * handArray = [player.hand cardIDs];;
     __block NSMutableArray * deckArray = [dict objectForKey:@"deck"];
     
     [UIView animateWithDuration:0.5 animations:^{
@@ -429,13 +456,11 @@
 //    NSLog(@"Game notified view controller of start round!");
 //    mysteryThree13CardView = (UIImageView*)[self.view viewWithTag:game.mysteryCard.number];
 //    knownThree13CardView = (UIImageView*)[self.view viewWithTag:game.knownCard.number];
+    [self displayMessage:[NSString stringWithFormat:@"Player %d's Turn", dataSource.currentPlayer+1]];
     NSInteger knownID = [ [dict objectForKey:@"known"] intValue];
     NSInteger mysteryID = [ [dict objectForKey:@"mystery"] intValue];
     [ (Three13CardView*)[self.view viewWithTag:mysteryID] setImage:[imagesArray lastObject]];
     [ (Three13CardView*)[self.view viewWithTag:knownID] setImage:[imagesArray lastObject]];
-    if (dataSource.round == dataSource.level ) {
-        [self displayMessage:[NSString stringWithFormat:@"Last Round!"]];
-    }
     [UIView transitionWithView:nil duration:0.5 options:UIViewAnimationOptionTransitionFlipFromLeft animations:^{
         [self.view viewWithTag:knownID].userInteractionEnabled = NO;
         [self.view viewWithTag:mysteryID].userInteractionEnabled = NO;
@@ -445,6 +470,11 @@
         [self flipViewFor:[dict objectForKey:@"known"]];
         //Reveal score labels
         [UIView transitionWithView:nil duration:0.5 options:0 animations:^{
+            
+            Three13Player * player = [dict[@"players"] objectAtIndex:[dict[@"currentPlayerIndex"]intValue]];
+            scoreLabel.text = [NSString stringWithFormat:@"Current Score: %d", player.currentScore];
+            totalScoreLabel.text = [NSString stringWithFormat:@"Total Score: %d", player.totalScore];
+
             scoreLabel.alpha = 1.0;
             totalScoreLabel.alpha = 1.0;
             roundLabel.alpha = 1.0;
@@ -471,6 +501,87 @@
     }];
 }
 
+-(void) turnStarts:(NSMutableDictionary *)dict {
+    [self displayMessage:[NSString stringWithFormat:@"Player %d's Turn", dataSource.currentPlayer+1]];
+    
+    NSMutableArray * players = [dict objectForKey:@"players"];
+    NSInteger currentPlayerIndex = [[dict objectForKey:@"currentPlayer"] intValue];
+    Three13Player * currentPlayer = [players objectAtIndex:currentPlayerIndex];
+    __block NSMutableArray * handArray = [currentPlayer.hand cardIDs];;
+    __block NSMutableArray * deckArray = [dict objectForKey:@"deck"];
+    
+    [UIView animateWithDuration:0.5 animations:^{
+		if (currentPlayerIndex > 0 || [dict[@"round"] intValue] > 0)
+		{
+			// We need to remove the previous player's hand from view
+            int lastPlayerIndex = currentPlayerIndex - 1;
+            if (currentPlayerIndex == 0) {
+                // Then the last player was player[N], not -1
+                lastPlayerIndex = [dict[@"players"] count] - 1;
+            }
+            Three13Player * lastPlayer = [players objectAtIndex:lastPlayerIndex];
+            __block NSMutableArray * lastHandArray = [lastPlayer.hand cardIDs];
+#warning This stuff should be refactored to not require such tight coupling between VC and model
+	        for (int i = 0; i < [lastHandArray count]; i++) {
+	            NSInteger tag = [[lastHandArray objectAtIndex:i] intValue];
+	            Three13CardView * view = (Three13CardView*)[self.view viewWithTag:tag];
+	            [self.view bringSubviewToFront:view];
+	            view.image = [imagesArray lastObject]; //back image
+	            view.frame = aboveFrame;
+	        }
+		}
+    }
+    completion:^(BOOL finished) {
+	    [UIView animateWithDuration:0.5 animations:^{
+		    // Set up new hand
+	        for (int i = 0; i < [handArray count]; i++) {
+	            NSInteger tag = [[handArray objectAtIndex:i] intValue];
+	            CGRect frame = [[handCardFrames objectAtIndex:i] CGRectValue];
+	            Three13CardView * view = (Three13CardView*)[self.view viewWithTag:tag];
+	            [self.view bringSubviewToFront:view];
+	            view.image = [imagesArray lastObject]; //back image
+	            view.frame = frame;
+	            //            [self moveCardWithTag:view.tag toLocation:frame];
+	        }
+	        for (NSNumber * tag in deckArray) {
+	            NSInteger tagInt = [tag intValue];
+	            Three13CardView * cardView = (Three13CardView*)[self.view viewWithTag:tagInt];
+	            cardView.frame = aboveFrame;
+	        }
+	    }
+	    completion:^(BOOL finished) {
+	        //Start round
+	        for( NSNumber * tag in handArray) {
+	            [self flipViewFor:tag];
+	        }
+		    [UIView animateWithDuration:0.5 animations:^{
+			    // Setup known and unknown
+			    NSInteger knownID = [ [dict objectForKey:@"known"] intValue];
+			    NSInteger mysteryID = [ [dict objectForKey:@"mystery"] intValue];
+			    [ (Three13CardView*)[self.view viewWithTag:mysteryID] setImage:[imagesArray lastObject]];
+			    [ (Three13CardView*)[self.view viewWithTag:knownID] setImage:[imagesArray lastObject]];
+		
+		        [self.view viewWithTag:knownID].userInteractionEnabled = NO;
+		        [self.view viewWithTag:mysteryID].userInteractionEnabled = NO;
+		        [self.view viewWithTag:knownID].frame = knownCardFrame;
+		        [self.view viewWithTag:mysteryID].frame = mysteryCardFrame;
+		    }
+		    completion:^(BOOL finished) {
+		        [self flipViewFor:[dict objectForKey:@"known"]];
+                
+                scoreLabel.text = [NSString stringWithFormat:@"Current Score: %d", currentPlayer.currentScore];
+                totalScoreLabel.text = [NSString stringWithFormat:@"Total Score: %d", currentPlayer.totalScore];
+
+		        //Reveal score labels
+		        scoreLabel.alpha = 1.0;
+		        totalScoreLabel.alpha = 1.0;
+		        roundLabel.alpha = 1.0;
+		        levelLabel.alpha = 1.0;
+		    }];
+	    }];
+    }];
+}
+
 -(void) knownChosen:(NSMutableDictionary *)dict {
 //    NSLog(@"Game notified view controller of known chosen!");
 
@@ -478,7 +589,9 @@
     [mysteryThree13CardView.layer removeAnimationForKey:@"animateOpacity"];
     [knownThree13CardView.layer removeAnimationForKey:@"animateOpacity"];
 */
-    NSMutableArray * handArray = [dict objectForKey:@"hand"];
+    NSMutableArray * players = [dict objectForKey:@"players"];
+    Three13Player * player = [players objectAtIndex:[[dict objectForKey:@"currentPlayer"]intValue]];
+    NSMutableArray * handArray = [player.hand cardIDs];;
     NSInteger knownID = [[dict objectForKey:@"known"] intValue];
     NSInteger mysteryID = [[dict objectForKey:@"mystery"] intValue];
     CGRect frame = [[ handCardFrames objectAtIndex:handArray.count-1] CGRectValue];
@@ -495,7 +608,9 @@
     [mysteryThree13CardView.layer removeAnimationForKey:@"animateOpacity"];
     [knownThree13CardView.layer removeAnimationForKey:@"animateOpacity"];
 */
-    NSMutableArray * handArray = [dict objectForKey:@"hand"];
+    NSMutableArray * players = [dict objectForKey:@"players"];
+    Three13Player * player = [players objectAtIndex:[[dict objectForKey:@"currentPlayer"]intValue]];
+    NSMutableArray * handArray = [player.hand cardIDs];;
     NSInteger knownID = [[dict objectForKey:@"known"] intValue];
     NSInteger mysteryID = [[dict objectForKey:@"mystery"] intValue];
 
@@ -537,6 +652,12 @@
 	// Release any retained subviews of the main view.
 	// e.g. self.myOutlet = nil;
     self.scoreLabel = nil;
+    
+    for (id player in dataSource.players) {
+        [player removeObserver:self forKeyPath:@"currentScore"];
+        [player removeObserver:self forKeyPath:@"totalScore"];
+    }
+
 }
 
 

@@ -36,7 +36,7 @@
     }
 }
 
-/*
+/**
  * Random sort used from this blog post
  * http://zaldzbugz.wordpress.com/2010/07/16/randomly-sort-nsarray/
  */

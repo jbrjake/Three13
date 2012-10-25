@@ -9,6 +9,9 @@
 #import <UIKit/UIKit.h>
 #import "Three13Game.h"
 #import "Three13CardView.h"
+#warning Temporarily including the Player class in the VC for testing
+#import "Three13Player.h"
+
 @interface _13_prototypeViewController : UIViewController <Three13GameDelegate> {
 
     Three13Game * game;

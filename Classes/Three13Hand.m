@@ -41,7 +41,7 @@
  * @param k The number of elements to be in each combination generated
  * @param n The number of elements in the larger set from which each combination is drawn
  * @return 1 if there are more combinations, 0 if this is the last one available
- * @see combinationsOf:For:
+ * @see -(NSMutableArray*) combinationsOf:(NSInteger)k For:(NSSet*)set
  */
 int next_comb(int comb[], int k, int n) {
     int i = k - 1;

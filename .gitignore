@@ -13,7 +13,8 @@ build/*
 xcuserdata
 profile
 *.moved-aside
-
+DerivedData/*
+Doxygen/*
 .DS_Store
 Icon?
 
