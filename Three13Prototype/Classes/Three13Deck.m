@@ -94,7 +94,7 @@ int randomSort(id obj1, id obj2, void *context ) {
 - (NSString *) description {
 	NSString *desc = [NSString stringWithFormat:@"Three13Deck with %d cards\n",[self cardsRemaining]];
 	for(int x = 0; x < [self cardsRemaining]; x++) {
-		desc = [desc stringByAppendingFormat:@"%@\n",[[cards objectAtIndex:x] description]];
+		desc = [desc stringByAppendingFormat:@"%@\n",[cards[x] description]];
 	}
 	return desc;
 }

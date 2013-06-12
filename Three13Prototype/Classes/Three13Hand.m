@@ -32,7 +32,7 @@
 }
 
 -(Three13Card*) showCardAt: (NSInteger)index {
-    return [cards objectAtIndex:index];
+    return cards[index];
 }
 
 /**
@@ -82,14 +82,14 @@ int next_comb(int comb[], int k, int n) {
     // Initialize array and begin first entry
     for (i=0; i<k; ++i) {
         comb[i] = i;
-        [tempSet addObject:[setArray objectAtIndex:comb[i] ]];
+        [tempSet addObject:setArray[comb[i]]];
     }
     [combinations addObject:tempSet];
     
     while(next_comb(comb, k, n)) {
         tempSet = [[NSMutableSet alloc] init];
         for (i=0; i<k; ++i) {
-            [tempSet addObject:[setArray objectAtIndex:comb[i] ]];
+            [tempSet addObject:setArray[comb[i]]];
         }
         [combinations addObject:tempSet];
     }
