@@ -2,6 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:Three13-sprite-prototype/Three13-sprite-prototype.xcodeproj">
+   </FileRef>
+   <FileRef
       location = "group:Three13Prototype/313-prototype.xcodeproj">
    </FileRef>
 </Workspace>
