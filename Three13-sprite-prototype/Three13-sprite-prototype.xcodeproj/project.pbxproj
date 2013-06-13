@@ -25,6 +25,8 @@
 		7443EC18176A33F7006173D6 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7443EBF0176A33F7006173D6 /* UIKit.framework */; };
 		7443EC20176A33F7006173D6 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7443EC1E176A33F7006173D6 /* InfoPlist.strings */; };
 		7443EC22176A33F7006173D6 /* Three13_sprite_prototypeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7443EC21176A33F7006173D6 /* Three13_sprite_prototypeTests.m */; };
+		7443EC2D176A35AE006173D6 /* TTTCardSpriteNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 7443EC2C176A35AE006173D6 /* TTTCardSpriteNode.m */; };
+		7443EC2E176A35AE006173D6 /* TTTCardSpriteNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 7443EC2C176A35AE006173D6 /* TTTCardSpriteNode.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -62,6 +64,8 @@
 		7443EC1D176A33F7006173D6 /* Three13-sprite-prototypeTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Three13-sprite-prototypeTests-Info.plist"; sourceTree = "<group>"; };
 		7443EC1F176A33F7006173D6 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		7443EC21176A33F7006173D6 /* Three13_sprite_prototypeTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Three13_sprite_prototypeTests.m; sourceTree = "<group>"; };
+		7443EC2B176A35AE006173D6 /* TTTCardSpriteNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTTCardSpriteNode.h; sourceTree = "<group>"; };
+		7443EC2C176A35AE006173D6 /* TTTCardSpriteNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTTCardSpriteNode.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -131,6 +135,8 @@
 				7443EC07176A33F7006173D6 /* TTTViewController.m */,
 				7443EC09176A33F7006173D6 /* TTTMyScene.h */,
 				7443EC0A176A33F7006173D6 /* TTTMyScene.m */,
+				7443EC2B176A35AE006173D6 /* TTTCardSpriteNode.h */,
+				7443EC2C176A35AE006173D6 /* TTTCardSpriteNode.m */,
 				7443EC0C176A33F7006173D6 /* Spaceship.png */,
 				7443EC0E176A33F7006173D6 /* Images.xcassets */,
 				7443EBF5176A33F7006173D6 /* Supporting Files */,
@@ -269,6 +275,7 @@
 			files = (
 				7443EC08176A33F7006173D6 /* TTTViewController.m in Sources */,
 				7443EBFB176A33F7006173D6 /* main.m in Sources */,
+				7443EC2D176A35AE006173D6 /* TTTCardSpriteNode.m in Sources */,
 				7443EBFF176A33F7006173D6 /* TTTAppDelegate.m in Sources */,
 				7443EC0B176A33F7006173D6 /* TTTMyScene.m in Sources */,
 			);
@@ -279,6 +286,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7443EC22176A33F7006173D6 /* Three13_sprite_prototypeTests.m in Sources */,
+				7443EC2E176A35AE006173D6 /* TTTCardSpriteNode.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
