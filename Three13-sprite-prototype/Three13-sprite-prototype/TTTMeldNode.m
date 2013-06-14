@@ -73,5 +73,21 @@
     return imageRef;
 }
 
+-(void) positionCards {
+    // Remedial trig
+    // x = cos(rad) * radius
+    // y = sin(rad) * radius
+    float radianOffset = ( 2 * M_PI ) / self.children.count;
+    float radius = self.size.width/2;
+    int i = 0;
+    for (SKSpriteNode * aNode in self.children) {
+        float angle = radianOffset * i;
+        CGFloat x = cosf(angle) * radius;
+        CGFloat y = sinf(angle) * radius;
+        aNode.position = CGPointMake(x, y);
+        i++;
+    }
+}
+
 
 @end

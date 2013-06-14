@@ -12,4 +12,6 @@
 
 + (TTTMeldNode*) nodeWithColor:(SKColor*)color andSize:(CGSize)size;
 
+-(void) positionCards;
+
 @end
