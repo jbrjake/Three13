@@ -12,6 +12,8 @@
 
 + (TTTMeldNode*) nodeWithColor:(SKColor*)color andSize:(CGSize)size;
 
+@property CGMutablePathRef circlePath;
+
 -(void) positionCards;
 
 @end

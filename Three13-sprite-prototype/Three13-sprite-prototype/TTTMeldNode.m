@@ -52,12 +52,11 @@
     
     
     // Draw a circle
-    CGMutablePathRef path = CGPathCreateMutable();
+    _circlePath = CGPathCreateMutable();
     
-    CGPathAddArc(path, NULL, size.width/2, size.width/2, size.width/2*0.9, 0, 2*M_PI, YES);
-    CGPathCloseSubpath(path);
-    CGContextAddPath(context, path);
-    CGPathRelease(path);
+    CGPathAddArc(self.circlePath, NULL, size.width/2, size.width/2, size.width/2*0.9, 0, 2*M_PI, YES);
+    CGPathCloseSubpath(self.circlePath);
+    CGContextAddPath(context, self.circlePath);
     
     CGContextSetStrokeColorWithColor(context, cgColor);
     CGContextSetLineWidth(context, 2);
