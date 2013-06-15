@@ -39,7 +39,6 @@
     CGFloat imageScale = (CGFloat)2.0;
     
     CGColorRef cgColor = color.CGColor;
-    const CGFloat * colorComponents = CGColorGetComponents(cgColor);
 
     // Create a bitmap graphics context of the given size
     //
@@ -49,7 +48,7 @@
     
     // Draw ...
     //
-    CGContextSetRGBFillColor(context, colorComponents[0], colorComponents[1], colorComponents[2], (CGFloat)1.0 );
+    CGContextSetFillColorWithColor(context, cgColor);
     
     // Draw a circle
     CGContextAddPath(context, self.circlePath);
@@ -59,13 +58,12 @@
     CGContextAddPath(context, self.polygonPath);
 
     // Draw lines from the polygon's vertices to the center
-    CGContextSetRGBStrokeColor(context, colorComponents[0], colorComponents[1], colorComponents[2], colorComponents[3]);
+    CGContextSetStrokeColorWithColor(context, cgColor);
     CGContextSetLineWidth(context, 2.0);
     CGContextDrawPath(context, kCGPathFillStroke);
 
     CGContextAddPath(context, self.verticesPath);
 
-    CGContextSetRGBStrokeColor(context, colorComponents[0] , colorComponents[1], colorComponents[2], 1);
     CGContextSetLineWidth(context, 1);
     CGContextDrawPath(context, kCGPathFillStroke);
 
