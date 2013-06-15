@@ -19,6 +19,8 @@
 - (TTTCardSpriteNode*) initWithColor:(SKColor*)color andSize:(CGSize)size andVertices:(NSInteger)vertices {
     self = [super initWithColor:color size:size];
     if (self) {
+        _vertices = [NSNumber numberWithInteger:vertices];
+        [self buildShapePaths];
         self.texture = [self textureWithColor:color andVertices:vertices andSize:size];
     }
     return self;
@@ -49,55 +51,19 @@
     //
     CGContextSetRGBFillColor(context, colorComponents[0], colorComponents[1], colorComponents[2], (CGFloat)1.0 );
     
-    // …
-    
-    
     // Draw a circle
-    CGMutablePathRef path = CGPathCreateMutable();
-    
-    CGPathAddArc(path, NULL, size.width/2, size.width/2, size.width/2*0.9, 0, 2*M_PI, YES);
-    CGPathCloseSubpath(path);
-    CGContextAddPath(context, path);
-    CGPathRelease(path);
+    CGContextAddPath(context, self.circlePath);
 
     // Draw an n-sided polygon
     
-    path = CGPathCreateMutable();
-    int radius = MIN(size.width, size.height)*0.33 ;
-
-    NSMutableArray * verticePoints = [NSMutableArray array];
-    for (int i = 0; i < vertices; i++){
-        
-        CGPoint point = CGPointMake( (size.width/2) + (radius * cosf(i*2*M_PI/vertices)), (size.width/2) + (radius*sinf(i*2*M_PI/vertices)) );
-
-        [verticePoints addObject:[NSValue valueWithCGPoint:point]];
-
-        if (i==0) {
-            CGPathMoveToPoint(path, NULL, point.x, point.y);
-        }
-        else{
-            CGPathAddLineToPoint(path, NULL, point.x, point.y);
-        }
-        
-    }
-    CGPathCloseSubpath(path);
-    CGContextAddPath(context, path);
-    CGPathRelease(path);
+    CGContextAddPath(context, self.polygonPath);
 
     // Draw lines from the polygon's vertices to the center
     CGContextSetRGBStrokeColor(context, colorComponents[0], colorComponents[1], colorComponents[2], colorComponents[3]);
     CGContextSetLineWidth(context, 2.0);
     CGContextDrawPath(context, kCGPathFillStroke);
 
-    path = CGPathCreateMutable();
-    for (NSValue* pointValue in verticePoints) {
-        CGPoint point = [pointValue CGPointValue];
-        CGPathMoveToPoint(path, NULL, point.x, point.y);
-        CGPathAddLineToPoint(path, NULL, size.width/2, size.width/2);
-    }
-    CGPathCloseSubpath(path);
-    CGContextAddPath(context, path);
-    CGPathRelease(path);
+    CGContextAddPath(context, self.verticesPath);
 
     CGContextSetRGBStrokeColor(context, colorComponents[0] , colorComponents[1], colorComponents[2], 1);
     CGContextSetLineWidth(context, 1);
@@ -111,6 +77,49 @@
     CGContextRelease(context);
     
     return imageRef;
+}
+
+-(void)buildShapePaths {
+    // Draw a circle
+    _circlePath = CGPathCreateMutable();
+    
+    CGPathAddArc(self.circlePath, NULL, self.size.width/2, self.size.width/2, self.size.width/2*0.9, 0, 2*M_PI, YES);
+
+    CGPathCloseSubpath(self.circlePath);
+    
+    // Draw a polygon
+    _polygonPath = CGPathCreateMutable();
+    
+    int radius = MIN(self.size.width, self.size.height)*0.33 ;
+    
+    NSMutableArray * verticePoints = [NSMutableArray array];
+    for (int i = 0; i < self.vertices.integerValue; i++){
+        
+        CGPoint point = CGPointMake( (self.size.width/2) + (radius * cosf(i*2*M_PI/self.vertices.integerValue)), (self.size.width/2) + (radius*sinf(i*2*M_PI/ self.vertices.integerValue)) );
+        
+        [verticePoints addObject:[NSValue valueWithCGPoint:point]];
+        
+        if (i==0) {
+            CGPathMoveToPoint(self.polygonPath, NULL, point.x, point.y);
+        }
+        else{
+            CGPathAddLineToPoint(self.polygonPath, NULL, point.x, point.y);
+        }
+        
+    }
+    CGPathCloseSubpath(self.polygonPath);
+
+    // Draw vertex lines
+    _verticesPath = CGPathCreateMutable();
+    
+    for (NSValue* pointValue in verticePoints) {
+        CGPoint point = [pointValue CGPointValue];
+        CGPathMoveToPoint(self.verticesPath, NULL, point.x, point.y);
+        CGPathAddLineToPoint(self.verticesPath, NULL, self.size.width/2, self.size.width/2);
+    }
+    CGPathCloseSubpath(self.verticesPath);
+
+    
 }
 
 @end

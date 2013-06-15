@@ -12,4 +12,8 @@
 
 + (TTTCardSpriteNode*) nodeWithColor:(SKColor*)color andSize:(CGSize)size andVertices:(NSInteger)vertices;
 
+@property CGMutablePathRef circlePath;
+@property CGMutablePathRef polygonPath;
+@property CGMutablePathRef verticesPath;
+@property NSNumber * vertices;
 @end
