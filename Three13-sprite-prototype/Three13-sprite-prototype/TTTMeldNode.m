@@ -54,7 +54,7 @@
     // Draw a circle
     _circlePath = CGPathCreateMutable();
     
-    CGPathAddArc(self.circlePath, NULL, size.width/2, size.width/2, size.width/2*0.9, 0, 2*M_PI, YES);
+    CGPathAddArc(self.circlePath, NULL, size.width/2, size.width/2, size.width/2, 0, 2*M_PI, YES);
     CGPathCloseSubpath(self.circlePath);
     CGContextAddPath(context, self.circlePath);
     
