@@ -54,7 +54,7 @@
     // Draw a circle
     _circlePath = CGPathCreateMutable();
     
-    CGPathAddArc(self.circlePath, NULL, size.width/2, size.width/2, size.width/2, 0, 2*M_PI, YES);
+    CGPathAddArc(self.circlePath, NULL, size.width/2, size.width/2, size.width/2*0.9, 0, 2*M_PI, YES);
     CGPathCloseSubpath(self.circlePath);
     CGContextAddPath(context, self.circlePath);
     
@@ -81,9 +81,10 @@
     int i = 0;
     for (SKSpriteNode * aNode in self.children) {
         float angle = radianOffset * i;
-        CGFloat x = cosf(angle) * radius;
-        CGFloat y = sinf(angle) * radius;
-        aNode.position = CGPointMake(x, y);
+        CGFloat x = cosf(angle) * radius * 0.9;
+        CGFloat y = sinf(angle) * radius * 0.9;
+        SKAction * move = [SKAction moveTo:CGPointMake(x, y) duration:1];
+        [aNode runAction:move];
         i++;
     }
 }

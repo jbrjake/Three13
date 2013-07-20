@@ -49,9 +49,12 @@
     // Draw ...
     //
     CGContextSetFillColorWithColor(context, cgColor);
-    
+    CGContextSetStrokeColorWithColor(context, cgColor);
+    CGContextSetLineWidth(context, 4.0);
+
     // Draw a circle
-    CGContextAddPath(context, self.circlePath);
+//    CGContextAddPath(context, self.circlePath);
+//    CGContextDrawPath(context, kCGPathStroke);
 
     // Draw an n-sided polygon
     
@@ -59,12 +62,11 @@
 
     // Draw lines from the polygon's vertices to the center
     CGContextSetStrokeColorWithColor(context, cgColor);
-    CGContextSetLineWidth(context, 2.0);
-    CGContextDrawPath(context, kCGPathFillStroke);
+    CGContextSetLineWidth(context, 3.0);
+    CGContextDrawPath(context, kCGPathStroke);
 
     CGContextAddPath(context, self.verticesPath);
 
-    CGContextSetLineWidth(context, 1);
     CGContextDrawPath(context, kCGPathFillStroke);
 
     // Get your image
@@ -88,7 +90,7 @@
     // Draw a polygon
     _polygonPath = CGPathCreateMutable();
     
-    int radius = MIN(self.size.width, self.size.height)*0.33 ;
+    int radius = MIN(self.size.width, self.size.height)*0.45 ;
     
     NSMutableArray * verticePoints = [NSMutableArray array];
     for (int i = 0; i < self.vertices.integerValue; i++){
