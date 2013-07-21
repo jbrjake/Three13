@@ -20,8 +20,24 @@
     self = [super initWithColor:color size:size];
     if (self) {
         _vertices = [NSNumber numberWithInteger:vertices];
-        [self buildShapePaths];
-        self.texture = [self textureWithColor:color andVertices:vertices andSize:size];
+//        [self buildShapePaths];
+        CALayer * spriteLayer = [CALayer layer];
+        spriteLayer.contentsScale = [[UIScreen mainScreen] scale];
+        spriteLayer.frame = CGRectMake(0, 0, size.width, size.height);
+        spriteLayer.backgroundColor = color.CGColor;
+        
+        UIGraphicsBeginImageContext(spriteLayer.bounds.size);
+        [spriteLayer renderInContext:UIGraphicsGetCurrentContext()];
+        UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+        self.texture = [SKTexture textureWithImage:image];
+
+        SKLabelNode * label = [SKLabelNode labelNodeWithFontNamed:@"Helevetica"];
+        label.text = [NSString stringWithFormat:@"%d", vertices];
+        label.position = CGPointMake(0, -self.frame.size.height/4);
+        [self addChild:label];
+        
+//        self.texture = [self textureWithColor:color andVertices:vertices andSize:size];
     }
     return self;
 }
