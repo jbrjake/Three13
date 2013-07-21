@@ -25,3 +25,8 @@ The main limit is the cell height, because we need to fit way more vertical cell
 Divide the frame height by 10. The result is the size of the cells, because we need 10 rows. So if the height is 1136, the cells should be 113x113 points. Remainder gets added to the division between the deck row and the hand.
 
 So cell 0 is centered on size.width/2, size.height - cell.height/2 - index*size.height. Cell 1 is centered on size.width/2 - cell.height/2, size.height - cell.height/2 - index*size.height. Cell 2 is centered on size.width/2 + cell.height/2, size.height - cell.height/2 - index*size.height.
+
+Tasks:
+* Method to position a node at its cell frame
+* Touch control to move one node to another cell
+* Adjacency finding method, to see if a node touches the other nodes it needs to in order to form a meld, in the right order.
