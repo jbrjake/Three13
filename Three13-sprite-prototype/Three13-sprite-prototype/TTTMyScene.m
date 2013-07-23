@@ -17,9 +17,35 @@
         /* Setup your scene here */
         
         self.backgroundColor = [SKColor whiteColor];
-
-        [self dealHand];
+        
+        _spriteCells = [[NSMutableArray alloc] init];
+        CGFloat height = self.frame.size.height;
+        CGFloat centerX = self.frame.size.width/2.0;
+        CGFloat cellHeight = height/10.0;
+        
+        // Cells 0-12
+        for (int i = 0; i < 9; i++) {
+            if (i % 2 ) {
+                [self.spriteCells addObject:
+                    [NSValue valueWithCGPoint:
+                        CGPointMake(centerX - cellHeight,
+                                    cellHeight/2 + i * cellHeight)]];
+                [self.spriteCells addObject:
+                    [NSValue valueWithCGPoint:
+                        CGPointMake(centerX + cellHeight,
+                                    cellHeight/2 + i * cellHeight)]];
+            }
+            else {
+                [self.spriteCells addObject:
+                    [NSValue valueWithCGPoint:
+                        CGPointMake(centerX,
+                                    cellHeight/2 + i * cellHeight)]];
+            }
+        }
+        
     }
+    
+    [self dealHand];
     return self;
 }
 

@@ -11,4 +11,5 @@
 
 @interface TTTMyScene : SKScene
 
+@property NSMutableArray * spriteCells;
 @end
