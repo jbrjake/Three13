@@ -56,8 +56,11 @@
     TTTCardSpriteNode * blackSprite = [TTTCardSpriteNode nodeWithColor:[SKColor blackColor] andSize:CGSizeMake(44,44)andVertices:6];
     
 
+-(void)update:(CFTimeInterval)currentTime {
+    /* Called before each frame is rendered */
 }
 
+#pragma mark UIResponder
 
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     /* Called when a touch begins */
@@ -73,8 +76,16 @@
     }
 }
 
--(void)update:(CFTimeInterval)currentTime {
-    /* Called before each frame is rendered */
-}
+ - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
+ 
+ }
+ 
+ - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
+ 
+ }
+ 
+ - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
+ 
+ }
 
 @end
