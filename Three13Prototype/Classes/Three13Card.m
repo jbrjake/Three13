@@ -178,7 +178,7 @@
 
 - (NSComparisonResult)compareSuit:(Three13Card *)otherCard
 {
-    return [ [NSNumber numberWithInt:[self suit]] compare: [NSNumber numberWithInt:[otherCard suit]]];
+    return [ @([self suit]) compare: @([otherCard suit])];
 }
 
 - (NSComparisonResult)compareNumber:(Three13Card *)otherCard

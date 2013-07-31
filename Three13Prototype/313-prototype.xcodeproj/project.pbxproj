@@ -94,6 +94,7 @@
 		7474D41312DD821A0067D62D /* spades-q-150.png in Resources */ = {isa = PBXBuildFile; fileRef = 7474D3D512DD821A0067D62D /* spades-q-150.png */; };
 		7478728515A0C0240000EE2E /* green-leather@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7478728415A0C0240000EE2E /* green-leather@2x.png */; };
 		7478728715A0C29A0000EE2E /* back-blue-150-1@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7478728615A0C29A0000EE2E /* back-blue-150-1@2x.png */; };
+		7492DBA4176910CB00106471 /* Three13Player.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B71BAF815DF49D400A67237 /* Three13Player.m */; };
 		74C681DD12A1BBCA00B04C1E /* Three13Card.m in Sources */ = {isa = PBXBuildFile; fileRef = 74C681DA12A1BBCA00B04C1E /* Three13Card.m */; };
 		74C681DE12A1BBCA00B04C1E /* Three13Deck.m in Sources */ = {isa = PBXBuildFile; fileRef = 74C681DC12A1BBCA00B04C1E /* Three13Deck.m */; };
 		74C6824D12A1BCD800B04C1E /* 2c.gif in Resources */ = {isa = PBXBuildFile; fileRef = 74C681E012A1BCD800B04C1E /* 2c.gif */; };
@@ -800,7 +801,7 @@
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0450;
+				LastUpgradeCheck = 0500;
 			};
 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "313-prototype" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -1057,6 +1058,7 @@
 				746E007215A4CB0200BB9F22 /* Three13Card.m in Sources */,
 				746E007415A4CB0200BB9F22 /* Three13Deck.m in Sources */,
 				746E007615A4CB0200BB9F22 /* Three13Hand.m in Sources */,
+				7492DBA4176910CB00106471 /* Three13Player.m in Sources */,
 				746E007815A4CB0200BB9F22 /* Three13Game.m in Sources */,
 				746E006C15A4CA7100BB9F22 /* _13_test.m in Sources */,
 			);
@@ -1166,11 +1168,11 @@
 		C01FCF4F08A954540054247B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -1178,7 +1180,6 @@
 		C01FCF5008A954540054247B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;

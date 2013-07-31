@@ -150,7 +150,7 @@
         return;
     }
     
-    Three13Player * player = [players objectAtIndex:index];
+    Three13Player * player = players[index];
     if (state == 0) {
         // Selecting card
         if( tag == knownCard.number) {
@@ -190,7 +190,7 @@
                 [player.hand sortBySuit];
                 [player.hand sortByValue];
                 __block NSMutableDictionary * dict = [self gameDict];
-                [dict setObject:@(tag) forKey:@"discard"];
+                dict[@"discard"] = @(tag);
                 if( [delegate conformsToProtocol:@protocol(Three13GameDelegate)] ) {
                     [delegate respondToCardBeingDiscardedWithDictionary:dict andCompletionHandler:^ {
                         dispatch_async(global_queue, ^{
@@ -291,7 +291,7 @@
 }
 
 -(void) cardDiscardedByPlayerWithIndex:(NSInteger)index {
-    [self checkForWinWithPlayer:[players objectAtIndex:index]];
+    [self checkForWinWithPlayer:players[index]];
 }
 
 

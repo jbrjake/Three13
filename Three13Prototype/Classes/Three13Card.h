@@ -3,12 +3,13 @@
 //
 //
 
-typedef enum {
+
+typedef NS_ENUM(int, Suit) {
 	Hearts,
 	Diamonds,
 	Spades,
 	Clubs
-} Suit;
+};
 
 #define Ace   1
 #define Jack  11
