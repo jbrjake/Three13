@@ -12,4 +12,10 @@
 @interface TTTMyScene : SKScene
 
 @property NSMutableArray * spriteCells;
+@property NSMutableArray * placedTiles;
+@property SKSpriteNode * heldTile;
+@property int heldCellIndex;
+@property CGPoint heldStartPosition;
+@property CGPoint touchStartLocation;
+
 @end
