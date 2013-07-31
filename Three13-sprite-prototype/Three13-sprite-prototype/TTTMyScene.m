@@ -26,7 +26,7 @@
         CGFloat cellHeight = height/10.0;
         
         // Cells 0-12
-        for (int i = 0; i < 9; i++) {
+        for (int i = 0; i < 10; i++) {
             if (i % 2 ) {
                 [self.spriteCells addObject:
                     [NSValue valueWithCGPoint:
