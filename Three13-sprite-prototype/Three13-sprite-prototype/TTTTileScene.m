@@ -46,31 +46,8 @@
         
     }
     
-    [self dealHand];
     return self;
 }
-
--(void) dealHand {
-    CGFloat cellSize = self.frame.size.height/10.0;
-    TTTTileSprite * cyanSprite = [TTTTileSprite nodeWithColor:[SKColor cyanColor] andSize:CGSizeMake(cellSize,cellSize)andVertices:3];
-    TTTTileSprite * magentaSprite = [TTTTileSprite nodeWithColor:[SKColor magentaColor] andSize:CGSizeMake(cellSize,cellSize)andVertices:4];
-    TTTTileSprite * yellowSprite = [TTTTileSprite nodeWithColor:[SKColor yellowColor] andSize:CGSizeMake(cellSize,cellSize)andVertices:5];
-    TTTTileSprite * blackSprite = [TTTTileSprite nodeWithColor:[SKColor blackColor] andSize:CGSizeMake(cellSize,cellSize)andVertices:6];
-    cyanSprite.name = @"Cyan";
-    magentaSprite.name = @"Magenta";
-    yellowSprite.name = @"Yellow";
-    blackSprite.name = @"Black";
-    [self addChild:cyanSprite];
-    [self addChild:magentaSprite];
-    [self addChild:yellowSprite];
-    [self addChild:blackSprite];
-    [self addTileSprite:cyanSprite];
-    [self addTileSprite:magentaSprite];
-    [self addTileSprite:yellowSprite];
-    [self addTileSprite:blackSprite];
-    [self layoutTiles];
-}
-
 
 -(void)update:(CFTimeInterval)currentTime {
     /* Called before each frame is rendered */
