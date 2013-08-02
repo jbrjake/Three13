@@ -18,4 +18,17 @@
 @property CGPoint heldStartPosition;
 @property CGPoint touchStartLocation;
 
+- (void)addTileSprite:(SKSpriteNode*)sprite;
+- (void)addTileSprite:(SKSpriteNode*)sprite toCellWithIndex:(NSInteger)index;
+- (void)removeTileSprite:(SKSpriteNode*)sprite;
+- (void)exchangeTileAtCell:(NSInteger)indexA withTileAtCell:(NSInteger)indexB;
+- (void)layoutTiles;
+
+// These should move to a class extension, instead of being exposed as public methpds:
+// http://lisles.net/accessing-private-methods-and-properties-in-objc-unit-tests/
+- (NSInteger)cellIndexForTileSprite:(SKSpriteNode*)sprite;
+- (SKSpriteNode*)tileForCellIndex:(NSInteger)index;
+- (void)moveHeldTileToPoint:(CGPoint)location;
+- (int)indexOfClosestCellToPoint:(CGPoint)point;
+
 @end
