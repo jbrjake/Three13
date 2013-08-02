@@ -9,7 +9,7 @@
 #import <SpriteKit/SpriteKit.h>
 @class TTTMeldNode;
 
-@interface TTTMyScene : SKScene
+@interface TTTTileScene : SKScene
 
 @property NSMutableArray * spriteCells;
 @property NSMutableArray * placedTiles;

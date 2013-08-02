@@ -7,7 +7,7 @@
 //
 
 #import "TTTViewController.h"
-#import "TTTMyScene.h"
+#import "TTTTileScene.h"
 
 @implementation TTTViewController
 
@@ -21,7 +21,7 @@
     skView.showsNodeCount = YES;
     
     // Create and configure the scene.
-    SKScene * scene = [TTTMyScene sceneWithSize:skView.bounds.size];
+    SKScene * scene = [TTTTileScene sceneWithSize:skView.bounds.size];
     scene.scaleMode = SKSceneScaleModeAspectFill;
     
     // Present the scene.

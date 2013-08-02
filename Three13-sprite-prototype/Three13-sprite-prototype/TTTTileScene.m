@@ -6,11 +6,10 @@
 //  Copyright (c) 2013 Jonathon Rubin. All rights reserved.
 //
 
-#import "TTTMyScene.h"
-#import "TTTCardSpriteNode.h"
-#import "TTTMeldNode.h"
+#import "TTTTileScene.h"
+#import "TTTTileSprite.h"
 
-@implementation TTTMyScene
+@implementation TTTTileScene
 
 -(id)initWithSize:(CGSize)size {    
     if (self = [super initWithSize:size]) {
@@ -53,10 +52,10 @@
 
 -(void) dealHand {
     CGFloat cellSize = self.frame.size.height/10.0;
-    TTTCardSpriteNode * cyanSprite = [TTTCardSpriteNode nodeWithColor:[SKColor cyanColor] andSize:CGSizeMake(cellSize,cellSize)andVertices:3];
-    TTTCardSpriteNode * magentaSprite = [TTTCardSpriteNode nodeWithColor:[SKColor magentaColor] andSize:CGSizeMake(cellSize,cellSize)andVertices:4];
-    TTTCardSpriteNode * yellowSprite = [TTTCardSpriteNode nodeWithColor:[SKColor yellowColor] andSize:CGSizeMake(cellSize,cellSize)andVertices:5];
-    TTTCardSpriteNode * blackSprite = [TTTCardSpriteNode nodeWithColor:[SKColor blackColor] andSize:CGSizeMake(cellSize,cellSize)andVertices:6];
+    TTTTileSprite * cyanSprite = [TTTTileSprite nodeWithColor:[SKColor cyanColor] andSize:CGSizeMake(cellSize,cellSize)andVertices:3];
+    TTTTileSprite * magentaSprite = [TTTTileSprite nodeWithColor:[SKColor magentaColor] andSize:CGSizeMake(cellSize,cellSize)andVertices:4];
+    TTTTileSprite * yellowSprite = [TTTTileSprite nodeWithColor:[SKColor yellowColor] andSize:CGSizeMake(cellSize,cellSize)andVertices:5];
+    TTTTileSprite * blackSprite = [TTTTileSprite nodeWithColor:[SKColor blackColor] andSize:CGSizeMake(cellSize,cellSize)andVertices:6];
     cyanSprite.name = @"Cyan";
     magentaSprite.name = @"Magenta";
     yellowSprite.name = @"Yellow";
@@ -86,7 +85,7 @@
         NSArray * nodes = [self.scene nodesAtPoint:spriteLocation];
         int cellIndex = [self indexOfClosestCellToPoint:spriteLocation];
         for (id node in nodes) {
-            if([node isKindOfClass:[TTTCardSpriteNode class]]) {
+            if([node isKindOfClass:[TTTTileSprite class]]) {
                 self.heldTile = node;
                 self.heldTile.zPosition = -1;
                 self.heldTile.alpha = 0.5;
@@ -174,7 +173,7 @@
     CGPoint position = [self.spriteCells[index] CGPointValue];
     NSArray * nodes = [self.scene nodesAtPoint:position];
     for (id node in nodes) {
-        if([node isKindOfClass:[TTTCardSpriteNode class]]) {
+        if([node isKindOfClass:[TTTTileSprite class]]) {
             returnNode = node;
         }
     }
