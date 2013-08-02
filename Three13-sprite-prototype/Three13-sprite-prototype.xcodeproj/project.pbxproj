@@ -26,7 +26,7 @@
 		7443EC20176A33F7006173D6 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7443EC1E176A33F7006173D6 /* InfoPlist.strings */; };
 		7443EC2D176A35AE006173D6 /* TTTTileSprite.m in Sources */ = {isa = PBXBuildFile; fileRef = 7443EC2C176A35AE006173D6 /* TTTTileSprite.m */; };
 		7443EC2E176A35AE006173D6 /* TTTTileSprite.m in Sources */ = {isa = PBXBuildFile; fileRef = 7443EC2C176A35AE006173D6 /* TTTTileSprite.m */; };
-		74C2CF0A17AB439900035B32 /* TTTileSceneTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 74C2CF0917AB439900035B32 /* TTTileSceneTests.m */; };
+		74C2CF0A17AB439900035B32 /* TTTTileSceneTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 74C2CF0917AB439900035B32 /* TTTTileSceneTests.m */; };
 		74C2CF0C17AB45C700035B32 /* TTTTileSpriteTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 74C2CF0B17AB45C700035B32 /* TTTTileSpriteTests.m */; };
 /* End PBXBuildFile section */
 
@@ -66,7 +66,7 @@
 		7443EC1F176A33F7006173D6 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		7443EC2B176A35AE006173D6 /* TTTTileSprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTTTileSprite.h; sourceTree = "<group>"; };
 		7443EC2C176A35AE006173D6 /* TTTTileSprite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTTTileSprite.m; sourceTree = "<group>"; };
-		74C2CF0917AB439900035B32 /* TTTileSceneTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTTileSceneTests.m; sourceTree = "<group>"; };
+		74C2CF0917AB439900035B32 /* TTTTileSceneTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTTTileSceneTests.m; sourceTree = "<group>"; };
 		74C2CF0B17AB45C700035B32 /* TTTTileSpriteTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTTTileSpriteTests.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -160,7 +160,7 @@
 		7443EC1B176A33F7006173D6 /* Three13-sprite-prototypeTests */ = {
 			isa = PBXGroup;
 			children = (
-				74C2CF0917AB439900035B32 /* TTTileSceneTests.m */,
+				74C2CF0917AB439900035B32 /* TTTTileSceneTests.m */,
 				74C2CF0B17AB45C700035B32 /* TTTTileSpriteTests.m */,
 				7443EC1C176A33F7006173D6 /* Supporting Files */,
 			);
@@ -288,7 +288,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				74C2CF0A17AB439900035B32 /* TTTileSceneTests.m in Sources */,
+				74C2CF0A17AB439900035B32 /* TTTTileSceneTests.m in Sources */,
 				74C2CF0C17AB45C700035B32 /* TTTTileSpriteTests.m in Sources */,
 				7443EC2E176A35AE006173D6 /* TTTTileSprite.m in Sources */,
 			);

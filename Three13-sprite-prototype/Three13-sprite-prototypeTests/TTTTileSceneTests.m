@@ -1,5 +1,5 @@
 //
-//  TTTileSceneTests.m
+//  TTTTileSceneTests.m
 //  Three13-sprite-prototype
 //
 //  Created by Jonathon Rubin on 8/1/13.
@@ -9,11 +9,11 @@
 #import <XCTest/XCTest.h>
 #import "TTTTileScene.h"
 
-@interface TTTileSceneTests : XCTestCase
+@interface TTTTileSceneTests : XCTestCase
 
 @end
 
-@implementation TTTileSceneTests
+@implementation TTTTileSceneTests
 
 - (void)setUp
 {
