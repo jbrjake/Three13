@@ -8,9 +8,9 @@
 
 #import <SpriteKit/SpriteKit.h>
 
-@interface TTTCardSpriteNode : SKSpriteNode
+@interface TTTTileSprite : SKSpriteNode
 
-+ (TTTCardSpriteNode*) nodeWithColor:(SKColor*)color andSize:(CGSize)size andVertices:(NSInteger)vertices;
++ (TTTTileSprite*) nodeWithColor:(SKColor*)color andSize:(CGSize)size andVertices:(NSInteger)vertices;
 
 @property CGMutablePathRef circlePath;
 @property CGMutablePathRef polygonPath;

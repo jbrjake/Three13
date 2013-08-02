@@ -3,7 +3,7 @@
 //  313-test
 //
 //  Created by Jonathon Rubin on 7/4/12.
-//  Copyright (c) 2012 The Nielsen Company. All rights reserved.
+//  Copyright (c) 2012 Jonathon Rubin. All rights reserved.
 //
 
 #import "_13_test.h"
@@ -36,7 +36,8 @@
     [hand addCard:[[Three13Card alloc] initWithValue:5 suit:Spades number:0]];
     [hand evaluateHand];
     
-    STAssertEquals(hand.score, 0, @"Hand score should be 0, as the jokers allow the meld 2, 3, 4, 5-as-5, 5-as-6");
+    XCTAssertEqual(hand.score, 0,
+                   @"Hand score should be 0, as the jokers allow the meld 2, 3, 4, 5-as-5, 5-as-6");
 }
 
 - (void)testHand1
@@ -52,7 +53,8 @@
     
     [testHand1 evaluateHand];
     
-    STAssertEquals(testHand1.score, 11, @"The best score for this hand is 11");
+    XCTAssertEqual(testHand1.score, 11,
+                   @"The best score for this hand is 11");
 }
 
 - (void)testHand2
@@ -67,7 +69,8 @@
     
     [testHand2 evaluateHand];
     
-    STAssertEquals(testHand2.score, 0, @"This is a winning hand with two jokers");
+    XCTAssertEqual(testHand2.score, 0,
+                   @"This is a winning hand with two jokers");
 }
     
 - (void)testHand3 {
@@ -79,7 +82,8 @@
     
     [testHand3 evaluateHand];
     
-    STAssertEquals(testHand3.score, 1, @"This hand can form a meld of 4 (joker), and 10 and 11 of hearts");
+    XCTAssertEqual(testHand3.score, 1,
+                   @"This hand can form a meld of 4 (joker), and 10 and 11 of hearts");
 }
 
 @end

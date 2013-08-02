@@ -20,7 +20,6 @@
 		740B8C9312BBCA4500E0AB34 /* green-leather.png in Resources */ = {isa = PBXBuildFile; fileRef = 740B8C9212BBCA4500E0AB34 /* green-leather.png */; };
 		740B904A12BFFEE600E0AB34 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 740B904912BFFEE600E0AB34 /* QuartzCore.framework */; };
 		7453688B163A04E500AC1535 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7453688A163A04E500AC1535 /* Default-568h@2x.png */; };
-		746E006115A4CA7100BB9F22 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 746E006015A4CA7100BB9F22 /* SenTestingKit.framework */; };
 		746E006215A4CA7100BB9F22 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		746E006315A4CA7100BB9F22 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		746E006915A4CA7100BB9F22 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 746E006715A4CA7100BB9F22 /* InfoPlist.strings */; };
@@ -229,8 +228,7 @@
 		740B904912BFFEE600E0AB34 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		743454C115A77C8D00B9C55A /* Three13GameDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Three13GameDelegate.h; sourceTree = "<group>"; };
 		7453688A163A04E500AC1535 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
-		746E005F15A4CA7100BB9F22 /* 313-test.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "313-test.octest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		746E006015A4CA7100BB9F22 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
+		746E005F15A4CA7100BB9F22 /* 313-test.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "313-test.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		746E006615A4CA7100BB9F22 /* 313-test-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "313-test-Info.plist"; sourceTree = "<group>"; };
 		746E006815A4CA7100BB9F22 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		746E006A15A4CA7100BB9F22 /* _13_test.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = _13_test.h; sourceTree = "<group>"; };
@@ -436,7 +434,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				746E006115A4CA7100BB9F22 /* SenTestingKit.framework in Frameworks */,
 				746E006215A4CA7100BB9F22 /* UIKit.framework in Frameworks */,
 				746E006315A4CA7100BB9F22 /* Foundation.framework in Frameworks */,
 			);
@@ -460,7 +457,7 @@
 			isa = PBXGroup;
 			children = (
 				1D6058910D05DD3D006BFB54 /* 313-prototype.app */,
-				746E005F15A4CA7100BB9F22 /* 313-test.octest */,
+				746E005F15A4CA7100BB9F22 /* 313-test.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -509,7 +506,6 @@
 				1D30AB110D05D00D00671497 /* Foundation.framework */,
 				288765A40DF7441C002DB57D /* CoreGraphics.framework */,
 				740B904912BFFEE600E0AB34 /* QuartzCore.framework */,
-				746E006015A4CA7100BB9F22 /* SenTestingKit.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -792,8 +788,8 @@
 			);
 			name = "313-test";
 			productName = "313-test";
-			productReference = 746E005F15A4CA7100BB9F22 /* 313-test.octest */;
-			productType = "com.apple.product-type.bundle";
+			productReference = 746E005F15A4CA7100BB9F22 /* 313-test.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
 
@@ -1119,10 +1115,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				COPY_PHASE_STRIP = NO;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(SDKROOT)/Developer/Library/Frameworks";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -1138,7 +1131,6 @@
 				INFOPLIST_FILE = "313-test/313-test-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				WRAPPER_EXTENSION = octest;
 			};
 			name = Debug;
 		};
@@ -1148,10 +1140,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				COPY_PHASE_STRIP = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(SDKROOT)/Developer/Library/Frameworks";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "313-test/313-test-Prefix.pch";
@@ -1161,7 +1150,6 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				VALIDATE_PRODUCT = YES;
-				WRAPPER_EXTENSION = octest;
 			};
 			name = Release;
 		};

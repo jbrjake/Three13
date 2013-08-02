@@ -6,17 +6,17 @@
 //  Copyright (c) 2013 Jonathon Rubin. All rights reserved.
 //
 
-#import "TTTCardSpriteNode.h"
+#import "TTTTileSprite.h"
 
-@implementation TTTCardSpriteNode
+@implementation TTTTileSprite
 
 
-+ (TTTCardSpriteNode*) nodeWithColor:(SKColor*)color andSize:(CGSize)size andVertices:(NSInteger)vertices {
-    TTTCardSpriteNode * node = [[TTTCardSpriteNode alloc] initWithColor:color andSize:size andVertices:vertices];
++ (TTTTileSprite*) nodeWithColor:(SKColor*)color andSize:(CGSize)size andVertices:(NSInteger)vertices {
+    TTTTileSprite * node = [[TTTTileSprite alloc] initWithColor:color andSize:size andVertices:vertices];
     return node;
 }
 
-- (TTTCardSpriteNode*) initWithColor:(SKColor*)color andSize:(CGSize)size andVertices:(NSInteger)vertices {
+- (TTTTileSprite*) initWithColor:(SKColor*)color andSize:(CGSize)size andVertices:(NSInteger)vertices {
     self = [super initWithColor:color size:size];
     if (self) {
         _vertices = [NSNumber numberWithInteger:vertices];

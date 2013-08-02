@@ -17,18 +17,18 @@
 		7443EC02176A33F7006173D6 /* Main_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7443EC00176A33F7006173D6 /* Main_iPhone.storyboard */; };
 		7443EC05176A33F7006173D6 /* Main_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7443EC03176A33F7006173D6 /* Main_iPad.storyboard */; };
 		7443EC08176A33F7006173D6 /* TTTViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7443EC07176A33F7006173D6 /* TTTViewController.m */; };
-		7443EC0B176A33F7006173D6 /* TTTMyScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 7443EC0A176A33F7006173D6 /* TTTMyScene.m */; };
+		7443EC0B176A33F7006173D6 /* TTTTileScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 7443EC0A176A33F7006173D6 /* TTTTileScene.m */; };
 		7443EC0D176A33F7006173D6 /* Spaceship.png in Resources */ = {isa = PBXBuildFile; fileRef = 7443EC0C176A33F7006173D6 /* Spaceship.png */; };
 		7443EC0F176A33F7006173D6 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7443EC0E176A33F7006173D6 /* Images.xcassets */; };
 		7443EC16176A33F7006173D6 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7443EC15176A33F7006173D6 /* XCTest.framework */; };
 		7443EC17176A33F7006173D6 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7443EBEC176A33F7006173D6 /* Foundation.framework */; };
 		7443EC18176A33F7006173D6 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7443EBF0176A33F7006173D6 /* UIKit.framework */; };
 		7443EC20176A33F7006173D6 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7443EC1E176A33F7006173D6 /* InfoPlist.strings */; };
-		7443EC22176A33F7006173D6 /* Three13_sprite_prototypeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7443EC21176A33F7006173D6 /* Three13_sprite_prototypeTests.m */; };
-		7443EC2D176A35AE006173D6 /* TTTCardSpriteNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 7443EC2C176A35AE006173D6 /* TTTCardSpriteNode.m */; };
-		7443EC2E176A35AE006173D6 /* TTTCardSpriteNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 7443EC2C176A35AE006173D6 /* TTTCardSpriteNode.m */; };
-		7443EC31176A7147006173D6 /* TTTMeldNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 7443EC30176A7147006173D6 /* TTTMeldNode.m */; };
-		7443EC32176A7147006173D6 /* TTTMeldNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 7443EC30176A7147006173D6 /* TTTMeldNode.m */; };
+		7443EC2D176A35AE006173D6 /* TTTTileSprite.m in Sources */ = {isa = PBXBuildFile; fileRef = 7443EC2C176A35AE006173D6 /* TTTTileSprite.m */; };
+		7443EC2E176A35AE006173D6 /* TTTTileSprite.m in Sources */ = {isa = PBXBuildFile; fileRef = 7443EC2C176A35AE006173D6 /* TTTTileSprite.m */; };
+		74C2CF0A17AB439900035B32 /* TTTTileSceneTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 74C2CF0917AB439900035B32 /* TTTTileSceneTests.m */; };
+		74C2CF0C17AB45C700035B32 /* TTTTileSpriteTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 74C2CF0B17AB45C700035B32 /* TTTTileSpriteTests.m */; };
+		74C2CF0D17AC722300035B32 /* TTTTileScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 7443EC0A176A33F7006173D6 /* TTTTileScene.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -57,19 +57,18 @@
 		7443EC04176A33F7006173D6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPad.storyboard; sourceTree = "<group>"; };
 		7443EC06176A33F7006173D6 /* TTTViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TTTViewController.h; sourceTree = "<group>"; };
 		7443EC07176A33F7006173D6 /* TTTViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TTTViewController.m; sourceTree = "<group>"; };
-		7443EC09176A33F7006173D6 /* TTTMyScene.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TTTMyScene.h; sourceTree = "<group>"; };
-		7443EC0A176A33F7006173D6 /* TTTMyScene.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TTTMyScene.m; sourceTree = "<group>"; };
+		7443EC09176A33F7006173D6 /* TTTTileScene.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TTTTileScene.h; sourceTree = "<group>"; };
+		7443EC0A176A33F7006173D6 /* TTTTileScene.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TTTTileScene.m; sourceTree = "<group>"; };
 		7443EC0C176A33F7006173D6 /* Spaceship.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Spaceship.png; sourceTree = "<group>"; };
 		7443EC0E176A33F7006173D6 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		7443EC14176A33F7006173D6 /* Three13-sprite-prototypeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Three13-sprite-prototypeTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7443EC15176A33F7006173D6 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		7443EC1D176A33F7006173D6 /* Three13-sprite-prototypeTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Three13-sprite-prototypeTests-Info.plist"; sourceTree = "<group>"; };
 		7443EC1F176A33F7006173D6 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		7443EC21176A33F7006173D6 /* Three13_sprite_prototypeTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Three13_sprite_prototypeTests.m; sourceTree = "<group>"; };
-		7443EC2B176A35AE006173D6 /* TTTCardSpriteNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTTCardSpriteNode.h; sourceTree = "<group>"; };
-		7443EC2C176A35AE006173D6 /* TTTCardSpriteNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTTCardSpriteNode.m; sourceTree = "<group>"; };
-		7443EC2F176A7147006173D6 /* TTTMeldNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTTMeldNode.h; sourceTree = "<group>"; };
-		7443EC30176A7147006173D6 /* TTTMeldNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTTMeldNode.m; sourceTree = "<group>"; };
+		7443EC2B176A35AE006173D6 /* TTTTileSprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTTTileSprite.h; sourceTree = "<group>"; };
+		7443EC2C176A35AE006173D6 /* TTTTileSprite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTTTileSprite.m; sourceTree = "<group>"; };
+		74C2CF0917AB439900035B32 /* TTTTileSceneTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTTTileSceneTests.m; sourceTree = "<group>"; };
+		74C2CF0B17AB45C700035B32 /* TTTTileSpriteTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTTTileSpriteTests.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -137,12 +136,10 @@
 				7443EC03176A33F7006173D6 /* Main_iPad.storyboard */,
 				7443EC06176A33F7006173D6 /* TTTViewController.h */,
 				7443EC07176A33F7006173D6 /* TTTViewController.m */,
-				7443EC09176A33F7006173D6 /* TTTMyScene.h */,
-				7443EC0A176A33F7006173D6 /* TTTMyScene.m */,
-				7443EC2B176A35AE006173D6 /* TTTCardSpriteNode.h */,
-				7443EC2C176A35AE006173D6 /* TTTCardSpriteNode.m */,
-				7443EC2F176A7147006173D6 /* TTTMeldNode.h */,
-				7443EC30176A7147006173D6 /* TTTMeldNode.m */,
+				7443EC09176A33F7006173D6 /* TTTTileScene.h */,
+				7443EC0A176A33F7006173D6 /* TTTTileScene.m */,
+				7443EC2B176A35AE006173D6 /* TTTTileSprite.h */,
+				7443EC2C176A35AE006173D6 /* TTTTileSprite.m */,
 				7443EC0C176A33F7006173D6 /* Spaceship.png */,
 				7443EC0E176A33F7006173D6 /* Images.xcassets */,
 				7443EBF5176A33F7006173D6 /* Supporting Files */,
@@ -164,7 +161,8 @@
 		7443EC1B176A33F7006173D6 /* Three13-sprite-prototypeTests */ = {
 			isa = PBXGroup;
 			children = (
-				7443EC21176A33F7006173D6 /* Three13_sprite_prototypeTests.m */,
+				74C2CF0917AB439900035B32 /* TTTTileSceneTests.m */,
+				74C2CF0B17AB45C700035B32 /* TTTTileSpriteTests.m */,
 				7443EC1C176A33F7006173D6 /* Supporting Files */,
 			);
 			path = "Three13-sprite-prototypeTests";
@@ -279,12 +277,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7443EC31176A7147006173D6 /* TTTMeldNode.m in Sources */,
 				7443EC08176A33F7006173D6 /* TTTViewController.m in Sources */,
 				7443EBFB176A33F7006173D6 /* main.m in Sources */,
-				7443EC2D176A35AE006173D6 /* TTTCardSpriteNode.m in Sources */,
+				7443EC2D176A35AE006173D6 /* TTTTileSprite.m in Sources */,
 				7443EBFF176A33F7006173D6 /* TTTAppDelegate.m in Sources */,
-				7443EC0B176A33F7006173D6 /* TTTMyScene.m in Sources */,
+				7443EC0B176A33F7006173D6 /* TTTTileScene.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -292,9 +289,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7443EC32176A7147006173D6 /* TTTMeldNode.m in Sources */,
-				7443EC22176A33F7006173D6 /* Three13_sprite_prototypeTests.m in Sources */,
-				7443EC2E176A35AE006173D6 /* TTTCardSpriteNode.m in Sources */,
+				74C2CF0A17AB439900035B32 /* TTTTileSceneTests.m in Sources */,
+				74C2CF0D17AC722300035B32 /* TTTTileScene.m in Sources */,
+				74C2CF0C17AB45C700035B32 /* TTTTileSpriteTests.m in Sources */,
+				7443EC2E176A35AE006173D6 /* TTTTileSprite.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -501,6 +499,7 @@
 				7443EC27176A33F7006173D6 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		7443EC28176A33F7006173D6 /* Build configuration list for PBXNativeTarget "Three13-sprite-prototypeTests" */ = {
 			isa = XCConfigurationList;
@@ -509,6 +508,7 @@
 				7443EC2A176A33F7006173D6 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
