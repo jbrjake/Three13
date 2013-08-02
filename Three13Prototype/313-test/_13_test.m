@@ -86,4 +86,33 @@
                    @"This hand can form a meld of 4 (joker), and 10 and 11 of hearts");
 }
 
+- (void)testHandInOrder {
+    Three13Hand * testHand = [[Three13Hand alloc] init];
+    [testHand addCard:[[Three13Card alloc] initWithValue:1 suit:Spades number:0]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:3 suit:Spades number:0]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:4 suit:Spades number:0]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:2 suit:Spades number:0]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:6 suit:Spades number:0]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:8 suit:Spades number:0]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:5 suit:Spades number:0]];
+    
+    [testHand evaluateHand];
+    XCTAssertEqual(testHand.score, 31, @"This hand does not get valid runs because they are not in sequential order.");
+}
+
+- (void)testHandInPartialOrder {
+    Three13Hand * testHand = [[Three13Hand alloc] init];
+    [testHand addCard:[[Three13Card alloc] initWithValue:1 suit:Spades number:0]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:6 suit:Spades number:0]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:2 suit:Spades number:0]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:3 suit:Spades number:0]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:4 suit:Spades number:0]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:8 suit:Spades number:0]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:5 suit:Spades number:0]];
+    
+    [testHand evaluateHand];
+    XCTAssertEqual(testHand.score, 20,
+                    @"This hand gets 1 valid run for 2-3-4. The rest are not in sequential order.");
+}
+
 @end
