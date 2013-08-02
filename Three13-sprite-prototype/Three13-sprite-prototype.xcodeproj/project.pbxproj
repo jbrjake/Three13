@@ -28,6 +28,7 @@
 		7443EC2E176A35AE006173D6 /* TTTTileSprite.m in Sources */ = {isa = PBXBuildFile; fileRef = 7443EC2C176A35AE006173D6 /* TTTTileSprite.m */; };
 		74C2CF0A17AB439900035B32 /* TTTTileSceneTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 74C2CF0917AB439900035B32 /* TTTTileSceneTests.m */; };
 		74C2CF0C17AB45C700035B32 /* TTTTileSpriteTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 74C2CF0B17AB45C700035B32 /* TTTTileSpriteTests.m */; };
+		74C2CF0D17AC722300035B32 /* TTTTileScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 7443EC0A176A33F7006173D6 /* TTTTileScene.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -289,6 +290,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				74C2CF0A17AB439900035B32 /* TTTTileSceneTests.m in Sources */,
+				74C2CF0D17AC722300035B32 /* TTTTileScene.m in Sources */,
 				74C2CF0C17AB45C700035B32 /* TTTTileSpriteTests.m in Sources */,
 				7443EC2E176A35AE006173D6 /* TTTTileSprite.m in Sources */,
 			);
