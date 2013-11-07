@@ -36,8 +36,11 @@
     [hand addCard:[[Three13Card alloc] initWithValue:5 suit:Spades number:4]];
     [hand evaluateHand];
     
+    XCTAssertEqual(hand.bestScore, 0,
+                   @"Best hand score should be 0, as the jokers allow the meld 2, 3, 4, 5-as-5, 5-as-6");
+
     XCTAssertEqual(hand.score, 0,
-                   @"Hand score should be 0, as the jokers allow the meld 2, 3, 4, 5-as-5, 5-as-6");
+                   @"Actual hand score should be 0, as the jokers make the meld 2, 3, 4, 5-as-5, 5-as-6");
 }
 
 - (void)testHand1
@@ -53,8 +56,10 @@
     
     [testHand1 evaluateHand];
     
-    XCTAssertEqual(testHand1.score, 11,
-                   @"The best score for this hand is 11");
+    XCTAssertEqual(testHand1.bestScore, 11,
+                   @"The best score for this hand is 11 (1,4,6 with meld 6,7,8,9)");
+    XCTAssertEqual(testHand1.score, 17,
+                   @"The actual score for this hand is 17 (1,4,6,6 with meld 8,9,10(joker)");
 }
 
 - (void)testHand2

@@ -356,8 +356,10 @@ int next_comb(int comb[], int k, int n) {
     // Sort by suit and value
     int worstScore = [self worstScoreForThree13Hand];
 
-    score = worstScore - bestScore;
-    NSLog(@"Best meld scores %d: %@", score, bestMeld);
+    self.bestScore = worstScore - bestScore;
+    NSLog(@"Best meld scores %d: %@", self.bestScore, bestMeld);
+    
+    self.score = worstScore - bestScore;
 }
   
 -(void) evaluateHand {

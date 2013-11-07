@@ -22,6 +22,7 @@
 }
 
 @property(nonatomic) NSInteger score;
+@property(nonatomic) NSInteger bestScore;
 @property(nonatomic, strong) NSMutableArray * valueSets;
 @property(nonatomic, strong) NSMutableArray * suitSets;
 @property(nonatomic, strong) NSMutableArray * valueSetsWithJokers;
