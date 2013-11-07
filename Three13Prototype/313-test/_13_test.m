@@ -30,10 +30,10 @@
     Three13Hand * hand = [[Three13Hand alloc] init];
 //    Hand is 2, 3, 4, 5, 5 -- all spades
     [hand addCard:[[Three13Card alloc] initWithValue:2 suit:Spades number:0]];
-    [hand addCard:[[Three13Card alloc] initWithValue:3 suit:Spades number:0]];
-    [hand addCard:[[Three13Card alloc] initWithValue:4 suit:Spades number:0]];
-    [hand addCard:[[Three13Card alloc] initWithValue:5 suit:Spades number:0]];
-    [hand addCard:[[Three13Card alloc] initWithValue:5 suit:Spades number:0]];
+    [hand addCard:[[Three13Card alloc] initWithValue:3 suit:Spades number:1]];
+    [hand addCard:[[Three13Card alloc] initWithValue:4 suit:Spades number:2]];
+    [hand addCard:[[Three13Card alloc] initWithValue:5 suit:Spades number:3]];
+    [hand addCard:[[Three13Card alloc] initWithValue:5 suit:Spades number:4]];
     [hand evaluateHand];
     
     XCTAssertEqual(hand.score, 0,
@@ -44,12 +44,12 @@
 {
     Three13Hand * testHand1 = [[Three13Hand alloc] init];
     [testHand1 addCard:[[Three13Card alloc] initWithValue:1 suit:Spades number:0]];
-    [testHand1 addCard:[[Three13Card alloc] initWithValue:4 suit:Hearts number:0]];
-    [testHand1 addCard:[[Three13Card alloc] initWithValue:6 suit:Hearts number:0]];
-    [testHand1 addCard:[[Three13Card alloc] initWithValue:6 suit:Spades number:0]];
-    [testHand1 addCard:[[Three13Card alloc] initWithValue:8 suit:Spades number:0]];
-    [testHand1 addCard:[[Three13Card alloc] initWithValue:9 suit:Spades number:0]];
-    [testHand1 addCard:[[Three13Card alloc] initWithValue:7 suit:Spades number:0]];
+    [testHand1 addCard:[[Three13Card alloc] initWithValue:4 suit:Hearts number:1]];
+    [testHand1 addCard:[[Three13Card alloc] initWithValue:6 suit:Hearts number:2]];
+    [testHand1 addCard:[[Three13Card alloc] initWithValue:6 suit:Spades number:3]];
+    [testHand1 addCard:[[Three13Card alloc] initWithValue:8 suit:Spades number:4]];
+    [testHand1 addCard:[[Three13Card alloc] initWithValue:9 suit:Spades number:5]];
+    [testHand1 addCard:[[Three13Card alloc] initWithValue:7 suit:Spades number:6]]; // Joker
     
     [testHand1 evaluateHand];
     
@@ -61,11 +61,11 @@
 {
     Three13Hand * testHand2 = [[Three13Hand alloc] init];
     [testHand2 addCard:[[Three13Card alloc] initWithValue:6 suit:Clubs number:0]];
-    [testHand2 addCard:[[Three13Card alloc] initWithValue:7 suit:Spades number:0]];
-    [testHand2 addCard:[[Three13Card alloc] initWithValue:7 suit:Spades number:0]];
-    [testHand2 addCard:[[Three13Card alloc] initWithValue:12 suit:Spades number:0]];
-    [testHand2 addCard:[[Three13Card alloc] initWithValue:12 suit:Hearts number:0]];
-    [testHand2 addCard:[[Three13Card alloc] initWithValue:6 suit:Spades number:0]];
+    [testHand2 addCard:[[Three13Card alloc] initWithValue:7 suit:Spades number:1]];
+    [testHand2 addCard:[[Three13Card alloc] initWithValue:7 suit:Spades number:2]];
+    [testHand2 addCard:[[Three13Card alloc] initWithValue:12 suit:Spades number:3]];
+    [testHand2 addCard:[[Three13Card alloc] initWithValue:12 suit:Hearts number:4]];
+    [testHand2 addCard:[[Three13Card alloc] initWithValue:6 suit:Spades number:5]];
     
     [testHand2 evaluateHand];
     
@@ -76,9 +76,9 @@
 - (void)testHand3 {
     Three13Hand * testHand3 = [[Three13Hand alloc] init];
     [testHand3 addCard:[[Three13Card alloc] initWithValue:1 suit:Hearts number:0]];
-    [testHand3 addCard:[[Three13Card alloc] initWithValue:4 suit:Clubs number:0]];
-    [testHand3 addCard:[[Three13Card alloc] initWithValue:10 suit:Hearts number:0]];
-    [testHand3 addCard:[[Three13Card alloc] initWithValue:11 suit:Hearts number:0]];
+    [testHand3 addCard:[[Three13Card alloc] initWithValue:4 suit:Clubs number:1]];
+    [testHand3 addCard:[[Three13Card alloc] initWithValue:10 suit:Hearts number:2]];
+    [testHand3 addCard:[[Three13Card alloc] initWithValue:11 suit:Hearts number:3]];
     
     [testHand3 evaluateHand];
     
@@ -89,12 +89,12 @@
 - (void)testHandInOrder {
     Three13Hand * testHand = [[Three13Hand alloc] init];
     [testHand addCard:[[Three13Card alloc] initWithValue:1 suit:Spades number:0]];
-    [testHand addCard:[[Three13Card alloc] initWithValue:3 suit:Spades number:0]];
-    [testHand addCard:[[Three13Card alloc] initWithValue:4 suit:Spades number:0]];
-    [testHand addCard:[[Three13Card alloc] initWithValue:2 suit:Spades number:0]];
-    [testHand addCard:[[Three13Card alloc] initWithValue:6 suit:Spades number:0]];
-    [testHand addCard:[[Three13Card alloc] initWithValue:8 suit:Spades number:0]];
-    [testHand addCard:[[Three13Card alloc] initWithValue:5 suit:Spades number:0]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:3 suit:Spades number:1]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:4 suit:Spades number:2]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:2 suit:Spades number:3]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:6 suit:Spades number:4]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:8 suit:Spades number:5]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:5 suit:Spades number:6]];
     
     [testHand evaluateHand];
     XCTAssertEqual(testHand.score, 31, @"This hand does not get valid runs because they are not in sequential order.");
@@ -103,12 +103,12 @@
 - (void)testHandInPartialOrder {
     Three13Hand * testHand = [[Three13Hand alloc] init];
     [testHand addCard:[[Three13Card alloc] initWithValue:1 suit:Spades number:0]];
-    [testHand addCard:[[Three13Card alloc] initWithValue:6 suit:Spades number:0]];
-    [testHand addCard:[[Three13Card alloc] initWithValue:2 suit:Spades number:0]];
-    [testHand addCard:[[Three13Card alloc] initWithValue:3 suit:Spades number:0]];
-    [testHand addCard:[[Three13Card alloc] initWithValue:4 suit:Spades number:0]];
-    [testHand addCard:[[Three13Card alloc] initWithValue:8 suit:Spades number:0]];
-    [testHand addCard:[[Three13Card alloc] initWithValue:5 suit:Spades number:0]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:6 suit:Spades number:1]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:2 suit:Spades number:2]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:3 suit:Spades number:3]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:4 suit:Spades number:4]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:8 suit:Spades number:5]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:5 suit:Spades number:6]];
     
     [testHand evaluateHand];
     XCTAssertEqual(testHand.score, 20,
