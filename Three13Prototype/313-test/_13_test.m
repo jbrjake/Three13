@@ -115,4 +115,22 @@
                     @"This hand gets 1 valid run for 2-3-4. The rest are not in sequential order.");
 }
 
+- (void)testRunInSet {
+    NSMutableOrderedSet * testSet = [[NSMutableOrderedSet alloc] init];
+    [testSet addObject:[[Three13Card alloc] initWithValue:4 suit:Spades number:0]];
+    [testSet addObject:[[Three13Card alloc] initWithValue:5 suit:Spades number:1]];
+    [testSet addObject:[[Three13Card alloc] initWithValue:6 suit:Spades number:2]];
+    Three13Hand * testHand = [[Three13Hand alloc] init];
+    XCTAssertTrue([testHand runInSet:testSet],
+                  @"This set should be a run, because it's got Spades in sequential order 4, 5, 6." );
+    
+    testSet = [[NSMutableOrderedSet alloc] init];
+    [testSet addObject:[[Three13Card alloc] initWithValue:4 suit:Spades number:0]];
+    [testSet addObject:[[Three13Card alloc] initWithValue:6 suit:Spades number:1]];
+    [testSet addObject:[[Three13Card alloc] initWithValue:5 suit:Spades number:2]];
+
+    XCTAssertFalse([testHand runInSet:testSet],
+                  @"This set shouldn't be a run, because it's got Spades in the nonsequential order 4, 6, 5." );
+    
+}
 @end
