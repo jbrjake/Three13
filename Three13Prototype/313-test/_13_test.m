@@ -102,7 +102,7 @@
     [testHand addCard:[[Three13Card alloc] initWithValue:5 suit:Spades number:6]];
     
     [testHand evaluateHand];
-    XCTAssertEqual(testHand.score, 31, @"This hand does not get valid runs because they are not in sequential order.");
+    XCTAssertEqual(testHand.score, 29, @"This hand does not get valid runs because they are not in sequential order.");
 }
 
 - (void)testHandInPartialOrder {
