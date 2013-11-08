@@ -149,6 +149,11 @@ int next_comb(int comb[], int k, int n) {
     return FALSE;
 }
 
+
+-(BOOL) runInOrderedSet:(NSOrderedSet *)set {
+    return TRUE;
+}
+
 -(void) findValuesSuitsAndJokers {
     /* Make sets of cards in the hand */
     [valueSets removeAllObjects];

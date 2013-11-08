@@ -41,6 +41,7 @@
 -(void) findSetCombinations;
 -(NSMutableArray*) combinationsOf:(NSInteger)k For:(NSSet*)set;
 -(BOOL) runInSet:(NSSet *)set;
+-(BOOL) runInOrderedSet:(NSOrderedSet *)set;
 -(void) pruneSuitSetsToRuns;
 -(void) findMeldsOfMelds;
 -(void) scoreHand;
