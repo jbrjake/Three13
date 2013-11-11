@@ -171,11 +171,10 @@ int next_comb(int comb[], int k, int n) {
     BOOL areReverseGaps = FALSE;
     BOOL isPotentialRun = [self runInSet:[set set]];
     BOOL isInOrder = FALSE;
-    
     NSInteger joker = [cards count];
     NSMutableArray * setArray = [NSMutableArray arrayWithArray:[set array]];
     
-    // Filter out sets with cards from different suits that aren't the joker
+    // Test if the cards are all from the same suit, or jokers
     int theSuit = -1;
     for (Three13Card * card in setArray) {
         if (theSuit == -1 && card.value != joker) {
@@ -186,18 +185,20 @@ int next_comb(int comb[], int k, int n) {
         }
     }
 
-    // Filter out sets with < 3 cards
+    // Test if there are enough cards (3) to form a meld
     if (setArray.count < 3) {
         areTooFewCards = TRUE;
     }
     
+    // These will store jokers extracted from the set, for use in ascending and descending order
     NSMutableArray * jokers = [[NSMutableArray alloc] init];
     NSMutableArray * reverseJokers = [[NSMutableArray alloc] init];
-    // Build a sorted array without jokers, then insert as needed. This will be the optimal layout.
+
+    // The arrays will hold the optimal layout of cards: all either ascending and descending in sequence
     NSMutableArray * sortedArray = [[NSMutableArray alloc] initWithArray:setArray];
     NSMutableArray * reverseSortedArray = [[NSMutableArray alloc] initWithArray:setArray];
     
-    // Remove jokers
+    // Remove jokers from the to-be-sorted arrays and store them in the jokers and reverseJokers arrays
     for (Three13Card * card in setArray) {
         if (card.value == joker) {
             [sortedArray removeObject:card];
@@ -206,48 +207,55 @@ int next_comb(int comb[], int k, int n) {
             [reverseJokers addObject:card];
         }
     }
+    
+    // Ascending and descending sort
     [sortedArray sortUsingSelector:@selector(compareValue:)];
     [reverseSortedArray sortUsingSelector:@selector(reverseCompareValue:)];
 
+    // If there's only one card left after removing jokers, add back a joker so we can do comparisons of current to next cards to make sure we're always increasing/decreasing by 1
     if (sortedArray.count == 1) {
         Three13Card * cur = sortedArray[0];
         if (jokers.count) {
             if (0 < [setArray indexOfObject:cur]) {
+                // The only non-joker card isn't supposed to be first, so prepend jokers LIFO
                 [sortedArray insertObject:jokers[jokers.count-1] atIndex:0];
-                [jokers removeObject:jokers[0]];
             }
             else {
+                // Append jokers LIFO
                 [sortedArray insertObject:jokers[jokers.count-1] atIndex:1];
-                [jokers removeObject:jokers[jokers.count-1]];
             }
+            [jokers removeObject:jokers[jokers.count-1]];
         }
     }
     if (reverseSortedArray.count == 1) {
         Three13Card * cur = reverseSortedArray[0];
         if (jokers.count) {
             if (0 < [setArray indexOfObject:cur]) {
+                // Prepend FIFO
                 [reverseSortedArray insertObject:reverseJokers[0] atIndex:0];
             }
             else {
+                // Append FIFO
                 [reverseSortedArray insertObject:reverseJokers[0] atIndex:1];
             }
             [reverseJokers removeObject:reverseJokers[0]];
         }
     }
     
+    // Now loop through looking at 2 adjacent cards at a time
     for (int i = 0; i < sortedArray.count-1; i++) {
         Three13Card * cur = sortedArray[i];
         Three13Card * next = sortedArray[i+1];
         if (cur.value != next.value-1) {
-            // We have a gap, try to fill it
+            // We have a gap, try to fill it with a joker, LIFO
             if (jokers.count) {
                 if (i < [setArray indexOfObject:cur]) {
-                    [sortedArray insertObject:jokers[0] atIndex:i];
+                    [sortedArray insertObject:jokers[jokers.count-1] atIndex:i];
                 }
                 else {
-                    [sortedArray insertObject:jokers[0] atIndex:i+1];
+                    [sortedArray insertObject:jokers[jokers.count-1] atIndex:i+1];
                 }
-                [jokers removeObject:jokers[0]];
+                [jokers removeObject:jokers[jokers.count-1]];
             }
         }
     }
@@ -255,7 +263,7 @@ int next_comb(int comb[], int k, int n) {
         Three13Card * cur = reverseSortedArray[i];
         Three13Card * next = reverseSortedArray[i+1];
         if (cur.value != next.value+1) {
-            // We have a gap, try to fill it
+            // We have a gap, try to fill it with a joker, FIFO
             if (reverseJokers.count) {
                 if (i < [setArray indexOfObject:cur]) {
                     [reverseSortedArray insertObject:reverseJokers[0] atIndex:i];
@@ -273,7 +281,7 @@ int next_comb(int comb[], int k, int n) {
         Three13Card * cur = sortedArray[i];
         Three13Card * next = sortedArray[i+1];
         if (cur.value != next.value-1 && !(cur.value == joker || next.value == joker) ) {
-            // We have still have a gap
+            // We have still have a gap after adding jokers
             areGaps = TRUE;
         }
     }
@@ -281,11 +289,12 @@ int next_comb(int comb[], int k, int n) {
         Three13Card * cur = reverseSortedArray[i];
         Three13Card * next = reverseSortedArray[i+1];
         if (cur.value != next.value+1 && !(cur.value == joker || next.value == joker) ) {
-            // We have still have a gap
+            // We have still have a gap after adding jokers
             areReverseGaps = TRUE;
         }
     }
     
+    // Check if either sorted array matches the actual hand and has no gaps
     if (!areGaps && [sortedArray isEqualToArray:setArray]) {
         isInOrder = TRUE;
     }
@@ -293,6 +302,7 @@ int next_comb(int comb[], int k, int n) {
         isInOrder = TRUE;
     }
     
+    // We have a run if the cards are the same suit, are in sufficient number, can make a run, and the hand is sorted correctly and has no gaps in numbering not filled by a joker
     retValue = ( !areDifferentSuits && !areTooFewCards &&
                  isPotentialRun && isInOrder ) ;
     
