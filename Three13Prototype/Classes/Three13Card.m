@@ -176,6 +176,11 @@
     return [ @([self value]) compare: @([otherCard value])];
 }
 
+- (NSComparisonResult)reverseCompareValue:(Three13Card *)otherCard
+{
+    return [ @([otherCard value]) compare: @([self value])];
+}
+
 - (NSComparisonResult)compareSuit:(Three13Card *)otherCard
 {
     return [ @([self suit]) compare: @([otherCard suit])];

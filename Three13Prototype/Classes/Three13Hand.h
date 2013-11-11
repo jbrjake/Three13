@@ -22,6 +22,7 @@
 }
 
 @property(nonatomic) NSInteger score;
+@property(nonatomic) NSInteger bestScore;
 @property(nonatomic, strong) NSMutableArray * valueSets;
 @property(nonatomic, strong) NSMutableArray * suitSets;
 @property(nonatomic, strong) NSMutableArray * valueSetsWithJokers;
@@ -40,6 +41,7 @@
 -(void) findSetCombinations;
 -(NSMutableArray*) combinationsOf:(NSInteger)k For:(NSSet*)set;
 -(BOOL) runInSet:(NSSet *)set;
+-(BOOL) runInOrderedSet:(NSOrderedSet *)set;
 -(void) pruneSuitSetsToRuns;
 -(void) findMeldsOfMelds;
 -(void) scoreHand;
