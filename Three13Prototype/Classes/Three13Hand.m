@@ -149,9 +149,154 @@ int next_comb(int comb[], int k, int n) {
     return FALSE;
 }
 
-
+/**
+ * @brief Says whether or not there's a numerical sequence in an ordered set, taking jokers into account.
+ * @param set The cards to examine
+ * @return True if there are sequential cards, or enough jokers to fill any gaps in them. False otherwise.
+ *
+ * This method first makes sure that all runs are in the same suit or jokers, and that here are at least 3 cards
+ * 
+ * Then, it builds sorted (ascending and descending) arrays of all non-joker cards in the hand.
+ *
+ * After that it starts adding jokers back where it finds gaps in the numbering. It prepends jokers until
+ * non-joker cards are in the same position as in the original hand, then appends remaining jokers.
+ * Finally, it checks to see if either of the reassembled series of cards matches the actual hand.
+ *
+ */
 -(BOOL) runInOrderedSet:(NSOrderedSet *)set {
-    return TRUE;
+	BOOL retValue = FALSE;
+    BOOL areDifferentSuits = FALSE;
+    BOOL areTooFewCards = FALSE;
+    BOOL areGaps = FALSE;
+    BOOL areReverseGaps = FALSE;
+    BOOL isPotentialRun = [self runInSet:[set set]];
+    BOOL isInOrder = FALSE;
+    
+    NSInteger joker = [cards count];
+    NSMutableArray * setArray = [NSMutableArray arrayWithArray:[set array]];
+    
+    // Filter out sets with cards from different suits that aren't the joker
+    int theSuit = -1;
+    for (Three13Card * card in setArray) {
+        if (theSuit == -1 && card.value != joker) {
+            theSuit = card.suit;
+        }
+        if (card.suit != theSuit && card.value != joker) {
+            areDifferentSuits = TRUE;
+        }
+    }
+
+    // Filter out sets with < 3 cards
+    if (setArray.count < 3) {
+        areTooFewCards = TRUE;
+    }
+    
+    NSMutableArray * jokers = [[NSMutableArray alloc] init];
+    NSMutableArray * reverseJokers = [[NSMutableArray alloc] init];
+    // Build a sorted array without jokers, then insert as needed. This will be the optimal layout.
+    NSMutableArray * sortedArray = [[NSMutableArray alloc] initWithArray:setArray];
+    NSMutableArray * reverseSortedArray = [[NSMutableArray alloc] initWithArray:setArray];
+    
+    // Remove jokers
+    for (Three13Card * card in setArray) {
+        if (card.value == joker) {
+            [sortedArray removeObject:card];
+            [reverseSortedArray removeObject:card];
+            [jokers addObject:card];
+            [reverseJokers addObject:card];
+        }
+    }
+    [sortedArray sortUsingSelector:@selector(compareValue:)];
+    [reverseSortedArray sortUsingSelector:@selector(reverseCompareValue:)];
+
+    if (sortedArray.count == 1) {
+        Three13Card * cur = sortedArray[0];
+        if (jokers.count) {
+            if (0 < [setArray indexOfObject:cur]) {
+                [sortedArray insertObject:jokers[jokers.count-1] atIndex:0];
+                [jokers removeObject:jokers[0]];
+            }
+            else {
+                [sortedArray insertObject:jokers[jokers.count-1] atIndex:1];
+                [jokers removeObject:jokers[jokers.count-1]];
+            }
+        }
+    }
+    if (reverseSortedArray.count == 1) {
+        Three13Card * cur = reverseSortedArray[0];
+        if (jokers.count) {
+            if (0 < [setArray indexOfObject:cur]) {
+                [reverseSortedArray insertObject:reverseJokers[0] atIndex:0];
+            }
+            else {
+                [reverseSortedArray insertObject:reverseJokers[0] atIndex:1];
+            }
+            [reverseJokers removeObject:reverseJokers[0]];
+        }
+    }
+    
+    for (int i = 0; i < sortedArray.count-1; i++) {
+        Three13Card * cur = sortedArray[i];
+        Three13Card * next = sortedArray[i+1];
+        if (cur.value != next.value-1) {
+            // We have a gap, try to fill it
+            if (jokers.count) {
+                if (i < [setArray indexOfObject:cur]) {
+                    [sortedArray insertObject:jokers[0] atIndex:i];
+                }
+                else {
+                    [sortedArray insertObject:jokers[0] atIndex:i+1];
+                }
+                [jokers removeObject:jokers[0]];
+            }
+        }
+    }
+    for (int i = 0; i < reverseSortedArray.count-1; i++) {
+        Three13Card * cur = reverseSortedArray[i];
+        Three13Card * next = reverseSortedArray[i+1];
+        if (cur.value != next.value+1) {
+            // We have a gap, try to fill it
+            if (reverseJokers.count) {
+                if (i < [setArray indexOfObject:cur]) {
+                    [reverseSortedArray insertObject:reverseJokers[0] atIndex:i];
+                }
+                else {
+                    [reverseSortedArray insertObject:reverseJokers[0] atIndex:i+1];
+                }
+                [reverseJokers removeObject:reverseJokers[0]];
+            }
+        }
+    }
+
+    // Make sure all gaps are filled
+    for (int i = 0; i < sortedArray.count-1; i++) {
+        Three13Card * cur = sortedArray[i];
+        Three13Card * next = sortedArray[i+1];
+        if (cur.value != next.value-1 && !(cur.value == joker || next.value == joker) ) {
+            // We have still have a gap
+            areGaps = TRUE;
+        }
+    }
+    for (int i = 0; i < reverseSortedArray.count-1; i++) {
+        Three13Card * cur = reverseSortedArray[i];
+        Three13Card * next = reverseSortedArray[i+1];
+        if (cur.value != next.value+1 && !(cur.value == joker || next.value == joker) ) {
+            // We have still have a gap
+            areReverseGaps = TRUE;
+        }
+    }
+    
+    if (!areGaps && [sortedArray isEqualToArray:setArray]) {
+        isInOrder = TRUE;
+    }
+    else if (!areReverseGaps && [reverseSortedArray isEqualToArray:setArray]) {
+        isInOrder = TRUE;
+    }
+    
+    retValue = ( !areDifferentSuits && !areTooFewCards &&
+                 isPotentialRun && isInOrder ) ;
+    
+    return retValue;
 }
 
 -(void) findValuesSuitsAndJokers {
