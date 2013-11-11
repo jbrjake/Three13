@@ -111,6 +111,7 @@ int next_comb(int comb[], int k, int n) {
     
     // Delete duplicate values to make finding runs easier
     NSMutableArray *setArrayCopy = [setArray copy];
+#warning The following way of getting the frequency is off by one (should be card.value not card.value-1)
     for( Three13Card * card in setArrayCopy )
     {
         frequency[card.value-1]++;
