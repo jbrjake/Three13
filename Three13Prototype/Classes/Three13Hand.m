@@ -444,6 +444,14 @@ int next_comb(int comb[], int k, int n) {
     }
 }
 
+-(void) findPotentialMelds {
+    [self findValuesSuitsAndJokers];
+    [self pruneSetsToSize];
+    [self addJokersToSets];
+    [self findSetCombinations];
+    [self pruneSuitSetsToRuns];
+}
+
 -(void) findValidMelds {
     // For every starting position make a set of the next m = (start+2 -> n) elements
     // and if it's valid, add it to a collection
@@ -585,11 +593,7 @@ int next_comb(int comb[], int k, int n) {
 }
 
 -(void) evaluateHand {
-    [self findValuesSuitsAndJokers];
-    [self pruneSetsToSize];
-    [self addJokersToSets];
-    [self findSetCombinations];
-    [self pruneSuitSetsToRuns];
+    [self findPotentialMelds];
     [self findValidMelds];
     [self findMeldsOfMelds];
     [self scoreHand];
