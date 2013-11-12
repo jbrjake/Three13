@@ -535,7 +535,8 @@ int next_comb(int comb[], int k, int n) {
     self.bestScore = worstScore - bestScore;
     NSLog(@"Best meld scores %d: %@", self.bestScore, bestMeld);
     
-    self.score = worstScore - bestScore;
+    self.score = worstScore - [self findActualScore];
+;
 }
 
 - (int) findActualScore {
