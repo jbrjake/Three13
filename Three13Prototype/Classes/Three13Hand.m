@@ -444,6 +444,26 @@ int next_comb(int comb[], int k, int n) {
     }
 }
 
+-(void) findValidMelds {
+    // Find valid runs
+    // For every starting position make a set of the next m = (start+2 -> n) elements
+    // and if it's valid, add it to a collection
+    for (int start = 0; start < cards.count-2; start++) {
+        for (int end = start+2; end < cards.count; end++) {
+            NSMutableOrderedSet * set = [[NSMutableOrderedSet alloc] init];
+            for (int i = start; i < end+1; i++) {
+                [set addObject:cards[i]];
+            }
+            if (set.count && [self runInOrderedSet:set]) {
+                [self.validRuns addObject:set];
+            }
+            if (set.count && [self valueSetInOrderedSet:set]) {
+                [self.validValueSets addObject:set];
+            }
+        }
+    }
+}
+
 -(void) findMeldsOfMelds {
     // Add combinations of melds.    
     // First put every meld in an array
@@ -561,23 +581,6 @@ int next_comb(int comb[], int k, int n) {
  * stored in bestValidMeld.
  */
 -(int) findActualScore {
-    // Find valid runs
-    // For every starting position make a set of the next m = (start+2 -> n) elements
-    // and if it's valid, add it to a collection
-    for (int start = 0; start < cards.count-2; start++) {
-        for (int end = start+2; end < cards.count; end++) {
-            NSMutableOrderedSet * set = [[NSMutableOrderedSet alloc] init];
-            for (int i = start; i < end+1; i++) {
-                [set addObject:cards[i]];
-            }
-            if (set.count && [self runInOrderedSet:set]) {
-                [self.validRuns addObject:set];
-            }
-            if (set.count && [self valueSetInOrderedSet:set]) {
-                [self.validValueSets addObject:set];
-            }
-        }
-    }
     [self findValidMeldsOfMelds];
     
     int bestScore = 0;
@@ -606,6 +609,7 @@ int next_comb(int comb[], int k, int n) {
 //    NSLog(@"Prune sets to runs");
     [self pruneSuitSetsToRuns];
 //    NSLog(@"Find melds of melds");
+    [self findValidMelds];
     [self findMeldsOfMelds];
 //    NSLog(@"Score hand");
     [self scoreHand];
