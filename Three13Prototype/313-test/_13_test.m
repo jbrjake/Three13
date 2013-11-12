@@ -571,7 +571,7 @@
     [testHand addCard:[[Three13Card alloc] initWithValue:3 suit:Spades number:2]];
     [testHand evaluateHand];
     
-    XCTAssertEqual(testHand.score, 12,
+    XCTAssertEqual(testHand.score, 13,
                    @"This set shouldn't be a run, because it's got Spades in the nonsequential order 4, 6, 3(joker)." );
     
     testHand = [[Three13Hand alloc] init];
