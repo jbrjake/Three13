@@ -263,6 +263,40 @@ int next_comb(int comb[], int k, int n) {
     return retValue;
 }
 
+/**
+ * @brief Says whether or not all cards in an ordered set are the same value, taking jokers into account.
+ * @param set The cards to examine
+ * @return True if they are al the same value, or there are enough jokers to fill any gaps in them. False otherwise.
+ *
+ */
+-(BOOL) valueSetInOrderedSet:(NSOrderedSet *)set {
+	BOOL retValue = FALSE;
+    BOOL areDifferentValues = FALSE;
+    BOOL areTooFewCards = FALSE;
+    NSInteger joker = [cards count];
+    NSMutableArray * setArray = [NSMutableArray arrayWithArray:[set array]];
+    
+    // Test if the cards have the same value, or are jokers
+    int theValue = -1;
+    for (Three13Card * card in setArray) {
+        if (theValue == -1 && card.value != joker) {
+            theValue = card.value;
+        }
+        if (card.value != theValue && card.value != joker) {
+            areDifferentValues = TRUE;
+        }
+    }
+    
+    // Test if there are enough cards (3) to form a meld
+    if (setArray.count < 3) {
+        areTooFewCards = TRUE;
+    }
+    
+    retValue = ( !areDifferentValues && !areTooFewCards ) ;
+    
+    return retValue;
+}
+
 -(void) findValuesSuitsAndJokers {
     /* Make sets of cards in the hand */
     [valueSets removeAllObjects];
