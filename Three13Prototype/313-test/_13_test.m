@@ -411,4 +411,275 @@
                    @"This set shouldn't be a run, because it's got cards in the sequential order 10, 9, 8, and 6, 5, 4, but there's a gap in the numbering (no 7)." );
 }
 
+- (void)testScoreOrderedRun {
+    Three13Hand * testHand = [[Three13Hand alloc] init];
+    [testHand addCard:[[Three13Card alloc] initWithValue:4 suit:Spades number:0]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:5 suit:Spades number:1]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:6 suit:Spades number:2]];
+    [testHand evaluateHand];
+    
+    XCTAssertEqual(testHand.score, 0,
+                  @"This set should be a run, because it's got Spades that can form the sequential order 4, 5, 6." );
+    
+    testHand = [[Three13Hand alloc] init];
+    [testHand addCard:[[Three13Card alloc] initWithValue:4 suit:Spades number:0]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:3 suit:Spades number:1]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:6 suit:Spades number:2]];
+    [testHand evaluateHand];
+    
+    XCTAssertEqual(testHand.score, 0,
+                  @"This set should be a run, because it's got Spades that can form the sequential order 4, 3-as-5, 6." );
+    
+    testHand = [[Three13Hand alloc] init];
+    [testHand addCard:[[Three13Card alloc] initWithValue:4 suit:Spades number:0]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:5 suit:Spades number:1]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:6 suit:Spades number:2]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:7 suit:Spades number:3]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:8 suit:Spades number:4]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:9 suit:Spades number:5]];
+    [testHand evaluateHand];
+    
+    XCTAssertEqual(testHand.score, 0,
+                  @"This set should be a run, because it has Spades in sequential order 4, 5, 6(joker), 7, 8, 9" );
+    
+    testHand = [[Three13Hand alloc] init];
+    [testHand addCard:[[Three13Card alloc] initWithValue:4 suit:Spades number:0]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:4 suit:Spades number:1]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:4 suit:Spades number:2]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:5 suit:Spades number:3]];
+    [testHand evaluateHand];
+    
+    XCTAssertEqual(testHand.score, 0,
+                  @"This set should be a run, because it has cards in sequential order 4-as-2, 4-as-3, 4-as-4, 5" );
+    
+    testHand = [[Three13Hand alloc] init];
+    [testHand addCard:[[Three13Card alloc] initWithValue:4 suit:Spades number:0]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:4 suit:Spades number:1]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:4 suit:Spades number:2]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:5 suit:Hearts number:3]];
+    [testHand evaluateHand];
+    
+    XCTAssertEqual(testHand.score, 0,
+                  @"This set should be a run, because it has cards in sequential order 4-as-2, 4-as-3, 4-as-4, 5, with all the jokers pretending to be hearts" );
+    
+    testHand = [[Three13Hand alloc] init];
+    [testHand addCard:[[Three13Card alloc] initWithValue:8 suit:Spades number:0]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:9 suit:Spades number:1]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:3 suit:Spades number:2]];
+    [testHand evaluateHand];
+    
+    XCTAssertEqual(testHand.score, 0,
+                  @"This set should be a run, because it has cards in sequential order 8,9,3-as-10" );
+    
+    testHand = [[Three13Hand alloc] init];
+    [testHand addCard:[[Three13Card alloc] initWithValue:8 suit:Spades number:0]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:9 suit:Spades number:1]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:4 suit:Spades number:2]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:4 suit:Spades number:3]];
+    [testHand evaluateHand];
+    
+    XCTAssertEqual(testHand.score, 0,
+                  @"This set should be a run, because it has cards in sequential order 8,9,4-as-10,4-as-11" );
+}
+
+- (void)testScoreInOrderedRunReversed {
+    Three13Hand * testHand = [[Three13Hand alloc] init];
+    [testHand addCard:[[Three13Card alloc] initWithValue:6 suit:Spades number:0]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:5 suit:Spades number:1]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:4 suit:Spades number:2]];
+    [testHand evaluateHand];
+    
+    XCTAssertEqual(testHand.score, 0,
+                  @"This set should be a run, because it's got Spades that can form the sequential order 6, 5, 4." );
+    
+    testHand = [[Three13Hand alloc] init];
+    [testHand addCard:[[Three13Card alloc] initWithValue:6 suit:Spades number:0]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:3 suit:Spades number:1]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:4 suit:Spades number:2]];
+    [testHand evaluateHand];
+    
+    XCTAssertEqual(testHand.score, 0,
+                  @"This set should be a run, because it's got Spades that can form the sequential order 6, 3-as-5, 4." );
+    
+    testHand = [[Three13Hand alloc] init];
+    [testHand addCard:[[Three13Card alloc] initWithValue:9 suit:Spades number:0]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:8 suit:Spades number:1]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:7 suit:Spades number:2]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:6 suit:Spades number:3]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:5 suit:Spades number:4]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:4 suit:Spades number:5]];
+    [testHand evaluateHand];
+    
+    XCTAssertEqual(testHand.score, 0,
+                  @"This set should be a run, because it has Spades in sequential order 9, 8, 7, 6(joker), 5, 4" );
+    
+    testHand = [[Three13Hand alloc] init];
+    [testHand addCard:[[Three13Card alloc] initWithValue:5 suit:Spades number:0]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:4 suit:Spades number:1]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:4 suit:Spades number:2]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:4 suit:Spades number:3]];
+    [testHand evaluateHand];
+    
+    XCTAssertEqual(testHand.score, 0,
+                  @"This set should be a run, because it has cards in sequential order 5, 4-as-4, 4-as-3, 4-as-2" );
+    
+    testHand = [[Three13Hand alloc] init];
+    [testHand addCard:[[Three13Card alloc] initWithValue:5 suit:Hearts number:0]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:4 suit:Spades number:1]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:4 suit:Spades number:2]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:4 suit:Spades number:3]];
+    [testHand evaluateHand];
+    
+    XCTAssertEqual(testHand.score, 0,
+                  @"This set should be a run, because it has cards in sequential order 5, 4-as-4, 4-as-3, 4-as-2, with all the jokers pretending to be hearts" );
+    
+    testHand = [[Three13Hand alloc] init];
+    [testHand addCard:[[Three13Card alloc] initWithValue:3 suit:Spades number:0]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:9 suit:Spades number:1]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:8 suit:Spades number:2]];
+    [testHand evaluateHand];
+    
+    XCTAssertEqual(testHand.score, 0,
+                  @"This set should be a run, because it has cards in sequential order 3-as-10,9,8" );
+    
+    testHand = [[Three13Hand alloc] init];
+    [testHand addCard:[[Three13Card alloc] initWithValue:4 suit:Spades number:0]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:4 suit:Spades number:1]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:9 suit:Spades number:2]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:8 suit:Spades number:3]];
+    [testHand evaluateHand];
+    
+    XCTAssertEqual(testHand.score, 0,
+                  @"This set should be a run, because it has cards in sequential order 4-as-11, 4-as-10, 9, 8" );
+    
+    
+}
+
+- (void)testScoreNoRunInOrderedSet {
+    Three13Hand * testHand = [[Three13Hand alloc] init];
+    [testHand addCard:[[Three13Card alloc] initWithValue:4 suit:Spades number:0]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:6 suit:Spades number:1]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:5 suit:Spades number:2]];
+    [testHand evaluateHand];
+    
+    XCTAssertEqual(testHand.score, 15,
+                   @"This set shouldn't be a run, because it's got Spades in the nonsequential order 4, 6, 5." );
+    
+    testHand = [[Three13Hand alloc] init];
+    [testHand addCard:[[Three13Card alloc] initWithValue:4 suit:Spades number:0]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:6 suit:Spades number:1]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:3 suit:Spades number:2]];
+    [testHand evaluateHand];
+    
+    XCTAssertEqual(testHand.score, 12,
+                   @"This set shouldn't be a run, because it's got Spades in the nonsequential order 4, 6, 3(joker)." );
+    
+    testHand = [[Three13Hand alloc] init];
+    [testHand addCard:[[Three13Card alloc] initWithValue:4 suit:Spades number:0]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:5 suit:Spades number:1]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:6 suit:Hearts number:2]];
+    [testHand evaluateHand];
+    
+    XCTAssertEqual(testHand.score, 15,
+                   @"This set shouldn't be a run, because it's got cards in the sequential order 4, 5, 6, but the 6 is a Heart and the rest are Spades." );
+    
+    testHand = [[Three13Hand alloc] init];
+    [testHand addCard:[[Three13Card alloc] initWithValue:4 suit:Spades number:0]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:5 suit:Spades number:1]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:6 suit:Spades number:2]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:7 suit:Hearts number:3]];
+    [testHand evaluateHand];
+    
+    XCTAssertEqual(testHand.score, 7,
+                   @"This set shouldn't be a run, because it's got cards in the sequential order 4, 5, 6, 7 but the 7 is a Heart and the rest are Spades, which makes a run of 3 with a spare card...not a run for the whole set." );
+    
+    testHand = [[Three13Hand alloc] init];
+    [testHand addCard:[[Three13Card alloc] initWithValue:4 suit:Spades number:0]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:5 suit:Spades number:1]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:6 suit:Spades number:2]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:7 suit:Hearts number:3]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:8 suit:Hearts number:4]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:9 suit:Hearts number:5]];
+    [testHand evaluateHand];
+    
+    XCTAssertEqual(testHand.score, 0,
+                   @"This set shouldn't be a run, because it's got cards in the sequential order 4, 5, 6, 7, 8, 9, but the 7-9 are Hearts and the rest are Spades, making two runs not one for the whole set." );
+    
+    testHand = [[Three13Hand alloc] init];
+    [testHand addCard:[[Three13Card alloc] initWithValue:4 suit:Spades number:0]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:5 suit:Spades number:1]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:6 suit:Spades number:2]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:8 suit:Spades number:3]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:9 suit:Spades number:4]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:10 suit:Spades number:5]];
+    [testHand evaluateHand];
+    
+    XCTAssertEqual(testHand.score, 0,
+                   @"This set shouldn't be a run, because it's got cards in the sequential order 4, 5, 6, and 8, 9, 10, but there's a gap in the numbering (no 7)." );
+}
+
+- (void)testScoreNoRunInOrderedSetReversed {
+    Three13Hand * testHand = [[Three13Hand alloc] init];
+    [testHand addCard:[[Three13Card alloc] initWithValue:5 suit:Spades number:0]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:6 suit:Spades number:1]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:4 suit:Spades number:2]];
+    [testHand evaluateHand];
+    
+    XCTAssertEqual(testHand.score, 15,
+                   @"This set shouldn't be a run, because it's got Spades in the nonsequential order 5, 6, 4." );
+    
+    testHand = [[Three13Hand alloc] init];
+    [testHand addCard:[[Three13Card alloc] initWithValue:3 suit:Spades number:0]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:6 suit:Spades number:1]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:4 suit:Spades number:2]];
+    [testHand evaluateHand];
+    
+    XCTAssertEqual(testHand.score, 13,
+                   @"This set shouldn't be a run, because it's got Spades in the nonsequential order 3(joker), 6, 4." );
+    
+    testHand = [[Three13Hand alloc] init];
+    [testHand addCard:[[Three13Card alloc] initWithValue:6 suit:Hearts number:0]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:5 suit:Spades number:1]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:4 suit:Spades number:2]];
+    [testHand evaluateHand];
+    
+    XCTAssertEqual(testHand.score, 15,
+                   @"This set shouldn't be a run, because it's got cards in the sequential order 6, 5, 4, but the 6 is a Heart and the rest are Spades." );
+    
+    testHand = [[Three13Hand alloc] init];
+    [testHand addCard:[[Three13Card alloc] initWithValue:7 suit:Hearts number:0]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:6 suit:Spades number:1]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:5 suit:Spades number:2]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:4 suit:Spades number:3]];
+    [testHand evaluateHand];
+    
+    XCTAssertEqual(testHand.score, 7,
+                   @"This set shouldn't be a run, because it's got cards in the sequential order 7, 6, 5, 4, but the 7 is a Heart and the rest are Spades, which makes a run of 3 with a spare card...not a run for the whole set." );
+    
+    testHand = [[Three13Hand alloc] init];
+    [testHand addCard:[[Three13Card alloc] initWithValue:9 suit:Hearts number:0]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:8 suit:Hearts number:1]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:7 suit:Hearts number:2]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:6 suit:Spades number:3]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:5 suit:Spades number:4]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:4 suit:Spades number:5]];
+    [testHand evaluateHand];
+    
+    XCTAssertEqual(testHand.score, 0,
+                   @"This set shouldn't be a run, because it's got cards in the sequential order 9, 8, 7, 6, 5, 4 but the 9-7 are Hearts and the rest are Spades, making two runs not one for the whole set." );
+    
+    testHand = [[Three13Hand alloc] init];
+    [testHand addCard:[[Three13Card alloc] initWithValue:10 suit:Spades number:0]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:9 suit:Spades number:1]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:8 suit:Spades number:2]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:6 suit:Spades number:3]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:5 suit:Spades number:4]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:4 suit:Spades number:5]];
+    [testHand evaluateHand];
+    
+    XCTAssertEqual(testHand.score, 0,
+                   @"This set shouldn't be a run, because it's got cards in the sequential order 10, 9, 8, and 6, 5, 4, but there's a gap in the numbering (no 7)." );
+}
+
+
 @end
