@@ -585,20 +585,13 @@ int next_comb(int comb[], int k, int n) {
 }
 
 -(void) evaluateHand {
-//    NSLog(@"Find value suits and jokers");
     [self findValuesSuitsAndJokers];
-//    NSLog(@"Prunt sets to size");
     [self pruneSetsToSize];
-//    NSLog(@"Add jokers");
     [self addJokersToSets];
-//    NSLog(@"Find combos");
     [self findSetCombinations];
-//    NSLog(@"Prune sets to runs");
     [self pruneSuitSetsToRuns];
-//    NSLog(@"Find melds of melds");
     [self findValidMelds];
     [self findMeldsOfMelds];
-//    NSLog(@"Score hand");
     [self scoreHand];
 }
 
