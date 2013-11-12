@@ -502,7 +502,16 @@ int next_comb(int comb[], int k, int n) {
     }
 }
 
--(NSInteger) worstScoreForThree13Hand {
+-(void) scoreHand {
+    int bestScore = [self findBestScore];
+    int worstScore = [self findWorstScore];
+    int actualScore = [self findActualScore];
+
+    self.bestScore = worstScore - bestScore;
+    self.score = worstScore - actualScore;
+}
+
+-(int) findWorstScore {
     int worstScore = 0;
     for( Three13Card * card in cards ) {
         worstScore += MIN(card.value, 10);
@@ -510,11 +519,10 @@ int next_comb(int comb[], int k, int n) {
     return worstScore;
 }
 
--(void) scoreHand {
+-(int) findBestScore {
     int bestScore = 0;
     int meldScore;
     [bestMeld removeAllObjects];
-    NSLog(@"Valid melds: %@", allMelds);
     for (NSSet * meld in allMelds) {
         meldScore = 0;
         for (Three13Card * card in meld) {
@@ -528,18 +536,10 @@ int next_comb(int comb[], int k, int n) {
             [bestMeld sortUsingSelector:@selector(compareValue:)];
         }
     }
-    
-    // Sort by suit and value
-    int worstScore = [self worstScoreForThree13Hand];
-
-    self.bestScore = worstScore - bestScore;
-    NSLog(@"Best meld scores %d: %@", self.bestScore, bestMeld);
-    
-    self.score = worstScore - [self findActualScore];
-;
+    return bestScore;
 }
 
-- (int) findActualScore {
+-(int) findActualScore {
     // Find valid runs
     // For every starting position make a set of the next m = (start+2 -> n) elements
     // and if it's valid, add it to a collection
