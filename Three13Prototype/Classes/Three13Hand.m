@@ -511,14 +511,25 @@ int next_comb(int comb[], int k, int n) {
     self.score = worstScore - actualScore;
 }
 
+/**
+ * @brief The score of the hand assuming no melds
+ * @return The values of all cards in the hand added together
+ */
 -(int) findWorstScore {
     int worstScore = 0;
     for( Three13Card * card in cards ) {
-        worstScore += MIN(card.value, 10);
+        worstScore += MIN(card.value, 10); // Face cards are clamped to 10 points
     }
     return worstScore;
 }
 
+/**
+ * @brief Finds the potential meld that contains the greatest number of points
+ * @return The greatest number of points that can be sunk into a meld, assuming an optimal hand arrangement
+ * Each possible meld (the collections in allMelds) is examined, looking for the meld that contains the most points.
+ * That highest-scoring meld (i.e., the one keeping the greatest number of points from going unmelded) is
+ * stored in bestMeld, and sorted by suit and value.
+ */
 -(int) findBestScore {
     int bestScore = 0;
     int meldScore;
@@ -539,6 +550,13 @@ int next_comb(int comb[], int k, int n) {
     return bestScore;
 }
 
+/**
+ * @brief Finds the actual meld that contains the greatest number of points
+ * @return The greatest number of points that can be sunk into a meld, assuming the current hand arrangement
+ * Each actual meld (the collections in allValidMelds) is examined, looking for the meld that contains the most points.
+ * That highest-scoring meld (i.e., the one keeping the greatest number of points from going unmelded) is
+ * stored in bestValidMeld.
+ */
 -(int) findActualScore {
     // Find valid runs
     // For every starting position make a set of the next m = (start+2 -> n) elements
