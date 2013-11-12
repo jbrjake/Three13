@@ -445,7 +445,6 @@ int next_comb(int comb[], int k, int n) {
 }
 
 -(void) findValidMelds {
-    // Find valid runs
     // For every starting position make a set of the next m = (start+2 -> n) elements
     // and if it's valid, add it to a collection
     for (int start = 0; start < cards.count-2; start++) {
