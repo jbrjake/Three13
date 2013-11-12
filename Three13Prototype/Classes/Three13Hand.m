@@ -11,11 +11,14 @@
 
 @implementation Three13Hand
 
-@synthesize score, suitSets, valueSets, jokerSet, suitSetsWithJokers, valueSetsWithJokers, allMelds, bestMeld;
+@synthesize score, validRuns, validValueSets, allValidMelds, suitSets, valueSets, jokerSet, suitSetsWithJokers, valueSetsWithJokers, allMelds, bestMeld, bestValidMeld;
 
 - (id) init {
 	if(self = [super init] ) {
 		cards = [[NSMutableArray alloc] init];
+        validRuns = [[NSMutableArray alloc] init];
+        validValueSets = [[NSMutableArray alloc] init];
+        allValidMelds = [[NSMutableArray alloc] init];
         valueSets = [[NSMutableArray alloc] init];
         suitSets = [[NSMutableArray alloc] init];
         jokerSet = [[NSMutableSet alloc] init];
@@ -23,6 +26,7 @@
         suitSetsWithJokers = [[NSMutableArray alloc] init];
         allMelds = [[NSMutableArray alloc] init];
         bestMeld = [[NSMutableArray alloc] init];
+        bestValidMeld = [[NSMutableArray alloc] init];
 	}
 	return self;
 }
