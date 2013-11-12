@@ -213,70 +213,19 @@ int next_comb(int comb[], int k, int n) {
     [sortedArray sortUsingSelector:@selector(compareValue:)];
     [reverseSortedArray sortUsingSelector:@selector(reverseCompareValue:)];
 
-    // If there's only one card left after removing jokers, add back a joker so we can do comparisons of current to next cards to make sure we're always increasing/decreasing by 1
-    if (sortedArray.count == 1) {
-        Three13Card * cur = sortedArray[0];
-        if (jokers.count) {
-            if (0 < [setArray indexOfObject:cur]) {
-                // The only non-joker card isn't supposed to be first, so prepend jokers LIFO
-                [sortedArray insertObject:jokers[jokers.count-1] atIndex:0];
-            }
-            else {
-                // Append jokers LIFO
-                [sortedArray insertObject:jokers[jokers.count-1] atIndex:1];
-            }
-            [jokers removeObject:jokers[jokers.count-1]];
-        }
+    // Return jokers to their original locations
+    for (Three13Card * card in jokers) {
+        int i = [setArray indexOfObject:card];
+        [sortedArray insertObject:card atIndex:i];
     }
-    if (reverseSortedArray.count == 1) {
-        Three13Card * cur = reverseSortedArray[0];
-        if (jokers.count) {
-            if (0 < [setArray indexOfObject:cur]) {
-                // Prepend FIFO
-                [reverseSortedArray insertObject:reverseJokers[0] atIndex:0];
-            }
-            else {
-                // Append FIFO
-                [reverseSortedArray insertObject:reverseJokers[0] atIndex:1];
-            }
-            [reverseJokers removeObject:reverseJokers[0]];
-        }
-    }
+    [jokers removeAllObjects];
     
-    // Now loop through looking at 2 adjacent cards at a time
-    for (int i = 0; i < sortedArray.count-1; i++) {
-        Three13Card * cur = sortedArray[i];
-        Three13Card * next = sortedArray[i+1];
-        if (cur.value != next.value-1) {
-            // We have a gap, try to fill it with a joker, LIFO
-            if (jokers.count) {
-                if (i < [setArray indexOfObject:cur]) {
-                    [sortedArray insertObject:jokers[jokers.count-1] atIndex:i];
-                }
-                else {
-                    [sortedArray insertObject:jokers[jokers.count-1] atIndex:i+1];
-                }
-                [jokers removeObject:jokers[jokers.count-1]];
-            }
-        }
+    for (Three13Card * card in reverseJokers) {
+        int i = [setArray indexOfObject:card];
+        [reverseSortedArray insertObject:card atIndex:i];
     }
-    for (int i = 0; i < reverseSortedArray.count-1; i++) {
-        Three13Card * cur = reverseSortedArray[i];
-        Three13Card * next = reverseSortedArray[i+1];
-        if (cur.value != next.value+1) {
-            // We have a gap, try to fill it with a joker, FIFO
-            if (reverseJokers.count) {
-                if (i < [setArray indexOfObject:cur]) {
-                    [reverseSortedArray insertObject:reverseJokers[0] atIndex:i];
-                }
-                else {
-                    [reverseSortedArray insertObject:reverseJokers[0] atIndex:i+1];
-                }
-                [reverseJokers removeObject:reverseJokers[0]];
-            }
-        }
-    }
-
+    [reverseJokers removeAllObjects];
+    
     // Make sure all gaps are filled
     for (int i = 0; i < sortedArray.count-1; i++) {
         Three13Card * cur = sortedArray[i];
