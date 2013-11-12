@@ -191,6 +191,25 @@
     XCTAssertTrue([testHand runInOrderedSet:testSet],
                   @"This set should be a run, because it has cards in sequential order 4-as-2, 4-as-3, 4-as-4, 5, with all the jokers pretending to be hearts" );
 
+    testHand = [[Three13Hand alloc] init];
+    [testHand addCard:[[Three13Card alloc] initWithValue:8 suit:Spades number:0]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:9 suit:Spades number:1]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:3 suit:Spades number:2]];
+    testSet = [[NSMutableOrderedSet alloc] initWithArray:testHand.cards];
+    
+    XCTAssertTrue([testHand runInOrderedSet:testSet],
+                  @"This set should be a run, because it has cards in sequential order 8,9,3-as-10" );
+
+    testHand = [[Three13Hand alloc] init];
+    [testHand addCard:[[Three13Card alloc] initWithValue:8 suit:Spades number:0]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:9 suit:Spades number:1]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:4 suit:Spades number:2]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:4 suit:Spades number:3]];
+    testSet = [[NSMutableOrderedSet alloc] initWithArray:testHand.cards];
+    
+    XCTAssertTrue([testHand runInOrderedSet:testSet],
+                  @"This set should be a run, because it has cards in sequential order 8,9,4-as-10,4-as-11" );
+    
 }
 
 - (void)testRunInOrderedSetReversed {
@@ -244,6 +263,26 @@
     XCTAssertTrue([testHand runInOrderedSet:testSet],
                   @"This set should be a run, because it has cards in sequential order 5, 4-as-4, 4-as-3, 4-as-2, with all the jokers pretending to be hearts" );
     
+    testHand = [[Three13Hand alloc] init];
+    [testHand addCard:[[Three13Card alloc] initWithValue:3 suit:Spades number:0]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:9 suit:Spades number:1]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:8 suit:Spades number:2]];
+    testSet = [[NSMutableOrderedSet alloc] initWithArray:testHand.cards];
+    
+    XCTAssertTrue([testHand runInOrderedSet:testSet],
+                  @"This set should be a run, because it has cards in sequential order 3-as-10,9,8" );
+
+    testHand = [[Three13Hand alloc] init];
+    [testHand addCard:[[Three13Card alloc] initWithValue:4 suit:Spades number:0]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:4 suit:Spades number:1]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:9 suit:Spades number:2]];
+    [testHand addCard:[[Three13Card alloc] initWithValue:8 suit:Spades number:3]];
+    testSet = [[NSMutableOrderedSet alloc] initWithArray:testHand.cards];
+    
+    XCTAssertTrue([testHand runInOrderedSet:testSet],
+                  @"This set should be a run, because it has cards in sequential order 4-as-11, 4-as-10, 9, 8" );
+    
+
 }
 
 - (void)testNoRunInOrderedSet {
