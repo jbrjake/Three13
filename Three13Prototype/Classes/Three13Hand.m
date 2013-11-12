@@ -470,10 +470,13 @@ int next_comb(int comb[], int k, int n) {
     [allMelds removeAllObjects];
     [allMelds addObjectsFromArray:valueSetsWithJokers];
     [allMelds addObjectsFromArray:suitSetsWithJokers];
+    [allValidMelds removeAllObjects];
+    [allValidMelds addObjectsFromArray:validRuns];
+    [allValidMelds addObjectsFromArray:validValueSets];
     
     // There can be up to 3 levels of melds of melds
     for (int i=0; i<3; i++) {
-        // Go through each meld
+        // Go through each possible meld
         NSMutableArray * allMeldsCopy = [allMelds copy];
         for (NSSet * setA in allMeldsCopy ) {
             NSMutableArray * tempArray = [[NSMutableArray alloc] init];
@@ -489,21 +492,8 @@ int next_comb(int comb[], int k, int n) {
             }
             [allMelds addObjectsFromArray:tempArray];
         }
-    }
-//    NSLog(@"All melds: %@", allMelds);    
-}
-
--(void) findValidMeldsOfMelds {
-    // Add combinations of melds.
-    // First put every meld in an array
-    [allValidMelds removeAllObjects];
-    [allValidMelds addObjectsFromArray:validRuns];
-    [allValidMelds addObjectsFromArray:validValueSets];
-    
-    // There can be up to 3 levels of melds of melds
-    for (int i=0; i<3; i++) {
-        // Go through each meld
-        NSMutableArray * allMeldsCopy = [allValidMelds copy];
+        // Go through each valid meld
+        allMeldsCopy = [allValidMelds copy];
         for (NSOrderedSet * setA in allMeldsCopy ) {
             NSMutableArray * tempArray = [[NSMutableArray alloc] init];
             for (NSOrderedSet *setB in allMeldsCopy ) {
@@ -581,8 +571,6 @@ int next_comb(int comb[], int k, int n) {
  * stored in bestValidMeld.
  */
 -(int) findActualScore {
-    [self findValidMeldsOfMelds];
-    
     int bestScore = 0;
     int meldScore;
     [bestValidMeld removeAllObjects];
