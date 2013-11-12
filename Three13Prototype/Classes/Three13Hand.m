@@ -13,6 +13,8 @@
 
 @synthesize score, validRuns, validValueSets, allValidMelds, suitSets, valueSets, jokerSet, suitSetsWithJokers, valueSetsWithJokers, allMelds, bestMeld, bestValidMeld;
 
+#pragma mark Lifecycle
+
 - (id) init {
 	if(self = [super init] ) {
 		cards = [[NSMutableArray alloc] init];
@@ -31,6 +33,8 @@
 	return self;
 }
 
+#pragma mark Data structure modification and search
+
 -(void) addCard:( Three13Card*) card {
     [cards addObject:card];
 }
@@ -39,66 +43,15 @@
     return cards[index];
 }
 
-/**
- * @brief From http://dzone.com/snippets/generate-combinations
- * @param comb For the first run, this needs to be the ordered set of values. After that, the previous combination is inputted and modified in place.
- * @param k The number of elements to be in each combination generated
- * @param n The number of elements in the larger set from which each combination is drawn
- * @return 1 if there are more combinations, 0 if this is the last one available
- * @see -(NSMutableArray*) combinationsOf:(NSInteger)k For:(NSSet*)set
- */
-int next_comb(int comb[], int k, int n) {
-    int i = k - 1;
-    ++comb[i];
-    while ((i >= 0) && (comb[i] >= n - k + 1 + i)) {
-        --i;
-        ++comb[i];
-    }
-    
-    if (comb[0] > n - k) /* Combination (n-k, n-k+1, ..., n) reached */
-        return 0; /* No more combinations can be generated */
-    
-    /* comb now looks like (..., x, n, n, n, ..., n).
-     Turn it into (..., x, x + 1, x + 2, ...) */
-    for (i = i + 1; i < k; ++i)
-        comb[i] = comb[i - 1] + 1;
-    
-    return 1;
+-(void) sortByValue {
+    [cards sortUsingSelector:@selector(compareValue:)];
 }
 
-/**
- * @brief Generates all possible combinations of size K in the given set
- * @param k The number of elements that should be in each combination
- * @param set The set of elements from which to draw each combination
- * @returns An array of the combinations
- */
--(NSMutableArray*) combinationsOf:(NSInteger)k For:(NSSet*)set {
-    NSMutableArray * combinations = [[NSMutableArray alloc] init];
-    int n = [set count];
-    int comb[16];
-    memset(comb, 0, sizeof(comb));
-    int i;
-
-    NSArray * setArray = [[NSArray alloc] initWithArray:[set allObjects]];
-    NSMutableSet * tempSet;
-
-    tempSet = [[NSMutableSet alloc] init];
-    // Initialize array and begin first entry
-    for (i=0; i<k; ++i) {
-        comb[i] = i;
-        [tempSet addObject:setArray[comb[i]]];
-    }
-    [combinations addObject:tempSet];
-    
-    while(next_comb(comb, k, n)) {
-        tempSet = [[NSMutableSet alloc] init];
-        for (i=0; i<k; ++i) {
-            [tempSet addObject:setArray[comb[i]]];
-        }
-        [combinations addObject:tempSet];
-    }
-    return combinations;
+-(void) sortBySuit {
+    [cards sortUsingSelector:@selector(compareSuit:)];
 }
+
+#pragma mark Potential meld identification
 
 /**
  * @brief Says whether or not there's a numerical sequence in a set, taking jokers into account.
@@ -152,6 +105,225 @@ int next_comb(int comb[], int k, int n) {
 
     return FALSE;
 }
+
+-(void) findValuesSuitsAndJokers {
+    /* Make sets of cards in the hand */
+    [valueSets removeAllObjects];
+    [suitSets removeAllObjects];
+    
+    //    NSLog(@"Making suit and value sets");
+    NSMutableSet * handSet = [[NSMutableSet alloc] initWithArray:cards];
+    NSPredicate * predicate;
+    NSSet * filteredSet;
+    for (int i=1; i < 14; i++) {
+        // Sets of cards with values 1-13
+        predicate = [NSPredicate predicateWithFormat:@"value == %d",i];
+        filteredSet = [[NSSet alloc] initWithSet:[handSet filteredSetUsingPredicate:predicate]];
+        [valueSets addObject:filteredSet];
+    }
+    for (int i=0; i < 4; i++) {
+        //Sets of cards with suits 0-3
+        predicate = [NSPredicate predicateWithFormat:@"suit == %d",i];
+        filteredSet = [[NSSet alloc] initWithSet:[handSet filteredSetUsingPredicate:predicate]];
+        [suitSets addObject:filteredSet];
+    }
+    //Set of jokers
+    predicate = [NSPredicate predicateWithFormat:@"value == %d",[cards count]];
+    filteredSet = [[NSSet alloc] initWithSet:[handSet filteredSetUsingPredicate:predicate]];
+    [jokerSet setSet:filteredSet];
+    
+    NSLog(@"Value sets: %@", [valueSets description]);
+    NSLog(@"Suit sets: %@", [suitSets description]);
+    NSLog(@"Joker set: %@", [jokerSet description]);
+}
+
+-(void) pruneSetsToSize {
+    //Discard sets too small to make melds even with jokers
+    int jokers = [jokerSet count];
+    NSArray * iterateArray = [[NSArray alloc] initWithArray:valueSets];
+    for( NSSet * set in iterateArray )
+    {
+        if( !jokers )
+        {
+            if( [set count] <= 2 )
+            {
+                [valueSets removeObject:set];
+            }
+        }
+        else if ( jokers == 1 )
+        {
+            if ([set count] <= 1 ) {
+                [valueSets removeObject:set];
+            }
+        }
+    }
+    iterateArray = [[NSArray alloc] initWithArray:suitSets];
+    for( NSSet * set in iterateArray )
+    {
+        if( !jokers )
+        {
+            if( [set count] <= 2 )
+            {
+                [suitSets removeObject:set];
+            }
+        }
+        else if ( jokers == 1 )
+        {
+            if ([set count] <= 1 ) {
+                [suitSets removeObject:set];
+            }
+        }
+    }
+}
+
+-(void) addJokersToSets {
+    // Time to iterate through the valuesets array
+    [valueSetsWithJokers removeAllObjects];
+    for( NSSet * set in valueSets ) {
+        // For each set, make an array. Union with the jokers.
+        NSMutableSet * jokeredSet = [[NSMutableSet alloc] initWithSet:set];
+        [jokeredSet unionSet:jokerSet];
+        [valueSetsWithJokers addObject:set];
+        if ( ![jokeredSet isEqualToSet:set] ) {
+            [valueSetsWithJokers addObject:jokeredSet];
+        }
+    }
+    // Then discard any set with count < 3 again, because some may have slipped through because of the jokers also being regular cards
+    NSMutableArray * iterateArray;
+    iterateArray = [[NSMutableArray alloc] initWithArray:valueSetsWithJokers];
+    for( NSSet * set in iterateArray )
+    {
+        if ([set count] < 3 ) {
+            [valueSetsWithJokers removeObject:set];
+        }
+    }
+    // Time to iterate through the suitsets array
+    [suitSetsWithJokers removeAllObjects];
+    for( NSSet * set in suitSets ) {
+        // For each set, make an array. Union with the jokers.
+        NSMutableSet * jokeredSet = [[NSMutableSet alloc] initWithSet:set];
+        [jokeredSet unionSet:jokerSet];
+        [suitSetsWithJokers addObject:set];
+        if ( ![jokeredSet isEqualToSet:set] ) {
+            [suitSetsWithJokers addObject:jokeredSet];
+        }
+    }
+    // Then discard any set with count < 3 again, because some may have slipped through because of the jokers also being regular cards
+    iterateArray = [[NSMutableArray alloc] initWithArray:suitSetsWithJokers];
+    for( NSSet * set in iterateArray )
+    {
+        if ([set count] < 3 ) {
+            [suitSetsWithJokers removeObject:set];
+        }
+    }
+}
+
+/**
+ * @brief From http://dzone.com/snippets/generate-combinations
+ * @param comb For the first run, this needs to be the ordered set of values. After that, the previous combination is inputted and modified in place.
+ * @param k The number of elements to be in each combination generated
+ * @param n The number of elements in the larger set from which each combination is drawn
+ * @return 1 if there are more combinations, 0 if this is the last one available
+ * @see -(NSMutableArray*) combinationsOf:(NSInteger)k For:(NSSet*)set
+ */
+int next_comb(int comb[], int k, int n) {
+    int i = k - 1;
+    ++comb[i];
+    while ((i >= 0) && (comb[i] >= n - k + 1 + i)) {
+        --i;
+        ++comb[i];
+    }
+    
+    if (comb[0] > n - k) /* Combination (n-k, n-k+1, ..., n) reached */
+        return 0; /* No more combinations can be generated */
+    
+    /* comb now looks like (..., x, n, n, n, ..., n).
+     Turn it into (..., x, x + 1, x + 2, ...) */
+    for (i = i + 1; i < k; ++i)
+        comb[i] = comb[i - 1] + 1;
+    
+    return 1;
+}
+
+/**
+ * @brief Generates all possible combinations of size K in the given set
+ * @param k The number of elements that should be in each combination
+ * @param set The set of elements from which to draw each combination
+ * @returns An array of the combinations
+ */
+-(NSMutableArray*) combinationsOf:(NSInteger)k For:(NSSet*)set {
+    NSMutableArray * combinations = [[NSMutableArray alloc] init];
+    int n = [set count];
+    int comb[16];
+    memset(comb, 0, sizeof(comb));
+    int i;
+    
+    NSArray * setArray = [[NSArray alloc] initWithArray:[set allObjects]];
+    NSMutableSet * tempSet;
+    
+    tempSet = [[NSMutableSet alloc] init];
+    // Initialize array and begin first entry
+    for (i=0; i<k; ++i) {
+        comb[i] = i;
+        [tempSet addObject:setArray[comb[i]]];
+    }
+    [combinations addObject:tempSet];
+    
+    while(next_comb(comb, k, n)) {
+        tempSet = [[NSMutableSet alloc] init];
+        for (i=0; i<k; ++i) {
+            [tempSet addObject:setArray[comb[i]]];
+        }
+        [combinations addObject:tempSet];
+    }
+    return combinations;
+}
+
+-(void) findSetCombinations {
+    // For each set left, loop through every combination
+    NSMutableArray * iterateArray;
+    iterateArray = [[NSMutableArray alloc] initWithArray:valueSetsWithJokers];
+    for( NSSet * set in iterateArray )
+    {
+        int entries = [set count];
+        int i;
+        for (i=3; i<entries; i++) {
+            NSMutableArray * combos = [self combinationsOf:i For:set];
+            [valueSetsWithJokers addObjectsFromArray:combos];
+        }
+    }
+    
+    iterateArray = [[NSMutableArray alloc] initWithArray:suitSetsWithJokers];
+    for( NSSet * set in iterateArray )
+    {
+        int entries = [set count];
+        for (int i=3; i<entries; i++) {
+            NSMutableArray * combos = [self combinationsOf:i For:set];
+            [suitSetsWithJokers addObjectsFromArray:combos];
+        }
+    }
+}
+
+-(void) pruneSuitSetsToRuns {
+    // Now remove non runs from the suit sets
+    NSMutableArray * sswjCopy = [suitSetsWithJokers copy];
+    for( NSSet * set in sswjCopy ) {
+        if( ![self runInSet:set] )
+        {
+            [suitSetsWithJokers removeObject:set];
+        }
+    }
+}
+
+-(void) findPotentialMelds {
+    [self findValuesSuitsAndJokers];
+    [self pruneSetsToSize];
+    [self addJokersToSets];
+    [self findSetCombinations];
+    [self pruneSuitSetsToRuns];
+}
+
+#pragma mark Valid meld detection
 
 /**
  * @brief Says whether or not there's a numerical sequence in an ordered set, taking jokers into account.
@@ -296,162 +468,6 @@ int next_comb(int comb[], int k, int n) {
     return retValue;
 }
 
--(void) findValuesSuitsAndJokers {
-    /* Make sets of cards in the hand */
-    [valueSets removeAllObjects];
-    [suitSets removeAllObjects];
-    
-//    NSLog(@"Making suit and value sets");
-    NSMutableSet * handSet = [[NSMutableSet alloc] initWithArray:cards];
-    NSPredicate * predicate;
-    NSSet * filteredSet;
-    for (int i=1; i < 14; i++) {
-        // Sets of cards with values 1-13
-        predicate = [NSPredicate predicateWithFormat:@"value == %d",i];
-        filteredSet = [[NSSet alloc] initWithSet:[handSet filteredSetUsingPredicate:predicate]];
-        [valueSets addObject:filteredSet];
-    }
-    for (int i=0; i < 4; i++) {
-        //Sets of cards with suits 0-3
-        predicate = [NSPredicate predicateWithFormat:@"suit == %d",i];
-        filteredSet = [[NSSet alloc] initWithSet:[handSet filteredSetUsingPredicate:predicate]];
-        [suitSets addObject:filteredSet];
-    }
-    //Set of jokers
-    predicate = [NSPredicate predicateWithFormat:@"value == %d",[cards count]];
-    filteredSet = [[NSSet alloc] initWithSet:[handSet filteredSetUsingPredicate:predicate]];
-    [jokerSet setSet:filteredSet];
-
-    NSLog(@"Value sets: %@", [valueSets description]);
-    NSLog(@"Suit sets: %@", [suitSets description]);
-    NSLog(@"Joker set: %@", [jokerSet description]);    
-}
-
--(void) pruneSetsToSize {
-    //Discard sets too small to make melds even with jokers
-    int jokers = [jokerSet count];
-    NSArray * iterateArray = [[NSArray alloc] initWithArray:valueSets];
-    for( NSSet * set in iterateArray )
-    {
-        if( !jokers )
-        {
-            if( [set count] <= 2 )
-            {
-                [valueSets removeObject:set];
-            }
-        }
-        else if ( jokers == 1 )
-        {
-            if ([set count] <= 1 ) {
-                [valueSets removeObject:set];
-            }
-        }
-    }
-    iterateArray = [[NSArray alloc] initWithArray:suitSets];
-    for( NSSet * set in iterateArray )
-    {
-        if( !jokers )
-        {
-            if( [set count] <= 2 )
-            {
-                [suitSets removeObject:set];
-            }
-        }
-        else if ( jokers == 1 )
-        {
-            if ([set count] <= 1 ) {
-                [suitSets removeObject:set];
-            }
-        }
-    }
-}
-
--(void) addJokersToSets {
-    // Time to iterate through the valuesets array
-    [valueSetsWithJokers removeAllObjects];
-    for( NSSet * set in valueSets ) {
-        // For each set, make an array. Union with the jokers.
-        NSMutableSet * jokeredSet = [[NSMutableSet alloc] initWithSet:set];
-        [jokeredSet unionSet:jokerSet];
-        [valueSetsWithJokers addObject:set];
-        if ( ![jokeredSet isEqualToSet:set] ) {
-            [valueSetsWithJokers addObject:jokeredSet];
-        }
-    }
-    // Then discard any set with count < 3 again, because some may have slipped through because of the jokers also being regular cards
-    NSMutableArray * iterateArray;
-    iterateArray = [[NSMutableArray alloc] initWithArray:valueSetsWithJokers];
-    for( NSSet * set in iterateArray )
-    {
-        if ([set count] < 3 ) {
-            [valueSetsWithJokers removeObject:set];
-        }
-    }
-    // Time to iterate through the suitsets array
-    [suitSetsWithJokers removeAllObjects];
-    for( NSSet * set in suitSets ) {
-        // For each set, make an array. Union with the jokers.
-        NSMutableSet * jokeredSet = [[NSMutableSet alloc] initWithSet:set];
-        [jokeredSet unionSet:jokerSet];
-        [suitSetsWithJokers addObject:set];
-        if ( ![jokeredSet isEqualToSet:set] ) {
-            [suitSetsWithJokers addObject:jokeredSet];
-        }
-    }
-    // Then discard any set with count < 3 again, because some may have slipped through because of the jokers also being regular cards
-    iterateArray = [[NSMutableArray alloc] initWithArray:suitSetsWithJokers];
-    for( NSSet * set in iterateArray )
-    {
-        if ([set count] < 3 ) {
-            [suitSetsWithJokers removeObject:set];
-        }
-    }
-}
-
--(void) findSetCombinations {
-    // For each set left, loop through every combination
-    NSMutableArray * iterateArray;
-    iterateArray = [[NSMutableArray alloc] initWithArray:valueSetsWithJokers];
-    for( NSSet * set in iterateArray )
-    {
-        int entries = [set count];
-        int i;
-        for (i=3; i<entries; i++) {
-            NSMutableArray * combos = [self combinationsOf:i For:set];
-            [valueSetsWithJokers addObjectsFromArray:combos];
-        }
-    }
-    
-    iterateArray = [[NSMutableArray alloc] initWithArray:suitSetsWithJokers];
-    for( NSSet * set in iterateArray )
-    {
-        int entries = [set count];
-        for (int i=3; i<entries; i++) {
-            NSMutableArray * combos = [self combinationsOf:i For:set];
-            [suitSetsWithJokers addObjectsFromArray:combos];
-        }
-    }
-}
-
--(void) pruneSuitSetsToRuns {
-    // Now remove non runs from the suit sets
-    NSMutableArray * sswjCopy = [suitSetsWithJokers copy];
-    for( NSSet * set in sswjCopy ) {
-        if( ![self runInSet:set] )
-        {
-            [suitSetsWithJokers removeObject:set];
-        }
-    }
-}
-
--(void) findPotentialMelds {
-    [self findValuesSuitsAndJokers];
-    [self pruneSetsToSize];
-    [self addJokersToSets];
-    [self findSetCombinations];
-    [self pruneSuitSetsToRuns];
-}
-
 -(void) findValidMelds {
     // For every starting position make a set of the next m = (start+2 -> n) elements
     // and if it's valid, add it to a collection
@@ -470,6 +486,8 @@ int next_comb(int comb[], int k, int n) {
         }
     }
 }
+
+#pragma mark Hand evaluation
 
 -(void) findMeldsOfMelds {
     // Add combinations of melds.    
@@ -518,15 +536,6 @@ int next_comb(int comb[], int k, int n) {
     }
 }
 
--(void) scoreHand {
-    int bestScore = [self findBestScore];
-    int worstScore = [self findWorstScore];
-    int actualScore = [self findActualScore];
-
-    self.bestScore = worstScore - bestScore;
-    self.score = worstScore - actualScore;
-}
-
 /**
  * @brief Returns the sum of values for the cards in a collection
  */
@@ -536,14 +545,6 @@ int next_comb(int comb[], int k, int n) {
         sum += MIN(card.value, 10); // Face cards are clamped to 10 points
     }
     return sum;
-}
-
-/**
- * @brief The score of the hand assuming no melds
- * @return The values of all cards in the hand added together
- */
--(int) findWorstScore {
-    return [self sumOfCardsIn:cards];
 }
 
 /**
@@ -571,6 +572,14 @@ int next_comb(int comb[], int k, int n) {
 }
 
 /**
+ * @brief The score of the hand assuming no melds
+ * @return The values of all cards in the hand added together
+ */
+-(int) findWorstScore {
+    return [self sumOfCardsIn:cards];
+}
+
+/**
  * @brief Finds the actual meld that contains the greatest number of points
  * @return The greatest number of points that can be sunk into a meld, assuming the current hand arrangement
  * Each actual meld (the collections in allValidMelds) is examined, looking for the meld that contains the most points.
@@ -592,6 +601,15 @@ int next_comb(int comb[], int k, int n) {
     return bestScore;
 }
 
+-(void) scoreHand {
+    int bestScore = [self findBestScore];
+    int worstScore = [self findWorstScore];
+    int actualScore = [self findActualScore];
+
+    self.bestScore = worstScore - bestScore;
+    self.score = worstScore - actualScore;
+}
+
 -(void) evaluateHand {
     [self findPotentialMelds];
     [self findValidMelds];
@@ -602,14 +620,6 @@ int next_comb(int comb[], int k, int n) {
 -(void) updateScore {
     [self evaluateHand];
     [self sortByValue];
-}
-
--(void) sortByValue {
-    [cards sortUsingSelector:@selector(compareValue:)];
-}
-
--(void) sortBySuit {
-    [cards sortUsingSelector:@selector(compareSuit:)];
 }
 
 @end
