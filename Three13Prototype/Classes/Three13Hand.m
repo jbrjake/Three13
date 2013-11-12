@@ -474,6 +474,34 @@ int next_comb(int comb[], int k, int n) {
 //    NSLog(@"All melds: %@", allMelds);    
 }
 
+-(void) findValidMeldsOfMelds {
+    // Add combinations of melds.
+    // First put every meld in an array
+    [allValidMelds removeAllObjects];
+    [allValidMelds addObjectsFromArray:validRuns];
+    [allValidMelds addObjectsFromArray:validValueSets];
+    
+    // There can be up to 3 levels of melds of melds
+    for (int i=0; i<3; i++) {
+        // Go through each meld
+        NSMutableArray * allMeldsCopy = [allValidMelds copy];
+        for (NSOrderedSet * setA in allMeldsCopy ) {
+            NSMutableArray * tempArray = [[NSMutableArray alloc] init];
+            for (NSOrderedSet *setB in allMeldsCopy ) {
+                if (![setA intersectsOrderedSet:setB] ) {
+                    //If the melds are not overlapping, combine
+                    NSMutableOrderedSet * unionSet = [[NSMutableOrderedSet alloc] initWithOrderedSet:setA];
+                    [unionSet unionOrderedSet:setB];
+                    if (![allValidMelds containsObject:unionSet] && ![tempArray containsObject:unionSet]) {
+                        [tempArray addObject:unionSet];
+                    }
+                }
+            }
+            [allValidMelds addObjectsFromArray:tempArray];
+        }
+    }
+}
+
 -(NSInteger) worstScoreForThree13Hand {
     int worstScore = 0;
     for( Three13Card * card in cards ) {
