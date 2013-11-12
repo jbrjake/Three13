@@ -512,15 +512,22 @@ int next_comb(int comb[], int k, int n) {
 }
 
 /**
+ * @brief Returns the sum of values for the cards in a collection
+ */
+-(int) sumOfCardsIn:(NSArray*)cardArray {
+    int sum = 0;
+    for( Three13Card * card in cardArray ) {
+        sum += MIN(card.value, 10); // Face cards are clamped to 10 points
+    }
+    return sum;
+}
+
+/**
  * @brief The score of the hand assuming no melds
  * @return The values of all cards in the hand added together
  */
 -(int) findWorstScore {
-    int worstScore = 0;
-    for( Three13Card * card in cards ) {
-        worstScore += MIN(card.value, 10); // Face cards are clamped to 10 points
-    }
-    return worstScore;
+    return [self sumOfCardsIn:cards];
 }
 
 /**
@@ -535,10 +542,7 @@ int next_comb(int comb[], int k, int n) {
     int meldScore;
     [bestMeld removeAllObjects];
     for (NSSet * meld in allMelds) {
-        meldScore = 0;
-        for (Three13Card * card in meld) {
-            meldScore += MIN(card.value, 10);
-        }
+        meldScore = [self sumOfCardsIn:[meld allObjects]];
         if (meldScore > bestScore ) {
             bestScore = meldScore;
             [bestMeld removeAllObjects];
@@ -581,10 +585,7 @@ int next_comb(int comb[], int k, int n) {
     int meldScore;
     [bestValidMeld removeAllObjects];
     for (NSOrderedSet * meld in allValidMelds) {
-        meldScore = 0;
-        for (Three13Card * card in meld) {
-            meldScore += MIN(card.value, 10);
-        }
+        meldScore = [self sumOfCardsIn:[meld array]];
         if (meldScore > bestScore ) {
             bestScore = meldScore;
             [bestValidMeld removeAllObjects];
