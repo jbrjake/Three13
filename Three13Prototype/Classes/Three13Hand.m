@@ -15,6 +15,9 @@
 
 #pragma mark Lifecycle
 
+/**
+ * @brief Very basic init method, does not but initialize ivars
+ */
 - (id) init {
 	if(self = [super init] ) {
 		cards = [[NSMutableArray alloc] init];
@@ -35,18 +38,30 @@
 
 #pragma mark Data structure modification and search
 
+/**
+ * @brief Simple pass-through for other classes to add cards to the card array
+ */
 -(void) addCard:( Three13Card*) card {
     [cards addObject:card];
 }
 
+/**
+ * @brief Simple pass-through for other classes to access card array indicies
+ */
 -(Three13Card*) showCardAt: (NSInteger)index {
     return cards[index];
 }
 
+/**
+ * @brief Sorts the card array in-place, with ascending card.values
+ */
 -(void) sortByValue {
     [cards sortUsingSelector:@selector(compareValue:)];
 }
 
+/**
+ * @brief Sorts the card array in-place by suit
+ */
 -(void) sortBySuit {
     [cards sortUsingSelector:@selector(compareSuit:)];
 }
@@ -106,6 +121,15 @@
     return FALSE;
 }
 
+/**
+ * @brief Populates the valueSets, suitSets, and jokerSet ivars
+ *
+ * valueSets stores sets containing all cards in-hand with every possible card.value
+ *
+ * suitSets stores sets containing all cards in-hand for each card.suit
+ *
+ * jokerSet stores the set of all jokers in the hand
+ */
 -(void) findValuesSuitsAndJokers {
     /* Make sets of cards in the hand */
     [valueSets removeAllObjects];
@@ -137,8 +161,11 @@
     NSLog(@"Joker set: %@", [jokerSet description]);
 }
 
+/**
+ * @brief Discards potential sets too small to make melds, even with jokers
+ */
+
 -(void) pruneSetsToSize {
-    //Discard sets too small to make melds even with jokers
     int jokers = [jokerSet count];
     NSArray * iterateArray = [[NSArray alloc] initWithArray:valueSets];
     for( NSSet * set in iterateArray )
@@ -176,6 +203,11 @@
     }
 }
 
+/**
+ * @brief Seeds valueSetsWithJokers and suitSetsWithJokers
+ *
+ * Finds all unions of valueSets and suitSets with the jokerSet
+ */
 -(void) addJokersToSets {
     // Time to iterate through the valuesets array
     [valueSetsWithJokers removeAllObjects];
@@ -279,6 +311,9 @@ int next_comb(int comb[], int k, int n) {
     return combinations;
 }
 
+/**
+ * @brief Fleshes out valueSetsWithJokers and suitSetsWithJokers with all possible combinations of cards
+ */
 -(void) findSetCombinations {
     // For each set left, loop through every combination
     NSMutableArray * iterateArray;
@@ -304,6 +339,9 @@ int next_comb(int comb[], int k, int n) {
     }
 }
 
+/**
+ * @brief Removes non-run combinations from suitSetsWithJokers
+ */
 -(void) pruneSuitSetsToRuns {
     // Now remove non runs from the suit sets
     NSMutableArray * sswjCopy = [suitSetsWithJokers copy];
@@ -315,6 +353,9 @@ int next_comb(int comb[], int k, int n) {
     }
 }
 
+/**
+ * Populates potential meld arrays (suitSets, valueSets, suitSetsWithJokers, and valueSetsWithJokers) with all possible combination
+ */
 -(void) findPotentialMelds {
     [self findValuesSuitsAndJokers];
     [self pruneSetsToSize];
@@ -468,6 +509,15 @@ int next_comb(int comb[], int k, int n) {
     return retValue;
 }
 
+/**
+ * @brief Populates validRuns and validValueSets by considering every possible window of meldable cards in the current hand order
+ *
+ * 1-3 -> 1-13
+ *
+ * 2-4 -> 2-13
+ *
+ * etc.
+ */
 -(void) findValidMelds {
     // For every starting position make a set of the next m = (start+2 -> n) elements
     // and if it's valid, add it to a collection
@@ -489,6 +539,9 @@ int next_comb(int comb[], int k, int n) {
 
 #pragma mark Hand evaluation
 
+/**
+ * @brief Populates allMelds and allValidMelds by iterating through each non-overlapping union of known potential and valid melds
+ */
 -(void) findMeldsOfMelds {
     // Add combinations of melds.    
     // First put every meld in an array
@@ -601,6 +654,9 @@ int next_comb(int comb[], int k, int n) {
     return bestScore;
 }
 
+/**
+ * @brief populates bestScore and score by finding the worst possible score, and then subtracting the melded cards from the potential and actual highest-value melds
+ */
 -(void) scoreHand {
     int bestScore = [self findBestScore];
     int worstScore = [self findWorstScore];
@@ -610,6 +666,9 @@ int next_comb(int comb[], int k, int n) {
     self.score = worstScore - actualScore;
 }
 
+/**
+ * @brief Builds collections of potential and valid melds and their supersets, the hand's score, and the hand's best possible score if it was reordered.
+ */
 -(void) evaluateHand {
     [self findPotentialMelds];
     [self findValidMelds];
@@ -617,6 +676,9 @@ int next_comb(int comb[], int k, int n) {
     [self scoreHand];
 }
 
+/**
+ * @brief Public-facing method for the game to recalculate scores after an event
+ */
 -(void) updateScore {
     [self evaluateHand];
     [self sortByValue];
