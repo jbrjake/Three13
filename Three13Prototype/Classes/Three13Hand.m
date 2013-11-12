@@ -537,7 +537,44 @@ int next_comb(int comb[], int k, int n) {
     
     self.score = worstScore - bestScore;
 }
-  
+
+- (int) findActualScore {
+    // Find valid runs
+    // For every starting position make a set of the next m = (start+2 -> n) elements
+    // and if it's valid, add it to a collection
+    for (int start = 0; start < cards.count-2; start++) {
+        for (int end = start+2; end < cards.count; end++) {
+            NSMutableOrderedSet * set = [[NSMutableOrderedSet alloc] init];
+            for (int i = start; i < end+1; i++) {
+                [set addObject:cards[i]];
+            }
+            if (set.count && [self runInOrderedSet:set]) {
+                [self.validRuns addObject:set];
+            }
+            if (set.count && [self valueSetInOrderedSet:set]) {
+                [self.validValueSets addObject:set];
+            }
+        }
+    }
+    [self findValidMeldsOfMelds];
+    
+    int bestScore = 0;
+    int meldScore;
+    [bestValidMeld removeAllObjects];
+    for (NSOrderedSet * meld in allValidMelds) {
+        meldScore = 0;
+        for (Three13Card * card in meld) {
+            meldScore += MIN(card.value, 10);
+        }
+        if (meldScore > bestScore ) {
+            bestScore = meldScore;
+            [bestValidMeld removeAllObjects];
+            [bestValidMeld addObjectsFromArray:[meld array]];
+        }
+    }
+    return bestScore;
+}
+
 -(void) evaluateHand {
 //    NSLog(@"Find value suits and jokers");
     [self findValuesSuitsAndJokers];
