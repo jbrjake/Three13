@@ -163,8 +163,8 @@ int next_comb(int comb[], int k, int n) {
  * 
  * Then, it builds sorted (ascending and descending) arrays of all non-joker cards in the hand.
  *
- * After that it starts adding jokers back where it finds gaps in the numbering. It prepends jokers until
- * non-joker cards are in the same position as in the original hand, then appends remaining jokers.
+ * After that it adds the jokers back to their original locations in the sorted arrays.
+ *
  * Finally, it checks to see if either of the reassembled series of cards matches the actual hand.
  *
  */
