@@ -11,18 +11,25 @@
 
 @interface Three13Hand : Three13Deck {
     NSInteger score;
+    NSMutableArray * validRuns;
+    NSMutableArray * validValueSets;
+    NSMutableArray * allValidMelds;
     NSMutableArray * valueSets;
     NSMutableArray * suitSets;
     NSMutableArray * valueSetsWithJokers;
     NSMutableArray * suitSetsWithJokers;
     NSMutableArray * allMelds;
     NSMutableArray * bestMeld;
+    NSMutableArray * bestValidMeld;
     NSMutableSet * jokerSet;
 
 }
 
 @property(nonatomic) NSInteger score;
 @property(nonatomic) NSInteger bestScore;
+@property(nonatomic, strong) NSMutableArray * validRuns;
+@property(nonatomic, strong) NSMutableArray * validValueSets;
+@property(nonatomic, strong) NSMutableArray * allValidMelds;
 @property(nonatomic, strong) NSMutableArray * valueSets;
 @property(nonatomic, strong) NSMutableArray * suitSets;
 @property(nonatomic, strong) NSMutableArray * valueSetsWithJokers;
@@ -30,6 +37,7 @@
 @property(nonatomic, strong) NSMutableArray * allMelds;
 @property(nonatomic, strong) NSMutableSet * jokerSet;
 @property(nonatomic, strong) NSMutableArray * bestMeld;
+@property(nonatomic, strong) NSMutableArray * bestValidMeld;
 
 -(void) addCard:( Three13Card*) card;
 -(Three13Card*) showCardAt:( NSInteger) index;
