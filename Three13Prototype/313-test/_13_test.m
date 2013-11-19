@@ -7,7 +7,6 @@
 //
 
 #import "_13_test.h"
-#import "Three13Hand.h"
 
 @implementation _13_test
 
@@ -16,12 +15,15 @@
     [super setUp];
     
     // Set-up code here.
+    _hand = [[Three13Hand alloc] init];
+    
 }
 
 - (void)tearDown
 {
     // Tear-down code here.
-    
+    _hand = nil;
+
     [super tearDown];
 }
 

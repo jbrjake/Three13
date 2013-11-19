@@ -7,7 +7,10 @@
 //
 
 #import <XCTest/XCTest.h>
+#import "Three13Hand.h"
 
 @interface _13_test : XCTestCase
+
+@property Three13Hand * hand;
 
 @end
