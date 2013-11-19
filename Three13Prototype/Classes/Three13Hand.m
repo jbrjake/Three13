@@ -39,6 +39,26 @@
 #pragma mark Data structure modification and search
 
 /**
+ * @brief Empties the cards and evaluation arrays and resets the scores
+ */
+-(void) clearHand {
+    [cards removeAllObjects];
+    [validRuns removeAllObjects];
+    [validValueSets removeAllObjects];
+    [allValidMelds removeAllObjects];
+    [valueSets removeAllObjects];
+    [suitSets removeAllObjects];
+    [jokerSet removeAllObjects];
+    [valueSetsWithJokers removeAllObjects];
+    [suitSetsWithJokers removeAllObjects];
+    [allMelds removeAllObjects];
+    [bestMeld removeAllObjects];
+    [bestValidMeld removeAllObjects];
+    self.score = 0;
+    self.bestScore = 0;
+}
+
+/**
  * @brief Simple pass-through for other classes to add cards to the card array
  */
 -(void) addCard:( Three13Card*) card {

@@ -41,6 +41,7 @@
 
 -(void) addCard:( Three13Card*) card;
 -(Three13Card*) showCardAt:( NSInteger) index;
+-(void) clearHand;
 -(void) sortByValue;
 -(void) sortBySuit;
 -(void) findValuesSuitsAndJokers;
